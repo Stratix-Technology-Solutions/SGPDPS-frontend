@@ -3,9 +3,22 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { useQuery } from '@tanstack/react-query'
 
 function App() {
   const [count, setCount] = useState(0)
+  const query = useQuery({
+    queryKey: ['test'],
+    queryFn: async () => {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+      const result = await response.json()
+      return result
+    }
+  })
+
+  if(query?.data) {
+    console.log(query.data)
+  }
 
   return (
     <>
