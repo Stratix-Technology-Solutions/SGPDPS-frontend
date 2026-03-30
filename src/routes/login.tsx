@@ -2,6 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import api from '../api/axios'
+import { loginSchema } from '../dtos/auth.dto'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -22,8 +23,9 @@ function RouteComponent() {
         replace: true,
       })
     },
-    onError: () => {
-      console.log('No estas logueado')
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Error al iniciar sesión'
+      console.error(message)
     },
   })
 
@@ -34,6 +36,9 @@ function RouteComponent() {
     },
     onSubmit: ({ value }) => {
       login(value)
+    },
+    validators: {
+      onChange: loginSchema,
     },
   })
 
@@ -62,6 +67,11 @@ function RouteComponent() {
                 required
                 aria-required="true"
               />
+              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
+                <p className="text-red-500">
+                  {field.state.meta.errors[0]?.message}
+                </p>
+              )}
             </div>
           )}
         />
