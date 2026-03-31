@@ -1,33 +1,14 @@
 import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import api from '../api/axios'
-import { loginSchema } from '../dtos/auth.dto'
+import { createFileRoute } from '@tanstack/react-router'
+import { LoginSchema } from '../dtos/auth.dto'
+import { useLogin } from '../hooks/useAuth'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const navigate = useNavigate()
-
-  const { mutate: login} = useMutation({
-    mutationFn: async ({ email, password }: { email: string, password: string }) => {
-      const res = await api.post('/auth/login', { email, password })
-      return res.data.data.token
-    },
-    onSuccess: (token) => {
-      localStorage.setItem('access_token', token)
-      navigate({
-        to: '/',
-        replace: true,
-      })
-    },
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
-    },
-  })
+  const { mutate: login } = useLogin()
 
   const form = useForm({
     defaultValues: {
@@ -38,7 +19,7 @@ function RouteComponent() {
       login(value)
     },
     validators: {
-      onChange: loginSchema,
+      onChange: LoginSchema,
     },
   })
 
