@@ -24,3 +24,16 @@ export const useLogin = () => {
     },
   })
 }
+
+export const useLogout = () => {
+  const navigate = useNavigate()
+
+  return () => {
+    localStorage.removeItem('access_token')
+
+    navigate({
+      to: '/login',
+      replace: true,
+    })
+  }
+}
