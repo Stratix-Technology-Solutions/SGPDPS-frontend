@@ -37,3 +37,7 @@ export const useLogout = () => {
     })
   }
 }
+
+export const useAuthenticated = () => {
+  return !!localStorage.getItem('access_token')
+}

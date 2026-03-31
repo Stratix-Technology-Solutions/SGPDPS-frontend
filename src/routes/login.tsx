@@ -1,10 +1,17 @@
 import { useForm } from '@tanstack/react-form'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { LoginSchema } from '../dtos/auth.dto'
-import { useLogin } from '../hooks/useAuth'
+import { useAuthenticated, useLogin } from '../hooks/useAuth'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
+  beforeLoad: () => {
+    const isAuthenticated = useAuthenticated()
+
+    if (isAuthenticated) {
+      throw redirect({ to: '/' })
+    }
+  },
 })
 
 function RouteComponent() {
