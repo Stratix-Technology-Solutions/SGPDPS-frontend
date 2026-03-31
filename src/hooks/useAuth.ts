@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import type { LoginDto } from '../dtos/auth.dto';
+import type { LoginDto, RegisterDto, VerifyEmailDto } from '../dtos/auth.dto';
 import api from '../api/axios';
 
 export const useLogin = () => {
@@ -13,10 +13,7 @@ export const useLogin = () => {
     },
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
-      navigate({
-        to: '/',
-        replace: true,
-      })
+      navigate({ to: '/' })
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Error al iniciar sesión'
@@ -30,14 +27,52 @@ export const useLogout = () => {
 
   return () => {
     localStorage.removeItem('access_token')
-
-    navigate({
-      to: '/login',
-      replace: true,
-    })
+    navigate({ to: '/login' })
   }
 }
 
 export const useAuthenticated = () => {
   return !!localStorage.getItem('access_token')
+}
+
+export const useRegister = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: async ({ email, password }: RegisterDto) => {
+      const res = await api.post('/auth/register', { email, password })
+      return res.data
+    },
+    onSuccess: (_, variables) => {
+      navigate({
+        to: '/verify-email',
+        search: {
+          email: variables.email,
+        },
+      })
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Error al iniciar sesión'
+      console.error(message)
+    }
+  })
+}
+
+export const useVerifyEmail = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: async ({ email, token }: VerifyEmailDto) => {
+      const res = await api.post('/auth/verify-email', { email, token })
+      return res.data.token
+    },
+    onSuccess: (token) => {
+      localStorage.setItem('access_token', token)
+      navigate({ to: '/' })
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Error al iniciar sesión'
+      console.error(message)
+    }
+  })
 }
