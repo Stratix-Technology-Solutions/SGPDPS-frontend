@@ -65,7 +65,7 @@ function RouteComponent() {
                   className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
+                  <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
                 )}
               </div>
             )}
@@ -93,7 +93,7 @@ function RouteComponent() {
             )}
           />
 
-          <div className="flex flex-col gap-3 mt-4">
+          <div className="flex flex-col gap-3">
             <div className="flex items-center justify-end mb-2 flex-wrap gap-3">
               {/*
               <label className="flex items-center gap-2 text-white cursor-pointer">
@@ -112,7 +112,7 @@ function RouteComponent() {
 
             <button
               type="submit"
-              className="bg-primary-soft hover:bg-primary text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
+              className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer"
             >
               Iniciar Sesion
             </button>

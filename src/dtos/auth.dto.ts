@@ -5,7 +5,6 @@ export const LoginSchema = z.object({
     .string()
     .email('Correo electrónico inválido')
     .min(1, 'El correo es requerido'),
-
   password: z
     .string(),
 })
@@ -36,7 +35,7 @@ export const VerifyEmailSchema = z.object({
     .min(1, 'El correo es requerido'),
   token: z
     .string()
-    .length(6, 'El código solo debe contener 6 dígitos')
+    .length(6, 'El código debe contener 6 dígitos')
 })
 
 export type LoginDto = z.infer<typeof LoginSchema>

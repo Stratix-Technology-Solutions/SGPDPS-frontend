@@ -66,7 +66,7 @@ function RouteComponent() {
                   className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
+                  <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
                 )}
               </div>
             )}
@@ -91,7 +91,7 @@ function RouteComponent() {
                   className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
+                  <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
                 )}
               </div>
             )}
@@ -116,7 +116,7 @@ function RouteComponent() {
                   className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
+                  <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
                 )}
               </div>
             )}
@@ -125,7 +125,7 @@ function RouteComponent() {
           <div className="flex flex-col mt-4 gap-3">
             <button
               type="submit"
-              className="bg-primary-soft hover:bg-primary text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
+              className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer"
             >
               Registrarme
             </button>
