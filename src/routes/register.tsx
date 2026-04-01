@@ -32,12 +32,12 @@ function RouteComponent() {
   })
 
   return (
-    <div className="h-screen bg-background-dark flex items-center justify-center">
+    <div className="min-h-screen bg-background-dark flex items-center justify-center">
       <div className="w-full max-w-xl flex flex-col p-8 gap-8">
 
         <div className="flex flex-col items-center gap-4">
           <img src="/Logo_FolioX.svg" alt="logo FolioX" className="h-40" />
-          <h2 className="text-white text-center text-4xl font-bold">Registrarse</h2>
+          <h2 className="text-white text-center text-4xl font-extrabold">Registrarse</h2>
         </div>
 
         <form

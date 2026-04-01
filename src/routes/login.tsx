@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { LoginSchema } from '../dtos/auth.dto'
 import { useAuthenticated, useLogin } from '../hooks/useAuth'
 
@@ -32,26 +32,25 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-background-dark flex items-center justify-center">
-      <div className="w-4/5 md:w-1/2 min-h-screen flex flex-col justify-center px-10 md:px-36">
+      <div className="w-full max-w-xl flex flex-col p-8 gap-8">
 
-        <div className="flex justify-center mb-8">
-          <img src="/Logo_FolioX.svg" alt="FolioX" className="h-35" />
+        <div className="flex flex-col items-center gap-4">
+          <img src="/Logo_FolioX.svg" alt="logo FolioX" className="h-40" />
+          <h2 className="text-white text-center text-4xl font-extrabold">Inicia sesión en FolioX</h2>
         </div>
-
-        <h2 className="text-white text-center text-4xl font-bold mb-8">Inicia sesión en FolioX</h2>
 
         <form
           onSubmit={(e) => {
             e.preventDefault()
             form.handleSubmit(e)
           }}
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-6 w-full"
         >
           <form.Field
             name="email"
             children={(field) => (
-              <div className="flex flex-col gap-1">
-                <label htmlFor={field.name} className="text-white text-sm font-medium">
+              <div className="flex flex-col gap-2">
+                <label htmlFor={field.name} className="text-white font-medium">
                   Email
                 </label>
                 <input
@@ -63,7 +62,7 @@ function RouteComponent() {
                   placeholder="Ingrese su email"
                   required
                   aria-required="true"
-                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
                   <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
@@ -75,8 +74,8 @@ function RouteComponent() {
           <form.Field
             name="password"
             children={(field) => (
-              <div className="flex flex-col gap-1">
-                <label htmlFor={field.name} className="text-white text-sm font-medium">
+              <div className="flex flex-col gap-2">
+                <label htmlFor={field.name} className="text-white font-medium">
                   Contraseña
                 </label>
                 <input
@@ -88,32 +87,45 @@ function RouteComponent() {
                   placeholder="••••••••••"
                   required
                   aria-required="true"
-                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
               </div>
             )}
           />
 
-          <button
-            type="submit"
-            className="mt-2 bg-primary-soft hover:bg-primary text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
-          >
-            Iniciar Sesion
-          </button>
+          <div className="flex flex-col gap-3 mt-4">
+            <div className="flex items-center justify-between mb-2 flex-wrap gap-3">
+              <label className="flex items-center gap-2 text-white cursor-pointer">
+                <input type="checkbox" className="accent-primary-soft" />
+                Recordarme
+              </label>
+
+              <Link
+                to="."
+                className="text-white hover:underline"
+              >
+                Olvide la contraseña
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              className="bg-primary-soft hover:bg-primary text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
+            >
+              Iniciar Sesion
+            </button>
+
+            <p className="text-center">
+              <span className="text-neutral-medium ">¿Es la primera vez que usas FolioX? </span>
+              <Link
+                to="/register"
+                className="text-primary-soft hover:underline"
+              >
+                Registrarse
+              </Link>
+            </p>
+          </div>
         </form>
-
-        <div className="mt-6 flex flex-col items-center gap-2">
-          <a href="#" className="text-white text-sm hover:underline">
-            Olvide la contraseña
-          </a>
-          <p className="text-neutral-medium text-center text-xs">
-            ¿Es la primera vez que usas FolioX?{' '}
-            <a href="/register" className="text-primary-soft hover:underline">
-              Registrarse
-            </a>
-          </p>
-        </div>
-
       </div>
     </div>
   )
