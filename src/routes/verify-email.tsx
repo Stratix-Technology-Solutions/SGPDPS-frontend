@@ -18,7 +18,7 @@ export const Route = createFileRoute('/verify-email')({
 function RouteComponent() {
   const { email } = Route.useSearch()
   const { mutate: verify } = useVerifyEmail()
-  const [timeLeft, setTimeLeft] = useState(300)
+  const [timeLeft, setTimeLeft] = useState(600)
 
   const form = useForm({
     defaultValues: {
