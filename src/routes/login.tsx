@@ -94,11 +94,13 @@ function RouteComponent() {
           />
 
           <div className="flex flex-col gap-3 mt-4">
-            <div className="flex items-center justify-between mb-2 flex-wrap gap-3">
+            <div className="flex items-center justify-end mb-2 flex-wrap gap-3">
+              {/*
               <label className="flex items-center gap-2 text-white cursor-pointer">
                 <input type="checkbox" className="accent-primary-soft" />
                 Recordarme
               </label>
+              */}
 
               <Link
                 to="."
