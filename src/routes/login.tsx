@@ -35,7 +35,7 @@ function RouteComponent() {
       <div className="w-full max-w-xl flex flex-col p-8 gap-8">
 
         <div className="flex flex-col items-center gap-4">
-          <img src="/Logo_FolioX.svg" alt="logo FolioX" className="h-40" />
+          <img src="/logo.svg" alt="logo FolioX" className="h-40" />
           <h2 className="text-white text-center text-4xl font-extrabold">Inicia sesión en FolioX</h2>
         </div>
 
@@ -118,7 +118,7 @@ function RouteComponent() {
             </button>
 
             <p className="text-center">
-              <span className="text-neutral-medium ">¿Es la primera vez que usas FolioX? </span>
+              <span className="text-neutral-medium">¿Es la primera vez que usas FolioX? </span>
               <Link
                 to="/register"
                 className="text-primary-soft hover:underline"

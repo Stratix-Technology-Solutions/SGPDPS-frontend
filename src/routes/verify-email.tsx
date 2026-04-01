@@ -55,7 +55,7 @@ function RouteComponent() {
       <div className="w-full max-w-xl flex flex-col p-8 gap-8">
 
         <div className="flex flex-col items-center gap-4">
-          <img src="/Logo_FolioX.svg" alt="logo FolioX" className="h-40" />
+          <img src="/logo.svg" alt="logo FolioX" className="h-40" />
           <h2 className="text-white text-center text-4xl font-extrabold">Confirmación de correo</h2>
 
           <div className="flex flex-col items-center justify-center gap-1">
