@@ -31,8 +31,8 @@ function RouteComponent() {
   })
 
   return (
-    <div className="min-h-screen bg-[#1F2B3B] flex items-center justify-center">
-      <div className="w-4/5 md:w-1/2 min-h-screen bg-[#1E2937] flex flex-col justify-center px-10 md:px-36">
+    <div className="min-h-screen bg-background-dark flex items-center justify-center">
+      <div className="w-4/5 md:w-1/2 min-h-screen flex flex-col justify-center px-10 md:px-36">
 
         <div className="flex justify-center mb-8">
           <img src="/Logo_FolioX.svg" alt="FolioX" className="h-35" />
@@ -63,7 +63,7 @@ function RouteComponent() {
                   placeholder="Ingrese su email"
                   required
                   aria-required="true"
-                  className="bg-[#C8D0D8] text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
                   <p className="text-red-400 text-xs">{field.state.meta.errors[0]?.message}</p>
@@ -88,7 +88,7 @@ function RouteComponent() {
                   placeholder="••••••••••"
                   required
                   aria-required="true"
-                  className="bg-[#C8D0D8] text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+                  className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
               </div>
             )}
@@ -96,7 +96,7 @@ function RouteComponent() {
 
           <button
             type="submit"
-            className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
+            className="mt-2 bg-primary-soft hover:bg-primary text-white font-medium py-3 rounded-2xl transition-colors cursor-pointer"
           >
             Iniciar Sesion
           </button>
@@ -106,9 +106,9 @@ function RouteComponent() {
           <a href="#" className="text-white text-sm hover:underline">
             Olvide la contraseña
           </a>
-          <p className="text-gray-500 text-center text-xs">
+          <p className="text-neutral-medium text-center text-xs">
             ¿Es la primera vez que usas FolioX?{' '}
-            <a href="/register" className="text-blue-400 hover:underline">
+            <a href="/register" className="text-primary-soft hover:underline">
               Registrarse
             </a>
           </p>
