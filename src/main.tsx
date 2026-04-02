@@ -13,6 +13,9 @@ declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
+  interface HistoryState {
+    email?: string
+  }
 }
 
 createRoot(document.getElementById('root')!).render(

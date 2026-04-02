@@ -46,7 +46,7 @@ export const useRegister = () => {
     onSuccess: (_, variables) => {
       navigate({
         to: '/verify-email',
-        search: {
+        state: {
           email: variables.email,
         },
       })

@@ -1,28 +1,26 @@
 import { useForm } from '@tanstack/react-form'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, useLocation } from '@tanstack/react-router'
 import { VerifyEmailSchema } from '../dtos/auth.dto'
-import { useAuthenticated, useVerifyEmail } from '../hooks/useAuth'
+import { useVerifyEmail } from '../hooks/useAuth'
 import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/verify-email')({
   component: RouteComponent,
-  beforeLoad: () => {
-    const isAuthenticated = useAuthenticated()
-
-    if (isAuthenticated) {
+  beforeLoad: ({ location }) => {
+    if (!location.state.email) {
       throw redirect({ to: '/' })
     }
   },
 })
 
 function RouteComponent() {
-  const { email } = Route.useSearch()
+  const location  = useLocation()
   const { mutate: verify } = useVerifyEmail()
   const [timeLeft, setTimeLeft] = useState(600)
 
   const form = useForm({
     defaultValues: {
-      email,
+      email: location.state.email || '',
       token: '',
     },
     onSubmit: ({ value }) => {
@@ -61,7 +59,7 @@ function RouteComponent() {
           <div className="flex flex-col items-center justify-center gap-1">
             <p className="text-gray-400 text-center leading-relaxed">
               Hemos enviado un código de verificación a
-              <span className="text-white font-medium"> {email}</span>
+              <span className="text-white font-medium"> {location.state.email}</span>
             </p>
             <p className="text-gray-400 text-center leading-relaxed">
               Ingresa el código para continuar
