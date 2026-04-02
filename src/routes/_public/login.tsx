@@ -3,8 +3,9 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { LoginSchema } from '../../dtos/auth.dto'
 import { useLogin } from '../../hooks/useAuth'
 import { MdMail, MdLock, MdLogin } from 'react-icons/md'
-import { MessageError } from '../../components/MessageError'
+import { InputMessageError } from '../../components/InputMessageError'
 import { ButtonLoader } from '../../components/ButtonLoader'
+import { BannerMessageError } from '../../components/BannerMessageError'
 
 export const Route = createFileRoute('/_public/login')({
   component: RouteComponent,
@@ -34,9 +35,7 @@ function RouteComponent() {
       </div>
 
       {!!error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-300 rounded-2xl p-3 text-center">
-          {error.response?.data?.message || 'Error al iniciar sesión'}
-        </div>
+        <BannerMessageError message={error.response?.data?.message || 'Error al iniciar sesión'} />
       )}
 
       <form
@@ -66,7 +65,7 @@ function RouteComponent() {
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
               {!field.state.meta.isValid && (
-                <MessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
             </div>
           )}
@@ -92,7 +91,7 @@ function RouteComponent() {
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
               {!field.state.meta.isValid && (
-                <MessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
             </div>
           )}
