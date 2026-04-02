@@ -13,8 +13,10 @@ import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as PublicVerifyEmailRouteImport } from './routes/_public/verify-email'
+import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
+import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 
 const PublicRoute = PublicRouteImport.update({
@@ -35,6 +37,11 @@ const PublicVerifyEmailRoute = PublicVerifyEmailRouteImport.update({
   path: '/verify-email',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicRegisterRoute = PublicRegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -43,6 +50,11 @@ const PublicRegisterRoute = PublicRegisterRouteImport.update({
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => PublicRoute,
 } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
@@ -54,15 +66,19 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
+  '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
+  '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
 }
 export interface FileRoutesById {
@@ -70,23 +86,41 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
+  '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_public/verify-email': typeof PublicVerifyEmailRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/login' | '/register' | '/verify-email'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/verify-email'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/login' | '/register' | '/verify-email'
+  to:
+    | '/'
+    | '/profile'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/verify-email'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_public'
     | '/_authenticated/profile'
+    | '/_public/forgot-password'
     | '/_public/login'
     | '/_public/register'
+    | '/_public/reset-password'
     | '/_public/verify-email'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
@@ -126,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicVerifyEmailRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/reset-password': {
+      id: '/_public/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof PublicResetPasswordRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/register': {
       id: '/_public/register'
       path: '/register'
@@ -138,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/forgot-password': {
+      id: '/_public/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof PublicForgotPasswordRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_authenticated/profile': {
@@ -165,14 +213,18 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface PublicRouteChildren {
+  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
   PublicLoginRoute: typeof PublicLoginRoute
   PublicRegisterRoute: typeof PublicRegisterRoute
+  PublicResetPasswordRoute: typeof PublicResetPasswordRoute
   PublicVerifyEmailRoute: typeof PublicVerifyEmailRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
+  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
   PublicLoginRoute: PublicLoginRoute,
   PublicRegisterRoute: PublicRegisterRoute,
+  PublicResetPasswordRoute: PublicResetPasswordRoute,
   PublicVerifyEmailRoute: PublicVerifyEmailRoute,
 }
 

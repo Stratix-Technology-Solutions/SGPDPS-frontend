@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import type { LoginDto, RegisterDto, VerifyEmailDto } from '../dtos/auth.dto';
+import type { EmailDto, LoginDto, RegisterDto, VerifyEmailDto } from '../dtos/auth.dto';
 import api from '../api/axios';
 
 export const useLogin = () => {
@@ -69,6 +69,39 @@ export const useVerifyEmail = () => {
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
       navigate({ to: '/' })
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Error al iniciar sesión'
+      console.error(message)
+    }
+  })
+}
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: async ({ email }: EmailDto) => {
+      const res = await api.post('/auth/forgot-password', { email })
+      return res.data
+    },
+    onSuccess: console.log,
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || 'Error al iniciar sesión'
+      console.error(message)
+    }
+  })
+}
+
+export const useResetPassword = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: async ({ email, password, token }: { token: string } & RegisterDto) => {
+      const res = await api.post('/auth/reset-password', { email, password, token })
+      return res.data
+    },
+    onSuccess: (data) => {
+      console.log(data)
+      navigate({ to: '/login' })
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || 'Error al iniciar sesión'

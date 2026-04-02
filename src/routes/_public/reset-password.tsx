@@ -1,25 +1,34 @@
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { ResetPasswordSearchSchema } from '../../dtos/search.dto'
 import { useForm } from '@tanstack/react-form'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { LoginSchema } from '../../dtos/auth.dto'
-import { useLogin } from '../../hooks/useAuth'
+import { useResetPassword } from '../../hooks/useAuth'
+import { RegisterSchema } from '../../dtos/auth.dto'
 
-export const Route = createFileRoute('/_public/login')({
+export const Route = createFileRoute('/_public/reset-password')({
   component: RouteComponent,
+  validateSearch: ResetPasswordSearchSchema,
+  beforeLoad: ({ search }) => {
+    if (!search.token || !search.email) {
+      throw redirect({ to: '/login' })
+    }
+  }
 })
 
 function RouteComponent() {
-  const { mutate: login } = useLogin()
+  const { email, token } = Route.useSearch()
+  const { mutate: reset } = useResetPassword()
 
   const form = useForm({
     defaultValues: {
-      email: '',
+      email,
       password: '',
+      confirmPassword: '',
     },
     onSubmit: ({ value }) => {
-      login(value)
+      reset({ ...value, token })
     },
     validators: {
-      onChange: LoginSchema,
+      onChange: RegisterSchema,
     },
   })
 
@@ -27,7 +36,7 @@ function RouteComponent() {
     <>
       <div className="flex flex-col items-center gap-4">
         <img src="/logo.svg" alt="logo FolioX" className="h-40" />
-        <h2 className="text-white text-center text-4xl font-extrabold">Inicia sesión en FolioX</h2>
+        <h2 className="text-white text-center text-4xl font-extrabold">Ingresar nueva contraseña</h2>
       </div>
 
       <form
@@ -53,11 +62,9 @@ function RouteComponent() {
                 placeholder="Ingrese su email"
                 required
                 aria-required="true"
-                className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+                disabled
+                className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent disabled:opacity-60 disabled:cursor-not-allowed"
               />
-              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
-              )}
             </div>
           )}
         />
@@ -67,7 +74,7 @@ function RouteComponent() {
           children={(field) => (
             <div className="flex flex-col gap-2">
               <label htmlFor={field.name} className="text-white font-medium">
-                Contraseña
+                Nueva Contraseña
               </label>
               <input
                 id={field.name}
@@ -80,44 +87,44 @@ function RouteComponent() {
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
+              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
+                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+              )}
             </div>
           )}
         />
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-end mb-2 flex-wrap gap-3">
-            {/*
-              <label className="flex items-center gap-2 text-white cursor-pointer">
-                <input type="checkbox" className="accent-primary-soft" />
-                Recordarme
+        <form.Field
+          name="confirmPassword"
+          children={(field) => (
+            <div className="flex flex-col gap-2">
+              <label htmlFor={field.name} className="text-white font-medium">
+                Confirmar contraseña
               </label>
-              */}
+              <input
+                id={field.name}
+                name={field.name}
+                type="password"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="••••••••••"
+                required
+                aria-required="true"
+                className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+              />
+              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
+                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+              )}
+            </div>
+          )}
+        />
 
-            <Link
-              to="/forgot-password"
-              className="text-white hover:underline"
-            >
-              Olvide la contraseña
-            </Link>
-          </div>
-
-          <button
-            type="submit"
-            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer"
-          >
-            Iniciar Sesion
-          </button>
-
-          <p className="text-center">
-            <span className="text-neutral-medium">¿Es la primera vez que usas FolioX? </span>
-            <Link
-              to="/register"
-              className="text-primary-soft hover:underline"
-            >
-              Registrarse
-            </Link>
-          </p>
-        </div>
+        <button
+          type="submit"
+          className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer mt-4"
+        >
+          Enviar
+        </button>
       </form>
     </>
   )

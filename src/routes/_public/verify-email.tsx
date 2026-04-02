@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_public/verify-email')({
   component: RouteComponent,
   beforeLoad: ({ location }) => {
     if (!location.state.email) {
-      throw redirect({ to: '/' })
+      throw redirect({ to: '/login' })
     }
   },
 })
