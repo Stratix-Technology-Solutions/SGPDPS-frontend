@@ -1,12 +1,13 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useLocation } from '@tanstack/react-router'
 import { VerifyEmailSchema } from '../../dtos/auth.dto'
-import { useVerifyEmail } from '../../hooks/useAuth'
+import { useRetrySendCode, useVerifyEmail } from '../../hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { BannerMessageError } from '../../components/BannerMessageError'
 import { InputMessageError } from '../../components/InputMessageError'
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BiSend } from 'react-icons/bi'
+import { MdRestore } from 'react-icons/md'
 
 export const Route = createFileRoute('/_public/verify-email')({
   component: RouteComponent,
@@ -18,9 +19,26 @@ export const Route = createFileRoute('/_public/verify-email')({
 })
 
 function RouteComponent() {
+  const EXPIRATION_KEY = 'verify_email_expiration'
+
+  const getInitialTime = () => {
+    const saved = localStorage.getItem(EXPIRATION_KEY)
+
+    if (saved) {
+      const diff = Math.floor((Number(saved) - Date.now()) / 1000)
+      return diff > 0 ? diff : 0
+    }
+
+    const newExpiration = Date.now() + 300 * 1000
+    localStorage.setItem(EXPIRATION_KEY, newExpiration.toString())
+
+    return 300
+  }
+
+const [timeLeft, setTimeLeft] = useState(getInitialTime)
   const location  = useLocation()
   const { mutate: verify, error, isPending } = useVerifyEmail()
-  const [timeLeft, setTimeLeft] = useState(600)
+  const { mutate: retry, error: errorRetry, isPending: isPendingRetry } = useRetrySendCode()
 
   const form = useForm({
     defaultValues: {
@@ -36,10 +54,16 @@ function RouteComponent() {
   })
 
   useEffect(() => {
-    if (timeLeft <= 0) return
     const interval = setInterval(() => {
-      setTimeLeft((prev) => prev - 1)
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          return 0
+        }
+        return prev - 1
+      })
     }, 1000)
+
     return () => clearInterval(interval)
   }, [timeLeft])
 
@@ -47,6 +71,19 @@ function RouteComponent() {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, `0`)}`
+  }
+
+  const handleRetry = () => {
+    retry(
+      { email: location.state.email || '' },
+      {
+        onSuccess: () => {
+          const newExpiration = Date.now() + 300 * 1000
+          localStorage.setItem(EXPIRATION_KEY, newExpiration.toString())
+          setTimeLeft(300)
+        },
+      }
+    )
   }
 
   return (
@@ -74,6 +111,10 @@ function RouteComponent() {
 
       {!!error && (
         <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante la verificación del correo'} />
+      )}
+
+      {!!errorRetry && (
+        <BannerMessageError message={errorRetry.response?.data?.message || 'Surgió un error durante la verificación del correo'} />
       )}
 
       <form
@@ -105,7 +146,23 @@ function RouteComponent() {
           )}
         />
 
-        <div className="flex items-center justify-end flex-wrap gap-3">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <button
+            type="button"
+            disabled={timeLeft > 0 || isPendingRetry}
+            onClick={handleRetry}
+            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isPendingRetry ? (
+              <ButtonLoader />
+            ) : (
+              <>
+                <span>Volver a enviar</span>
+                <MdRestore className="w-6 h-6 inline" />
+              </>
+            )}
+          </button>
+
           <button
             type="submit"
             disabled={timeLeft <= 0 || isPending}

@@ -109,3 +109,12 @@ export const useResetPassword = () => {
     }
   })
 }
+
+export const useRetrySendCode = () => {
+  return useMutation({
+    mutationFn: async ({ email }: EmailDto) => {
+      const res = await api.post('/auth/resend-verification', { email })
+      return res.data
+    },
+  })
+}

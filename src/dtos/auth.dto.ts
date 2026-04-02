@@ -31,7 +31,7 @@ export const RegisterSchema = EmailSchema.extend({
 export const VerifyEmailSchema = EmailSchema.extend({
   token: z
     .string()
-    .length(6, 'El código debe contener 6 dígitos')
+    .length(6, 'El código debe contener 6 caracteres')
 })
 
 export type EmailDto = z.infer<typeof EmailSchema>
