@@ -1,26 +1,18 @@
 import { z } from 'zod'
 
-export const LoginSchema = z.object({
+export const EmailSchema = z.object({
   email: z
     .string()
     .email('Correo electrónico inválido')
     .min(1, 'El correo es requerido'),
+})
+
+export const LoginSchema = EmailSchema.extend({
   password: z
     .string(),
 })
 
-export const RegisterSchema = z.object({
-  email: z
-    .string()
-    .email('Correo electrónico inválido')
-    .min(1, 'El correo es requerido'),
-  password: z
-    .string()
-    .min(8, 'La contraseña debe tener al menos 8 caracteres')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/,
-      'Debe incluir mayúscula, minúscula, número y carácter especial'
-    ),
+export const RegisterSchema = LoginSchema.extend({
   confirmPassword: z
     .string()
 }).refine((data) => data.password === data.confirmPassword, {
@@ -28,16 +20,13 @@ export const RegisterSchema = z.object({
   path: ['confirmPassword'],
 })
 
-export const VerifyEmailSchema = z.object({
-  email: z
-    .string()
-    .email('Correo electrónico inválido')
-    .min(1, 'El correo es requerido'),
+export const VerifyEmailSchema = EmailSchema.extend({
   token: z
     .string()
     .length(6, 'El código debe contener 6 dígitos')
 })
 
+export type EmailDto = z.infer<typeof EmailSchema>
 export type LoginDto = z.infer<typeof LoginSchema>
 export type RegisterDto = z.infer<typeof RegisterSchema>
 export type VerifyEmailDto = z.infer<typeof VerifyEmailSchema>
