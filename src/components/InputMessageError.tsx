@@ -1,10 +1,10 @@
-import { BiError } from 'react-icons/bi'
+import { MdWarning } from 'react-icons/md'
 
 export const InputMessageError = ({ message }: { message: string }) => {
   return (
-    <em role="alert" className="text-red-400 text-sm flex items-center gap-1 flex-wrap">
-      <BiError className="w-5 h-5" />
-      <span>{message}</span>
+    <em role="alert" className="text-red-400 text-sm">
+      <MdWarning className="inline" />
+      <span> {message}</span>
     </em>
   )
 }

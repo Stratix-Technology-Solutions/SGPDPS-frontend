@@ -35,7 +35,7 @@ function RouteComponent() {
       </div>
 
       {!!error && (
-        <BannerMessageError message={error.response?.data?.message || 'Error al iniciar sesión'} />
+        <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante el inicio de sesión'} />
       )}
 
       <form
@@ -49,7 +49,7 @@ function RouteComponent() {
           name="email"
           children={(field) => (
             <div className="flex flex-col gap-2">
-              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2">
+              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
                 <MdMail className="w-6 h-6" />
                 <span>Email</span>
               </label>
@@ -75,7 +75,7 @@ function RouteComponent() {
           name="password"
           children={(field) => (
             <div className="flex flex-col gap-2">
-              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2">
+              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
                 <MdLock className="w-6 h-6" />
                 <span>Contraseña</span>
               </label>
@@ -110,14 +110,14 @@ function RouteComponent() {
           <button
             type="submit"
             disabled={isPending}
-            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer flex justify-center items-center gap-2 disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
+            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isPending ? (
               <ButtonLoader message="Iniciando Sesión..." />
             ) : (
               <>
-                <span>Iniciar Sesion</span>
-                <MdLogin className="w-6 h-6" />
+                <span>Iniciar Sesion </span>
+                <MdLogin className="w-6 h-6 inline" />
               </>
             )}
           </button>

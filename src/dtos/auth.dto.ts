@@ -13,7 +13,14 @@ export const LoginSchema = EmailSchema.extend({
     .nonempty('La contraseña es requerida')
 })
 
-export const RegisterSchema = LoginSchema.extend({
+export const RegisterSchema = EmailSchema.extend({
+  password: z
+    .string()
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/,
+      'Debe incluir mayúscula, minúscula, número y carácter especial'
+    ),
   confirmPassword: z
     .string()
 }).refine((data) => data.password === data.confirmPassword, {
