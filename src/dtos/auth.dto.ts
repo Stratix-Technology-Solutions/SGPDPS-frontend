@@ -3,13 +3,14 @@ import { z } from 'zod'
 export const EmailSchema = z.object({
   email: z
     .string()
+    .nonempty('El correo es requerido')
     .email('Correo electrónico inválido')
-    .min(1, 'El correo es requerido'),
 })
 
 export const LoginSchema = EmailSchema.extend({
   password: z
-    .string(),
+    .string()
+    .nonempty('La contraseña es requerida')
 })
 
 export const RegisterSchema = LoginSchema.extend({
