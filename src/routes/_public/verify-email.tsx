@@ -19,7 +19,10 @@ export const Route = createFileRoute('/_public/verify-email')({
 })
 
 function RouteComponent() {
-  const EXPIRATION_KEY = 'verify_email_expiration'
+  const location  = useLocation()
+  
+  const email = location.state.email || ''
+  const EXPIRATION_KEY = `verify_email_expiration_${email}`
 
   const getInitialTime = () => {
     const saved = localStorage.getItem(EXPIRATION_KEY)
@@ -35,8 +38,7 @@ function RouteComponent() {
     return 300
   }
 
-const [timeLeft, setTimeLeft] = useState(getInitialTime)
-  const location  = useLocation()
+  const [timeLeft, setTimeLeft] = useState(getInitialTime)
   const { mutate: verify, error, isPending } = useVerifyEmail()
   const { mutate: retry, error: errorRetry, isPending: isPendingRetry } = useRetrySendCode()
 
