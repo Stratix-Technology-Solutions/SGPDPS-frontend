@@ -2,13 +2,17 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
 import { EmailSchema } from '../../dtos/auth.dto'
 import { useForgotPassword } from '../../hooks/useAuth'
+import { BiSend } from 'react-icons/bi'
+import { ButtonLoader } from '../../components/ButtonLoader'
+import { InputMessageError } from '../../components/InputMessageError'
+import { BannerMessageError } from '../../components/BannerMessageError'
 
 export const Route = createFileRoute('/_public/forgot-password')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { mutate: forgot, data, isPending } = useForgotPassword()
+  const { mutate: forgot, data, error, isPending } = useForgotPassword()
 
   const form = useForm({
     defaultValues: {
@@ -35,6 +39,10 @@ function RouteComponent() {
         </p>
       </div>
 
+      {!!error && (
+        <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante la recuperación de la contraseña'} />
+      )}
+
       {!data && (
         <form
           onSubmit={(e) => {
@@ -58,8 +66,8 @@ function RouteComponent() {
                   aria-required="true"
                   className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
                 />
-                {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+                {!field.state.meta.isValid && (
+                  <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
                 )}
               </div>
             )}
@@ -68,9 +76,16 @@ function RouteComponent() {
           <button
             type="submit"
             disabled={isPending}
-            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
+            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Enviar
+            {isPending ? (
+              <ButtonLoader />
+            ) : (
+              <>
+                <span>Enviar </span>
+                <BiSend className="w-6 h-6 inline" />
+              </>
+            )}
           </button>
         </form>
       )}

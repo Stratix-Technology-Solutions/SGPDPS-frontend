@@ -3,16 +3,24 @@ import { z } from 'zod'
 export const EmailSchema = z.object({
   email: z
     .string()
+    .nonempty('El correo es requerido')
     .email('Correo electrónico inválido')
-    .min(1, 'El correo es requerido'),
 })
 
 export const LoginSchema = EmailSchema.extend({
   password: z
-    .string(),
+    .string()
+    .nonempty('La contraseña es requerida')
 })
 
-export const RegisterSchema = LoginSchema.extend({
+export const RegisterSchema = EmailSchema.extend({
+  password: z
+    .string()
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/,
+      'Debe incluir mayúscula, minúscula, número y carácter especial'
+    ),
   confirmPassword: z
     .string()
 }).refine((data) => data.password === data.confirmPassword, {
@@ -23,7 +31,7 @@ export const RegisterSchema = LoginSchema.extend({
 export const VerifyEmailSchema = EmailSchema.extend({
   token: z
     .string()
-    .length(6, 'El código debe contener 6 dígitos')
+    .length(6, 'El código debe contener 6 caracteres')
 })
 
 export type EmailDto = z.infer<typeof EmailSchema>

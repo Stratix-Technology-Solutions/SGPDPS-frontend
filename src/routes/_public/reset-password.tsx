@@ -3,6 +3,10 @@ import { ResetPasswordSearchSchema } from '../../dtos/search.dto'
 import { useForm } from '@tanstack/react-form'
 import { useResetPassword } from '../../hooks/useAuth'
 import { RegisterSchema } from '../../dtos/auth.dto'
+import { InputMessageError } from '../../components/InputMessageError'
+import { BannerMessageError } from '../../components/BannerMessageError'
+import { ButtonLoader } from '../../components/ButtonLoader'
+import { BiSend } from 'react-icons/bi'
 
 export const Route = createFileRoute('/_public/reset-password')({
   component: RouteComponent,
@@ -16,7 +20,7 @@ export const Route = createFileRoute('/_public/reset-password')({
 
 function RouteComponent() {
   const { email, token } = Route.useSearch()
-  const { mutate: reset } = useResetPassword()
+  const { mutate: reset, error, isPending } = useResetPassword()
 
   const form = useForm({
     defaultValues: {
@@ -38,6 +42,10 @@ function RouteComponent() {
         <img src="/logo.svg" alt="logo FolioX" className="h-40" />
         <h2 className="text-white text-center text-4xl font-extrabold">Ingresar nueva contraseña</h2>
       </div>
+
+      {!!error && (
+        <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante la modificación de la contraseña'} />
+      )}
 
       <form
         onSubmit={(e) => {
@@ -87,8 +95,8 @@ function RouteComponent() {
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
-              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+              {!field.state.meta.isValid && (
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
             </div>
           )}
@@ -112,8 +120,8 @@ function RouteComponent() {
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
-              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+              {!field.state.meta.isValid && (
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
             </div>
           )}
@@ -121,9 +129,17 @@ function RouteComponent() {
 
         <button
           type="submit"
-          className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer mt-4"
+          disabled={isPending}
+          className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer mt-2 disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Enviar
+          {isPending ? (
+            <ButtonLoader />
+          ) : (
+            <>
+              <span>Enviar </span>
+              <BiSend className="w-6 h-6 inline" />
+            </>
+          )}
         </button>
       </form>
     </>

@@ -2,13 +2,17 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LoginSchema } from '../../dtos/auth.dto'
 import { useLogin } from '../../hooks/useAuth'
+import { MdMail, MdLock, MdLogin } from 'react-icons/md'
+import { InputMessageError } from '../../components/InputMessageError'
+import { ButtonLoader } from '../../components/ButtonLoader'
+import { BannerMessageError } from '../../components/BannerMessageError'
 
 export const Route = createFileRoute('/_public/login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { mutate: login } = useLogin()
+  const { mutate: login, error, isPending } = useLogin()
 
   const form = useForm({
     defaultValues: {
@@ -30,6 +34,10 @@ function RouteComponent() {
         <h2 className="text-white text-center text-4xl font-extrabold">Inicia sesión en FolioX</h2>
       </div>
 
+      {!!error && (
+        <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante el inicio de sesión'} />
+      )}
+
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -41,8 +49,9 @@ function RouteComponent() {
           name="email"
           children={(field) => (
             <div className="flex flex-col gap-2">
-              <label htmlFor={field.name} className="text-white font-medium">
-                Email
+              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
+                <MdMail className="w-6 h-6" />
+                <span>Email</span>
               </label>
               <input
                 id={field.name}
@@ -55,8 +64,8 @@ function RouteComponent() {
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
-              {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                <p className="text-red-400 text-sm">{field.state.meta.errors[0]?.message}</p>
+              {!field.state.meta.isValid && (
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
             </div>
           )}
@@ -66,8 +75,9 @@ function RouteComponent() {
           name="password"
           children={(field) => (
             <div className="flex flex-col gap-2">
-              <label htmlFor={field.name} className="text-white font-medium">
-                Contraseña
+              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
+                <MdLock className="w-6 h-6" />
+                <span>Contraseña</span>
               </label>
               <input
                 id={field.name}
@@ -80,19 +90,15 @@ function RouteComponent() {
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
               />
+              {!field.state.meta.isValid && (
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
+              )}
             </div>
           )}
         />
 
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-end mb-2 flex-wrap gap-3">
-            {/*
-              <label className="flex items-center gap-2 text-white cursor-pointer">
-                <input type="checkbox" className="accent-primary-soft" />
-                Recordarme
-              </label>
-              */}
-
+          <div className="flex items-center justify-end mb-2">
             <Link
               to="/forgot-password"
               className="text-white hover:underline"
@@ -103,9 +109,17 @@ function RouteComponent() {
 
           <button
             type="submit"
-            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer"
+            disabled={isPending}
+            className="bg-primary-soft hover:bg-primary text-white font-medium p-3 rounded-2xl transition-colors cursor-pointer disabled:bg-neutral-medium disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Iniciar Sesion
+            {isPending ? (
+              <ButtonLoader message="Iniciando Sesión..." />
+            ) : (
+              <>
+                <span>Iniciar Sesion </span>
+                <MdLogin className="w-6 h-6 inline" />
+              </>
+            )}
           </button>
 
           <p className="text-center">
