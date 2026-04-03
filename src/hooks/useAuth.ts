@@ -1,23 +1,20 @@
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
-import type { EmailDto, LoginDto, RegisterDto, VerifyEmailDto } from '../dtos/auth.dto';
-import api from '../api/axios';
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import type { EmailDto, LoginDto, RegisterDto, VerifyEmailDto } from '../dtos/auth.dto'
+import api from '../api/axios'
+import type { ApiError } from '../interfaces/api.interface'
 
 export const useLogin = () => {
   const navigate = useNavigate()
 
-  return useMutation({
-    mutationFn: async ({ email, password }: LoginDto) => {
+  return useMutation<string, ApiError, LoginDto>({
+    mutationFn: async ({ email, password }) => {
       const res = await api.post('/auth/login', { email, password })
       return res.data.data.token
     },
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
       navigate({ to: '/' })
-    },
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
     },
   })
 }
@@ -38,8 +35,8 @@ export const useAuthenticated = () => {
 export const useRegister = () => {
   const navigate = useNavigate()
 
-  return useMutation({
-    mutationFn: async ({ email, password }: RegisterDto) => {
+  return useMutation<unknown, ApiError, RegisterDto>({
+    mutationFn: async ({ email, password }) => {
       const res = await api.post('/auth/register', { email, password })
       return res.data
     },
@@ -51,18 +48,14 @@ export const useRegister = () => {
         },
       })
     },
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
-    }
   })
 }
 
 export const useVerifyEmail = () => {
   const navigate = useNavigate()
 
-  return useMutation({
-    mutationFn: async ({ email, token }: VerifyEmailDto) => {
+  return useMutation<string, ApiError, VerifyEmailDto>({
+    mutationFn: async ({ email, token }) => {
       const res = await api.post('/auth/verify-email', { email, token })
       return res.data.token
     },
@@ -70,49 +63,35 @@ export const useVerifyEmail = () => {
       localStorage.setItem('access_token', token)
       navigate({ to: '/' })
     },
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
-    }
   })
 }
 
 export const useForgotPassword = () => {
-  return useMutation({
-    mutationFn: async ({ email }: EmailDto) => {
+  return useMutation<{ message: string }, ApiError, EmailDto>({
+    mutationFn: async ({ email } ) => {
       const res = await api.post('/auth/forgot-password', { email })
       return res.data
     },
-    onSuccess: console.log,
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
-    }
   })
 }
 
 export const useResetPassword = () => {
   const navigate = useNavigate()
 
-  return useMutation({
-    mutationFn: async ({ email, password, token }: { token: string } & RegisterDto) => {
+  return useMutation<unknown, ApiError, { token: string } & RegisterDto>({
+    mutationFn: async ({ email, password, token }) => {
       const res = await api.post('/auth/reset-password', { email, password, token })
       return res.data
     },
-    onSuccess: (data) => {
-      console.log(data)
+    onSuccess: () => {
       navigate({ to: '/login' })
     },
-    onError: (error: any) => {
-      const message = error?.response?.data?.message || 'Error al iniciar sesión'
-      console.error(message)
-    }
   })
 }
 
 export const useRetrySendCode = () => {
-  return useMutation({
-    mutationFn: async ({ email }: EmailDto) => {
+  return useMutation<unknown, ApiError, EmailDto>({
+    mutationFn: async ({ email }) => {
       const res = await api.post('/auth/resend-verification', { email })
       return res.data
     },
