@@ -6,6 +6,7 @@ import { MdMail, MdLock, MdLogin } from 'react-icons/md'
 import { InputMessageError } from '../../components/InputMessageError'
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BannerMessageError } from '../../components/BannerMessageError'
+import { PasswordInput } from '../../components/Input/PasswordInput'
 
 export const Route = createFileRoute('/_public/login')({
   component: RouteComponent,
@@ -73,28 +74,7 @@ function RouteComponent() {
 
         <form.Field
           name="password"
-          children={(field) => (
-            <div className="flex flex-col gap-2">
-              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
-                <MdLock className="w-6 h-6" />
-                <span>Contraseña</span>
-              </label>
-              <input
-                id={field.name}
-                name={field.name}
-                type="password"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="••••••••••"
-                required
-                aria-required="true"
-                className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
-              />
-              {!field.state.meta.isValid && (
-                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
-              )}
-            </div>
-          )}
+          children={(field) => <PasswordInput field={field} Icon={MdLock}/>}
         />
 
         <div className="flex flex-col gap-3">
