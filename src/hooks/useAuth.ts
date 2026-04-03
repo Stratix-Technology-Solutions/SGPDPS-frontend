@@ -57,7 +57,7 @@ export const useVerifyEmail = () => {
   return useMutation<string, ApiError, VerifyEmailDto>({
     mutationFn: async ({ email, token }) => {
       const res = await api.post('/auth/verify-email', { email, token })
-      return res.data.token
+      return res.data.data.token
     },
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
