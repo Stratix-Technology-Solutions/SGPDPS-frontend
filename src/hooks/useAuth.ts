@@ -20,12 +20,12 @@ export const useLogin = () => {
 }
 
 export const useLogout = () => {
-  const navigate = useNavigate()
-
-  return () => {
-    localStorage.removeItem('access_token')
-    navigate({ to: '/login' })
-  }
+  return useMutation<string, ApiError>({
+    mutationFn: async () => {
+      const res = await api.post('/logout');
+      return res.data.message;
+    }
+  })
 }
 
 export const useAuthenticated = () => {
@@ -68,7 +68,7 @@ export const useVerifyEmail = () => {
 
 export const useForgotPassword = () => {
   return useMutation<{ message: string }, ApiError, EmailDto>({
-    mutationFn: async ({ email } ) => {
+    mutationFn: async ({ email }) => {
       const res = await api.post('/auth/forgot-password', { email })
       return res.data
     },

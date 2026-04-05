@@ -1,6 +1,10 @@
 import { Link } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { CgClose } from 'react-icons/cg';
 import { useLogout } from '../hooks/useAuth';
+import { useState } from 'react';
+import { SuccesModal } from './SuccesModal';
+import { ErrorModal } from './ErrorModal';
 
 interface IUserMenu {
   open: boolean
@@ -14,6 +18,29 @@ const links = [
 
 export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
+  const navigate = useNavigate()
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handleLogout = () => {
+    logout.mutate(undefined, {
+      onSuccess: (message) => {
+        setSuccessMessage(message || 'Sessión cerrada correctamente')
+
+        setTimeout(() => {
+          localStorage.removeItem('access_token')
+          setSuccessMessage(null)
+          navigate({ to: '/login' })
+        }, 2000);
+      },
+      onError: () => {
+        setErrorMessage('Error al cerrar sesión')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 2000);
+      }
+    });
+  }
 
   if (!open) return null
 
@@ -40,7 +67,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
 
         <button
           type="button"
-          onClick={logout}
+          onClick={handleLogout}
           className="text-red-500 text-left"
         >
           Cerrar sesión
@@ -63,12 +90,15 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
 
         <button
           type="button"
-          onClick={logout}
+          onClick={handleLogout}
           className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-red-500 cursor-pointer"
         >
           Cerrar sesión
         </button>
       </div>
+      {successMessage && <SuccesModal message={successMessage} />}
+
+      {errorMessage && <ErrorModal message={errorMessage} />}
     </>
   )
 }
