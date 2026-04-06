@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../components/ProfileFormField'
@@ -5,14 +6,16 @@ import { ProfessionsField } from '../../components/ProfessionsField'
 import { RegisterAccountSchema } from '../../dtos/user.dto'
 import { useCreateProfile } from '../../hooks/usePerfil'
 import { ButtonLoader } from '../../components/ButtonLoader'
-import {BannerMessageError} from '../../components/BannerMessageError'
+import { BannerMessageError } from '../../components/BannerMessageError'
+import { InputMessageError } from '../../components/InputMessageError'
+import { SuccesModal } from '../../components/SuccesModal'
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { mutate: createProfile, error, isPending } = useCreateProfile()
+  const { mutate: createProfile, error, isPending, isSuccess } = useCreateProfile()
 
   const form = useForm({
     defaultValues: {
@@ -42,9 +45,19 @@ function RouteComponent() {
     },
   })
 
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [error])
+
   return (
     <div className="py-10">
       <div className="max-w-2xl mx-auto">
+
+        {isSuccess && <SuccesModal message="Perfil creado exitosamente." />}
 
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-background-dark">Completa tu perfil</h1>
@@ -52,7 +65,9 @@ function RouteComponent() {
         </div>
 
         {!!error && (
-          <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil" } />
+          <div ref={errorRef} className="mb-4">
+            <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil" } />
+          </div>
         )}
 
         <form
@@ -111,7 +126,7 @@ function RouteComponent() {
 
           {/* Sección: Profesiones */}
           <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Profesiones</h2>
+            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Profesiones <span className="text-red-500">*</span></h2>
             <p className="text-xs text-neutral-medium mb-4">Agrega hasta 5 profesiones que te describan.</p>
 
             <form.Field name="professions" children={(field) => (
@@ -121,7 +136,7 @@ function RouteComponent() {
 
           {/* Sección: Biografía */}
           <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Biografía</h2>
+            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Biografía <span className="text-red-500">*</span></h2>
             <p className="text-xs text-neutral-medium mb-4">Cuéntale al mundo quién eres y qué haces.</p>
 
             <form.Field name="biography" children={(field) => (
@@ -134,7 +149,7 @@ function RouteComponent() {
                   rows={4}
                 />
                 {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <p className="text-red-500 text-xs mt-1">{field.state.meta.errors[0]?.message}</p>
+                  <InputMessageError message={field.state.meta.errors[0]?.message ?? ''} />
                 )}
               </div>
             )} />

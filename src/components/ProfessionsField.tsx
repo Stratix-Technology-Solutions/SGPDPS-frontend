@@ -1,4 +1,5 @@
 import type { AnyFieldApi } from '@tanstack/react-form'
+import { InputMessageError } from './InputMessageError'
 
 export function ProfessionsField({ field }: { field: AnyFieldApi }) {
   return (
@@ -35,7 +36,7 @@ export function ProfessionsField({ field }: { field: AnyFieldApi }) {
         </button>
       )}
       {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-        <p className="text-red-500 text-xs mt-1">{field.state.meta.errors[0]?.message}</p>
+        <InputMessageError message={field.state.meta.errors[0]?.message ?? ''} />
       )}
     </div>
   )

@@ -13,7 +13,9 @@ export const useCreateProfile = () => {
       return res.data
     },
     onSuccess: () => {
-      navigate({ to: '/' })
+      setTimeout(() => {
+        navigate({ to: '/' })
+      }, 2000)
     },
   })
 }
