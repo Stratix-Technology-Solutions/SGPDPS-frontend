@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+.PhoneInputInput:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 @theme {
   --color-primary: #1B3D87;
   --color-primary-soft: #4C77BB;
