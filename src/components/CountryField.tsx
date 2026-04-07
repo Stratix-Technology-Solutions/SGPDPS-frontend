@@ -83,7 +83,8 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const selected = paises.find((p) => p.country === field.state.value) ?? null
+  const selectedValue = String(field.state.value || '').trim().toLowerCase()
+  const selected = paises.find((p) => p.country.trim().toLowerCase() === selectedValue) ?? null
 
   const filtered = search
     ? paises.filter((p) => p.country.toLowerCase().includes(search.toLowerCase()))
