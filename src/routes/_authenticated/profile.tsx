@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useRef, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../components/ProfileFormField'
 import { CountryField } from '../../components/CountryField'
@@ -17,6 +17,7 @@ export const Route = createFileRoute('/_authenticated/profile')({
 })
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const { data: existingProfile, isLoading: isLoadingProfile, isFetching: isFetchingProfile } = useGetProfile()
   const { mutate: createProfile, error: createError, isPending: isCreatePending, isSuccess: isCreateSuccess } = useCreateProfile()
   const { mutate: updateProfile, error: updateError, isPending: isUpdatePending, isSuccess: isUpdateSuccess } = useUpdateProfile()
@@ -63,6 +64,7 @@ function RouteComponent() {
   })
 
   const errorRef = useRef<HTMLDivElement>(null)
+  const [showCancelModal, setShowCancelModal] = useState(false)
 
   useEffect(() => {
     if (!isProfileLoading) {
@@ -94,8 +96,47 @@ function RouteComponent() {
     }
   }, [error])
 
+  const handleCancel = () => {
+    setShowCancelModal(true);
+  };
+
+  const confirmCancel = () => {
+    setShowCancelModal(false);
+    navigate({ to: '/' });
+  };
+
   return (
     <div className="py-10">
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
+            <h3 className="text-lg font-bold text-background-dark mb-2">
+              {existingProfile ? '¿Cancelar edición?' : '¿Cancelar creación?'}
+            </h3>
+            <p className="text-sm text-neutral-medium mb-6">
+              {existingProfile 
+                ? "¿Estás seguro de que deseas cancelar la edición de tu perfil? Los cambios no guardados se perderán."
+                : "¿Estás seguro de que deseas cancelar la creación de tu perfil? Puedes completarlo más tarde."}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(false)}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+              >
+                Seguir editando
+              </button>
+              <button
+                type="button"
+                onClick={confirmCancel}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                Sí, salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-2xl mx-auto">
 
         {isSuccess && (
@@ -209,7 +250,15 @@ function RouteComponent() {
             )} />
           </section>
 
-          <div className="flex justify-end pb-4">
+          <div className="flex justify-end gap-3 pb-4">
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={handleCancel}
+              className="bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
               disabled={isPending}
