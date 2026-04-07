@@ -29,3 +29,19 @@ export const useCreateProfile = () => {
     },
   })
 }
+
+export const useUpdateProfile = () => {
+  const navigate = useNavigate()
+
+  return useMutation<unknown, ApiError, RegisterAccountDto>({
+    mutationFn: async (data) => {
+      const res = await api.patch('/profile', data)
+      return res.data
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate({ to: '/' })
+      }, 2000)
+    },
+  })
+}
