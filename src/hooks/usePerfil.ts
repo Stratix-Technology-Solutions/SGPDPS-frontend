@@ -5,11 +5,18 @@ import type { ApiError } from '../interfaces/api.interface'
 import type { RegisterAccountDto } from '../dtos/user.dto'
 
 export const useGetProfile = () => {
-  return useQuery<RegisterAccountDto, ApiError>({
+  return useQuery<RegisterAccountDto | null, ApiError>({
     queryKey: ['profile'],
     queryFn: async () => {
-      const res = await api.get('/profile')
-      return res.data
+      try {
+        const res = await api.get('/profile')
+        return res.data
+      } catch (error: any) {
+        if (error.response?.status === 404) {
+          return null // No hay perfil aún, es estado normal
+        }
+        throw error // Otros errores se propagan
+      }
     },
   })
 }
