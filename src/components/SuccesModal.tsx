@@ -1,4 +1,9 @@
-export function SuccesModal({ message }: { message: string }) {
+interface Params {
+    message: string
+    redirect: string
+}
+
+export function SuccessModal(params: Params) {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
             <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
@@ -9,8 +14,8 @@ export function SuccesModal({ message }: { message: string }) {
                         </svg>
                     </div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">Éxito</h3>
-                    <p className="text-sm text-gray-500">{message}</p>
-                    <p className="text-xs text-gray-400 mt-2">Redirigiendo al login...</p>
+                    <p className="text-sm text-gray-500">{params.message}</p>
+                    <p className="text-xs text-gray-400 mt-2">{params.redirect}</p>
                 </div>
             </div>
         </div>

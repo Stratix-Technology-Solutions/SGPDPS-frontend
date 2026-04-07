@@ -10,7 +10,7 @@ import { useCreateProfile, useGetProfile, useUpdateProfile } from '../../hooks/u
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BannerMessageError } from '../../components/BannerMessageError'
 import { InputMessageError } from '../../components/InputMessageError'
-import { SuccesModalRedirect } from '../../components/SuccesModalRedirect'
+import { SuccessModal } from '../../components/SuccesModal'
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: RouteComponent,
@@ -71,16 +71,16 @@ function RouteComponent() {
       if (existingProfile) {
         form.setFieldValue('first_name', existingProfile.first_name)
         form.setFieldValue('last_name', existingProfile.last_name)
-        form.setFieldValue('date_of_birth', existingProfile.date_of_birth || '') 
+        form.setFieldValue('date_of_birth', existingProfile.date_of_birth || '')
         form.setFieldValue('gender', existingProfile.gender || '')
         form.setFieldValue('biography', existingProfile.biography)
         form.setFieldValue('country', existingProfile.country || '')
         form.setFieldValue('phone', existingProfile.phone || '')
-        form.setFieldValue('professions', existingProfile.professions || [])     
+        form.setFieldValue('professions', existingProfile.professions || [])
       } else {
         form.setFieldValue('first_name', '')
         form.setFieldValue('last_name', '')
-        form.setFieldValue('date_of_birth', '') 
+        form.setFieldValue('date_of_birth', '')
         form.setFieldValue('gender', '')
         form.setFieldValue('biography', '')
         form.setFieldValue('country', '')
@@ -114,7 +114,7 @@ function RouteComponent() {
               {existingProfile ? '¿Cancelar edición?' : '¿Cancelar creación?'}
             </h3>
             <p className="text-sm text-neutral-medium mb-6">
-              {existingProfile 
+              {existingProfile
                 ? "¿Estás seguro de que deseas cancelar la edición de tu perfil? Los cambios no guardados se perderán."
                 : "¿Estás seguro de que deseas cancelar la creación de tu perfil? Puedes completarlo más tarde."}
             </p>
@@ -140,7 +140,7 @@ function RouteComponent() {
       <div className="max-w-2xl mx-auto">
 
         {isSuccess && (
-          <SuccesModalRedirect message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} />
+          <SuccessModal message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} redirect="Redirigiendo al inicio..." />
         )}
 
         <div className="mb-8">
@@ -165,109 +165,109 @@ function RouteComponent() {
               </div>
             )}
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            form.handleSubmit()
-          }}
-          className="flex flex-col gap-6"
-        >
-          {/* Sección: Información personal */}
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-4">Información personal</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                form.handleSubmit()
+              }}
+              className="flex flex-col gap-6"
+            >
+              {/* Sección: Información personal */}
+              <section className="bg-white rounded-2xl p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-4">Información personal</h2>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <form.Field name="first_name" children={(field) => (
-                <ProfileFormField label="Nombre" required field={field} type="text" placeholder="Tu nombre" />
-              )} />
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <form.Field name="first_name" children={(field) => (
+                    <ProfileFormField label="Nombre" required field={field} type="text" placeholder="Tu nombre" />
+                  )} />
 
-              <form.Field name="last_name" children={(field) => (
-                <ProfileFormField label="Apellidos" required field={field} type="text" placeholder="Tus apellidos" />
-              )} />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <form.Field name="date_of_birth" children={(field) => (
-                <ProfileFormField label="Fecha de nacimiento" field={field} type="date" />
-              )} />
-
-              <form.Field name="gender" children={(field) => (
-                <div>
-                  <label className="block text-sm font-medium text-background-dark mb-1.5">Género</label>
-                  <select
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                  </select>
+                  <form.Field name="last_name" children={(field) => (
+                    <ProfileFormField label="Apellidos" required field={field} type="text" placeholder="Tus apellidos" />
+                  )} />
                 </div>
-              )} />
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <form.Field name="country" children={(field) => (
-                <CountryField field={field} />
-              )} />
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <form.Field name="date_of_birth" children={(field) => (
+                    <ProfileFormField label="Fecha de nacimiento" field={field} type="date" />
+                  )} />
 
-              <form.Field name="phone" children={(field) => (
-                <PhoneField field={field} />
-              )} />
-            </div>
-          </section>
+                  <form.Field name="gender" children={(field) => (
+                    <div>
+                      <label className="block text-sm font-medium text-background-dark mb-1.5">Género</label>
+                      <select
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
+                      >
+                        <option value="">Seleccionar</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="otro">Otro</option>
+                      </select>
+                    </div>
+                  )} />
+                </div>
 
-          {/* Sección: Profesiones */}
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Profesiones <span className="text-red-500">*</span></h2>
-            <p className="text-xs text-neutral-medium mb-4">Agrega hasta 5 profesiones que te describan.</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <form.Field name="country" children={(field) => (
+                    <CountryField field={field} />
+                  )} />
 
-            <form.Field name="professions" children={(field) => (
-              <ProfessionsField field={field} />
-            )} />
-          </section>
+                  <form.Field name="phone" children={(field) => (
+                    <PhoneField field={field} />
+                  )} />
+                </div>
+              </section>
 
-          {/* Sección: Biografía */}
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Biografía <span className="text-red-500">*</span></h2>
-            <p className="text-xs text-neutral-medium mb-4">Cuéntale al mundo quién eres y qué haces.</p>
+              {/* Sección: Profesiones */}
+              <section className="bg-white rounded-2xl p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Profesiones <span className="text-red-500">*</span></h2>
+                <p className="text-xs text-neutral-medium mb-4">Agrega hasta 5 profesiones que te describan.</p>
 
-            <form.Field name="biography" children={(field) => (
-              <div>
-                <textarea
-                  placeholder="Escribe una breve descripción sobre ti..."
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors resize-none"
-                  rows={4}
-                />
-                {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
-                  <InputMessageError message={field.state.meta.errors[0]?.message ?? ''} />
-                )}
+                <form.Field name="professions" children={(field) => (
+                  <ProfessionsField field={field} />
+                )} />
+              </section>
+
+              {/* Sección: Biografía */}
+              <section className="bg-white rounded-2xl p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Biografía <span className="text-red-500">*</span></h2>
+                <p className="text-xs text-neutral-medium mb-4">Cuéntale al mundo quién eres y qué haces.</p>
+
+                <form.Field name="biography" children={(field) => (
+                  <div>
+                    <textarea
+                      placeholder="Escribe una breve descripción sobre ti..."
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors resize-none"
+                      rows={4}
+                    />
+                    {!field.state.meta.isValid && field.state.meta.errors.length > 0 && (
+                      <InputMessageError message={field.state.meta.errors[0]?.message ?? ''} />
+                    )}
+                  </div>
+                )} />
+              </section>
+
+              <div className="flex justify-end gap-3 pb-4">
+                <button
+                  type="button"
+                  disabled={isPending}
+                  onClick={handleCancel}
+                  className="bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {isPending ? <ButtonLoader message="Guardando..." /> : existingProfile ? 'Actualizar perfil' : 'Guardar perfil'}
+                </button>
               </div>
-            )} />
-          </section>
-
-          <div className="flex justify-end gap-3 pb-4">
-            <button
-              type="button"
-              disabled={isPending}
-              onClick={handleCancel}
-              className="bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={isPending}
-              className="bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {isPending ? <ButtonLoader message="Guardando..." /> : existingProfile ? 'Actualizar perfil' : 'Guardar perfil'}
-            </button>
-          </div>
-        </form>
+            </form>
           </>
         )}
       </div>

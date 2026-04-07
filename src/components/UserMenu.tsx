@@ -3,7 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { CgClose } from 'react-icons/cg';
 import { useLogout } from '../hooks/useAuth';
 import { useState } from 'react';
-import { SuccesModal } from './SuccesModal';
+import { SuccessModal } from './SuccesModal';
 import { ErrorModal } from './ErrorModal';
 
 interface IUserMenu {
@@ -96,7 +96,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
           Cerrar sesión
         </button>
       </div>
-      {successMessage && <SuccesModal message={successMessage} />}
+      {successMessage && <SuccessModal message={successMessage} redirect="Redirigiendo al login..." />}
 
       {errorMessage && <ErrorModal message={errorMessage} />}
     </>
