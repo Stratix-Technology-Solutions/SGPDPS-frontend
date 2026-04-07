@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useRef, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../components/ProfileFormField'
 import { CountryField } from '../../components/CountryField'
 import { PhoneField } from '../../components/PhoneField'
 import { ProfessionsField } from '../../components/ProfessionsField'
 import { RegisterAccountSchema } from '../../dtos/user.dto'
-import { useCreateProfile } from '../../hooks/usePerfil'
+import { useCreateProfile, useGetProfile, useUpdateProfile } from '../../hooks/usePerfil'
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BannerMessageError } from '../../components/BannerMessageError'
 import { InputMessageError } from '../../components/InputMessageError'
@@ -17,25 +17,34 @@ export const Route = createFileRoute('/_authenticated/profile')({
 })
 
 function RouteComponent() {
-  const { mutate: createProfile, error, isPending, isSuccess } = useCreateProfile()
+  const navigate = useNavigate();
+  const { data: existingProfile, isLoading: isLoadingProfile, isFetching: isFetchingProfile } = useGetProfile()
+  const { mutate: createProfile, error: createError, isPending: isCreatePending, isSuccess: isCreateSuccess } = useCreateProfile()
+  const { mutate: updateProfile, error: updateError, isPending: isUpdatePending, isSuccess: isUpdateSuccess } = useUpdateProfile()
+
+  const isProfileLoading = isLoadingProfile || isFetchingProfile;
+
+  const error = existingProfile ? updateError : createError
+  const isPending = existingProfile ? isUpdatePending : isCreatePending
+  const isSuccess = existingProfile ? isUpdateSuccess : isCreateSuccess
 
   const form = useForm({
     defaultValues: {
-      first_name: '',
-      last_name: '',
-      date_of_birth: '',
-      gender: '',
-      biography: '',
-      country: '',
-      phone: '',
-      professions: [] as string[],
+      first_name: existingProfile?.first_name || '',
+      last_name: existingProfile?.last_name || '',
+      date_of_birth: existingProfile?.date_of_birth || '',
+      gender: existingProfile?.gender || '',
+      biography: existingProfile?.biography || '',
+      country: existingProfile?.country || '',
+      phone: existingProfile?.phone || '',
+      professions: existingProfile?.professions || ([] as string[]),
     },
     validators: {
       onChange: RegisterAccountSchema,
       onSubmit: RegisterAccountSchema,
     },
     onSubmit: ({ value }) => {
-      createProfile({
+      const profileData = {
         first_name: value.first_name,
         last_name: value.last_name,
         biography: value.biography,
@@ -43,12 +52,43 @@ function RouteComponent() {
         gender: (value.gender as 'masculino' | 'femenino' | 'otro') || undefined,
         country: value.country || undefined,
         phone: value.phone || undefined,
-        professions:  value.professions,
-      })
+        professions: value.professions,
+      }
+
+      if (existingProfile) {
+        updateProfile(profileData)
+      } else {
+        createProfile(profileData)
+      }
     },
   })
 
   const errorRef = useRef<HTMLDivElement>(null)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+
+  useEffect(() => {
+    if (!isProfileLoading) {
+      if (existingProfile) {
+        form.setFieldValue('first_name', existingProfile.first_name)
+        form.setFieldValue('last_name', existingProfile.last_name)
+        form.setFieldValue('date_of_birth', existingProfile.date_of_birth || '') 
+        form.setFieldValue('gender', existingProfile.gender || '')
+        form.setFieldValue('biography', existingProfile.biography)
+        form.setFieldValue('country', existingProfile.country || '')
+        form.setFieldValue('phone', existingProfile.phone || '')
+        form.setFieldValue('professions', existingProfile.professions || [])     
+      } else {
+        form.setFieldValue('first_name', '')
+        form.setFieldValue('last_name', '')
+        form.setFieldValue('date_of_birth', '') 
+        form.setFieldValue('gender', '')
+        form.setFieldValue('biography', '')
+        form.setFieldValue('country', '')
+        form.setFieldValue('phone', '')
+        form.setFieldValue('professions', [])
+      }
+    }
+  }, [existingProfile, isProfileLoading])
 
   useEffect(() => {
     if (error && errorRef.current) {
@@ -56,22 +96,74 @@ function RouteComponent() {
     }
   }, [error])
 
+  const handleCancel = () => {
+    setShowCancelModal(true);
+  };
+
+  const confirmCancel = () => {
+    setShowCancelModal(false);
+    navigate({ to: '/' });
+  };
+
   return (
     <div className="py-10">
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
+            <h3 className="text-lg font-bold text-background-dark mb-2">
+              {existingProfile ? '¿Cancelar edición?' : '¿Cancelar creación?'}
+            </h3>
+            <p className="text-sm text-neutral-medium mb-6">
+              {existingProfile 
+                ? "¿Estás seguro de que deseas cancelar la edición de tu perfil? Los cambios no guardados se perderán."
+                : "¿Estás seguro de que deseas cancelar la creación de tu perfil? Puedes completarlo más tarde."}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(false)}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+              >
+                Seguir editando
+              </button>
+              <button
+                type="button"
+                onClick={confirmCancel}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                Sí, salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-2xl mx-auto">
 
-        {isSuccess && <SuccesModalRedirect message="Perfil creado exitosamente." />}
+        {isSuccess && (
+          <SuccesModalRedirect message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} />
+        )}
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-background-dark">Completa tu perfil</h1>
+          <h1 className="text-2xl font-bold text-background-dark">{existingProfile ? 'Edita tu perfil' : 'Completa tu perfil'}</h1>
           <p className="text-sm text-neutral-medium mt-1">Esta información será visible en tu portafolio público.</p>
         </div>
 
-        {!!error && (
-          <div ref={errorRef} className="mb-4">
-            <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil" } />
+        {isProfileLoading && (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-sm text-neutral-medium mt-2">Cargando tu perfil...</p>
+            </div>
           </div>
         )}
+
+        {!isProfileLoading && (
+          <>
+            {!!error && (
+              <div ref={errorRef} className="mb-4">
+                <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil"} />
+              </div>
+            )}
 
         <form
           onSubmit={(e) => {
@@ -158,16 +250,26 @@ function RouteComponent() {
             )} />
           </section>
 
-          <div className="flex justify-end pb-4">
+          <div className="flex justify-end gap-3 pb-4">
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={handleCancel}
+              className="bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
               disabled={isPending}
               className="bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isPending ? <ButtonLoader message="Guardando..." /> : 'Guardar perfil'}
+              {isPending ? <ButtonLoader message="Guardando..." /> : existingProfile ? 'Actualizar perfil' : 'Guardar perfil'}
             </button>
           </div>
         </form>
+          </>
+        )}
       </div>
     </div>
   )
