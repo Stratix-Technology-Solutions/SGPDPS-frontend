@@ -2,13 +2,15 @@ import { useEffect, useRef } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../components/ProfileFormField'
+import { CountryField } from '../../components/CountryField'
+import { PhoneField } from '../../components/PhoneField'
 import { ProfessionsField } from '../../components/ProfessionsField'
 import { RegisterAccountSchema } from '../../dtos/user.dto'
 import { useCreateProfile, useGetProfile, useUpdateProfile } from '../../hooks/usePerfil'
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BannerMessageError } from '../../components/BannerMessageError'
 import { InputMessageError } from '../../components/InputMessageError'
-import { SuccesModal } from '../../components/SuccesModal'
+import { SuccesModalRedirect } from '../../components/SuccesModalRedirect'
 
 export const Route = createFileRoute('/_authenticated/profile')({
   component: RouteComponent,
@@ -35,6 +37,7 @@ function RouteComponent() {
       professions: existingProfile?.professions || ([] as string[]),
     },
     validators: {
+      onChange: RegisterAccountSchema,
       onSubmit: RegisterAccountSchema,
     },
     onSubmit: ({ value }) => {
@@ -93,7 +96,7 @@ function RouteComponent() {
       <div className="max-w-2xl mx-auto">
 
         {isSuccess && (
-          <SuccesModal message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} />
+          <SuccesModalRedirect message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} />
         )}
 
         <div className="mb-8">
@@ -163,11 +166,11 @@ function RouteComponent() {
 
             <div className="grid grid-cols-2 gap-4">
               <form.Field name="country" children={(field) => (
-                <ProfileFormField label="País" field={field} type="text" placeholder="Tu país" />
+                <CountryField field={field} />
               )} />
 
               <form.Field name="phone" children={(field) => (
-                <ProfileFormField label="Teléfono" field={field} type="tel" placeholder="Tu teléfono" />
+                <PhoneField field={field} />
               )} />
             </div>
           </section>
