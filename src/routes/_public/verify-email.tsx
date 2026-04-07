@@ -56,6 +56,14 @@ function RouteComponent() {
   })
 
   useEffect(() => {
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('verify_email_expiration_') && key !== EXPIRATION_KEY) {
+        localStorage.removeItem(key)
+      }
+    })
+  }, [EXPIRATION_KEY])
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
