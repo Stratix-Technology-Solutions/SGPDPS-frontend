@@ -4,7 +4,7 @@ import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../components/ProfileFormField'
 import { ProfessionsField } from '../../components/ProfessionsField'
 import { RegisterAccountSchema } from '../../dtos/user.dto'
-import { useCreateProfile } from '../../hooks/usePerfil'
+import { useCreateProfile, useGetProfile, useUpdateProfile } from '../../hooks/usePerfil'
 import { ButtonLoader } from '../../components/ButtonLoader'
 import { BannerMessageError } from '../../components/BannerMessageError'
 import { InputMessageError } from '../../components/InputMessageError'
@@ -15,24 +15,30 @@ export const Route = createFileRoute('/_authenticated/profile')({
 })
 
 function RouteComponent() {
-  const { mutate: createProfile, error, isPending, isSuccess } = useCreateProfile()
+  const { data: existingProfile, isLoading: isLoadingProfile } = useGetProfile()
+  const { mutate: createProfile, error: createError, isPending: isCreatePending, isSuccess: isCreateSuccess } = useCreateProfile()
+  const { mutate: updateProfile, error: updateError, isPending: isUpdatePending, isSuccess: isUpdateSuccess } = useUpdateProfile()
+
+  const error = existingProfile ? updateError : createError
+  const isPending = existingProfile ? isUpdatePending : isCreatePending
+  const isSuccess = existingProfile ? isUpdateSuccess : isCreateSuccess
 
   const form = useForm({
     defaultValues: {
-      first_name: '',
-      last_name: '',
-      date_of_birth: '',
-      gender: '',
-      biography: '',
-      country: '',
-      phone: '',
-      professions: [] as string[],
+      first_name: existingProfile?.first_name || '',
+      last_name: existingProfile?.last_name || '',
+      date_of_birth: existingProfile?.date_of_birth || '',
+      gender: existingProfile?.gender || '',
+      biography: existingProfile?.biography || '',
+      country: existingProfile?.country || '',
+      phone: existingProfile?.phone || '',
+      professions: existingProfile?.professions || ([] as string[]),
     },
     validators: {
       onSubmit: RegisterAccountSchema,
     },
     onSubmit: ({ value }) => {
-      createProfile({
+      const profileData = {
         first_name: value.first_name,
         last_name: value.last_name,
         biography: value.biography,
@@ -40,13 +46,42 @@ function RouteComponent() {
         gender: (value.gender as 'masculino' | 'femenino' | 'otro') || undefined,
         country: value.country || undefined,
         phone: value.phone || undefined,
-        professions:  value.professions,
-      })
+        professions: value.professions,
+      }
+
+      if (existingProfile) {
+        updateProfile(profileData)
+      } else {
+        createProfile(profileData)
+      }
     },
   })
 
   const errorRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    if (!isLoadingProfile) {
+      if (existingProfile) {
+        form.setFieldValue('first_name', existingProfile.first_name)
+        form.setFieldValue('last_name', existingProfile.last_name)
+        form.setFieldValue('date_of_birth', existingProfile.date_of_birth || '') 
+        form.setFieldValue('gender', existingProfile.gender || '')
+        form.setFieldValue('biography', existingProfile.biography)
+        form.setFieldValue('country', existingProfile.country || '')
+        form.setFieldValue('phone', existingProfile.phone || '')
+        form.setFieldValue('professions', existingProfile.professions || [])     
+      } else {
+        form.setFieldValue('first_name', '')
+        form.setFieldValue('last_name', '')
+        form.setFieldValue('date_of_birth', '') 
+        form.setFieldValue('gender', '')
+        form.setFieldValue('biography', '')
+        form.setFieldValue('country', '')
+        form.setFieldValue('phone', '')
+        form.setFieldValue('professions', [])
+      }
+    }
+  }, [existingProfile, isLoadingProfile])
   useEffect(() => {
     if (error && errorRef.current) {
       errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -57,18 +92,31 @@ function RouteComponent() {
     <div className="py-10">
       <div className="max-w-2xl mx-auto">
 
-        {isSuccess && <SuccesModal message="Perfil creado exitosamente." />}
+        {isSuccess && (
+          <SuccesModal message={existingProfile ? "Perfil actualizado exitosamente." : "Perfil creado exitosamente."} />
+        )}
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-background-dark">Completa tu perfil</h1>
+          <h1 className="text-2xl font-bold text-background-dark">{existingProfile ? 'Edita tu perfil' : 'Completa tu perfil'}</h1>
           <p className="text-sm text-neutral-medium mt-1">Esta información será visible en tu portafolio público.</p>
         </div>
 
-        {!!error && (
-          <div ref={errorRef} className="mb-4">
-            <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil" } />
+        {isLoadingProfile && (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-sm text-neutral-medium mt-2">Cargando tu perfil...</p>
+            </div>
           </div>
         )}
+
+        {!isLoadingProfile && (
+          <>
+            {!!error && (
+              <div ref={errorRef} className="mb-4">
+                <BannerMessageError message={error.response?.data?.message || "Ocurrió un error al guardar el perfil"} />
+              </div>
+            )}
 
         <form
           onSubmit={(e) => {
@@ -161,10 +209,12 @@ function RouteComponent() {
               disabled={isPending}
               className="bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isPending ? <ButtonLoader message="Guardando..." /> : 'Guardar perfil'}
+              {isPending ? <ButtonLoader message="Guardando..." /> : existingProfile ? 'Actualizar perfil' : 'Guardar perfil'}
             </button>
           </div>
         </form>
+          </>
+        )}
       </div>
     </div>
   )
