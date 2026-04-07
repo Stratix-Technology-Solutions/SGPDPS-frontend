@@ -17,9 +17,11 @@ export const Route = createFileRoute('/_authenticated/profile')({
 })
 
 function RouteComponent() {
-  const { data: existingProfile, isLoading: isLoadingProfile } = useGetProfile()
+  const { data: existingProfile, isLoading: isLoadingProfile, isFetching: isFetchingProfile } = useGetProfile()
   const { mutate: createProfile, error: createError, isPending: isCreatePending, isSuccess: isCreateSuccess } = useCreateProfile()
   const { mutate: updateProfile, error: updateError, isPending: isUpdatePending, isSuccess: isUpdateSuccess } = useUpdateProfile()
+
+  const isProfileLoading = isLoadingProfile || isFetchingProfile;
 
   const error = existingProfile ? updateError : createError
   const isPending = existingProfile ? isUpdatePending : isCreatePending
@@ -63,7 +65,7 @@ function RouteComponent() {
   const errorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!isLoadingProfile) {
+    if (!isProfileLoading) {
       if (existingProfile) {
         form.setFieldValue('first_name', existingProfile.first_name)
         form.setFieldValue('last_name', existingProfile.last_name)
@@ -84,7 +86,8 @@ function RouteComponent() {
         form.setFieldValue('professions', [])
       }
     }
-  }, [existingProfile, isLoadingProfile])
+  }, [existingProfile, isProfileLoading])
+
   useEffect(() => {
     if (error && errorRef.current) {
       errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -104,7 +107,7 @@ function RouteComponent() {
           <p className="text-sm text-neutral-medium mt-1">Esta información será visible en tu portafolio público.</p>
         </div>
 
-        {isLoadingProfile && (
+        {isProfileLoading && (
           <div className="flex justify-center items-center py-12">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -113,7 +116,7 @@ function RouteComponent() {
           </div>
         )}
 
-        {!isLoadingProfile && (
+        {!isProfileLoading && (
           <>
             {!!error && (
               <div ref={errorRef} className="mb-4">
