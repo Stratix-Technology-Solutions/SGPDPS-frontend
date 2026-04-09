@@ -15,13 +15,12 @@ export const Route = createFileRoute('/_authenticated')({
 
 function RouteComponent() {
   return (
-    <>
+    <div className="min-h-screen bg-neutral-light/40">
       <Header />
-      <main className="bg-neutral-light">
-        <div className="px-4 md:w-10/12 md:px-0 m-auto">
-          <Outlet />
-        </div>
+
+      <main className="px-4 md:w-10/12 md:px-0 m-auto">
+        <Outlet />
       </main>
-    </>
+    </div>
   )
 }

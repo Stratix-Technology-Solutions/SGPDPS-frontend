@@ -27,11 +27,10 @@ export const Header = () => {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="cursor-pointer hover:opacity-60 transition"
+          className="cursor-pointer text-primary hover:text-primary-soft transition"
         >
           <FaUserCircle className="w-10 h-10" />
         </button>
-
       </div>
 
       <UserMenu open={open} onClose={() => setOpen(false)} />
