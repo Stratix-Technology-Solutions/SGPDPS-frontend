@@ -23,3 +23,14 @@ export interface RegisterAccountDto {
   phone?: string
   professions: string[]
 }
+
+export const defaultValues = {
+  first_name: '',
+  last_name: '',
+  date_of_birth:  '',
+  gender: '',
+  biography: '',
+  country: '',
+  phone: '',
+  professions: [] as string[],
+}

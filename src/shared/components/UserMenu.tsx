@@ -13,7 +13,7 @@ interface IUserMenu {
 
 const links = [
   { label: 'Inicio', to: '/' },
-  { label: 'Perfil', to: '/profile' },
+  { label: 'Editar perfil', to: '/profile/edit' },
 ]
 
 export const UserMenu = ({ open, onClose }: IUserMenu) => {
@@ -96,8 +96,8 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
           Cerrar sesión
         </button>
       </div>
-      {successMessage && <SuccessModal message={successMessage} redirect="Redirigiendo al login..." />}
 
+      {successMessage && <SuccessModal message={successMessage} redirect="Redirigiendo al login..." />}
       {errorMessage && <ErrorModal message={errorMessage} />}
     </>
   )
