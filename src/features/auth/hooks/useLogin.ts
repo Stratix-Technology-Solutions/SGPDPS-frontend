@@ -10,7 +10,7 @@ export const useLogin = () => {
   return useMutation<string, ApiError, LoginDto>({
     mutationFn: async ({ email, password }) => {
       const res = await api.post('/auth/login', { email, password })
-      return res.data.data.token
+      return res.data.token
     },
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
