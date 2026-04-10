@@ -15,3 +15,8 @@ export const VerifyEmailSchema = EmailSchema.extend({
 
 export type EmailDto = z.infer<typeof EmailSchema>
 export type VerifyEmailDto = z.infer<typeof VerifyEmailSchema>
+
+export const defaultValues = {
+  email: '',
+  token: '',
+}

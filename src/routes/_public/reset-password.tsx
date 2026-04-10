@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { ResetPasswordSearchSchema } from '../../features/auth/dtos/resetPasswordSearch.dto'
 import { useResetPassword } from '../../features/auth/hooks/useResetPassword'
-import { RegisterSchema } from '../../features/auth/dtos/register.dto'
+import { RegisterSchema, defaultValues } from '../../features/auth/dtos/register.dto'
 import { InputMessageError } from '../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
@@ -23,11 +23,7 @@ function RouteComponent() {
   const { mutate: reset, error, isPending } = useResetPassword()
 
   const form = useForm({
-    defaultValues: {
-      email,
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: { ...defaultValues, email },
     onSubmit: ({ value }) => {
       reset({ ...value, token })
     },

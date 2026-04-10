@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, redirect, useLocation } from '@tanstack/react-router'
-import { VerifyEmailSchema } from '../../features/auth/dtos/verifyEmail.dto'
+import { VerifyEmailSchema, defaultValues } from '../../features/auth/dtos/verifyEmail.dto'
 import { useVerifyEmail } from '../../features/auth/hooks/useVerifyEmail'
 import { useRetrySendCode } from '../../features/auth/hooks/useRetrySendCode'
 import { useEffect, useState } from 'react'
@@ -44,10 +44,7 @@ function RouteComponent() {
   const { mutate: retry, error: errorRetry, isPending: isPendingRetry } = useRetrySendCode()
 
   const form = useForm({
-    defaultValues: {
-      email: location.state.email || '',
-      token: '',
-    },
+    defaultValues: { ...defaultValues, email },
     onSubmit: ({ value }) => {
       verify(value)
     },

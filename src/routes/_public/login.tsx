@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { LoginSchema } from '../../features/auth/dtos/login.dto'
+import { LoginSchema, defaultValues } from '../../features/auth/dtos/login.dto'
 import { useLogin } from '../../features/auth/hooks/useLogin'
 import { MdMail, MdLock, MdLogin } from 'react-icons/md'
 import { InputMessageError } from '../../shared/components/InputMessageError'
@@ -16,10 +16,7 @@ function RouteComponent() {
   const { mutate: login, error, isPending } = useLogin()
 
   const form = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues,
     onSubmit: ({ value }) => {
       login(value)
     },

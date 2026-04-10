@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useRegister } from '../../features/auth/hooks/useRegister'
 import { useForm } from '@tanstack/react-form'
-import { RegisterSchema } from '../../features/auth/dtos/register.dto'
+import { RegisterSchema, defaultValues } from '../../features/auth/dtos/register.dto'
 import { InputMessageError } from '../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
@@ -16,11 +16,7 @@ function RouteComponent() {
   const { mutate: register, error, isPending } = useRegister()
 
   const form = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues,
     onSubmit: ({ value }) => {
       register(value)
     },

@@ -15,9 +15,7 @@ function RouteComponent() {
   const { mutate: forgot, data, error, isPending } = useForgotPassword()
 
   const form = useForm({
-    defaultValues: {
-      email: '',
-    },
+    defaultValues: { email: '' },
     onSubmit: ({ value }) => {
       forgot(value)
     },
