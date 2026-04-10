@@ -1,11 +1,11 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
-import { EmailSchema } from '../../dtos/auth.dto'
-import { useForgotPassword } from '../../hooks/useAuth'
+import { EmailSchema } from '../../features/auth/dtos/verifyEmail.dto'
+import { useForgotPassword } from '../../features/auth/hooks/useForgotPassword'
 import { BiSend } from 'react-icons/bi'
-import { ButtonLoader } from '../../components/ButtonLoader'
-import { InputMessageError } from '../../components/InputMessageError'
-import { BannerMessageError } from '../../components/BannerMessageError'
+import { ButtonLoader } from '../../shared/components/ButtonLoader'
+import { InputMessageError } from '../../shared/components/InputMessageError'
+import { BannerMessageError } from '../../shared/components/BannerMessageError'
 
 export const Route = createFileRoute('/_public/forgot-password')({
   component: RouteComponent,

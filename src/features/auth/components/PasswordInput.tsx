@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { IoEye, IoEyeOff } from "react-icons/io5"
-import { InputMessageError } from "../InputMessageError"
+import { InputMessageError } from "../../../shared/components/InputMessageError"
 import { type IconType } from "react-icons/lib"
 
 interface Props {

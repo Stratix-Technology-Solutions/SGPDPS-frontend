@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useRegister } from '../../hooks/useAuth'
+import { useRegister } from '../../features/auth/hooks/useRegister'
 import { useForm } from '@tanstack/react-form'
-import { RegisterSchema } from '../../dtos/auth.dto'
-import { InputMessageError } from '../../components/InputMessageError'
-import { BannerMessageError } from '../../components/BannerMessageError'
-import { ButtonLoader } from '../../components/ButtonLoader'
+import { RegisterSchema } from '../../features/auth/dtos/register.dto'
+import { InputMessageError } from '../../shared/components/InputMessageError'
+import { BannerMessageError } from '../../shared/components/BannerMessageError'
+import { ButtonLoader } from '../../shared/components/ButtonLoader'
 import { MdLock, MdLogin, MdMail, MdPassword } from 'react-icons/md'
-import { PasswordInput } from '../../components/Input/PasswordInput'
+import { PasswordInput } from '../../features/auth/components/PasswordInput'
 
 export const Route = createFileRoute('/_public/register')({
   component: RouteComponent,

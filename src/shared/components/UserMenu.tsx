@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { useNavigate } from '@tanstack/react-router'
-import { CgClose } from 'react-icons/cg';
-import { useLogout } from '../hooks/useAuth';
-import { useState } from 'react';
-import { SuccessModal } from './SuccesModal';
-import { ErrorModal } from './ErrorModal';
+import { useState } from 'react'
+import { CgClose } from 'react-icons/cg'
+import { useLogout } from '../../features/auth/hooks/useLogout'
+import { SuccessModal } from './SuccessModal'
+import { ErrorModal } from './ErrorModal'
 
 interface IUserMenu {
   open: boolean

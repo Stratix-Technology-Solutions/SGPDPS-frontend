@@ -1,10 +1,10 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { useAuthenticated } from '../hooks/useAuth'
+import { useAuth } from '../features/auth/hooks/useAuth'
 
 export const Route = createFileRoute('/_public')({
   component: RouteComponent,
   beforeLoad: () => {
-    const isAuthenticated = useAuthenticated()
+    const isAuthenticated = useAuth()
 
     if (isAuthenticated) {
       throw redirect({ to: '/' })

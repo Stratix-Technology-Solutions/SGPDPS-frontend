@@ -1,11 +1,11 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { useAuthenticated } from '../hooks/useAuth'
-import { Header } from '../components/Header'
+import { useAuth } from '../features/auth/hooks/useAuth'
+import { Header } from '../shared/components/Header'
 
 export const Route = createFileRoute('/_authenticated')({
   component: RouteComponent,
   beforeLoad: () => {
-    const isAuthenticated = useAuthenticated()
+    const isAuthenticated = useAuth()
 
     if (!isAuthenticated) {
       throw redirect({ to: '/login' })

@@ -1,11 +1,11 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { ResetPasswordSearchSchema } from '../../dtos/search.dto'
 import { useForm } from '@tanstack/react-form'
-import { useResetPassword } from '../../hooks/useAuth'
-import { RegisterSchema } from '../../dtos/auth.dto'
-import { InputMessageError } from '../../components/InputMessageError'
-import { BannerMessageError } from '../../components/BannerMessageError'
-import { ButtonLoader } from '../../components/ButtonLoader'
+import { ResetPasswordSearchSchema } from '../../features/auth/dtos/resetPasswordSearch.dto'
+import { useResetPassword } from '../../features/auth/hooks/useResetPassword'
+import { RegisterSchema } from '../../features/auth/dtos/register.dto'
+import { InputMessageError } from '../../shared/components/InputMessageError'
+import { BannerMessageError } from '../../shared/components/BannerMessageError'
+import { ButtonLoader } from '../../shared/components/ButtonLoader'
 import { BiSend } from 'react-icons/bi'
 
 export const Route = createFileRoute('/_public/reset-password')({

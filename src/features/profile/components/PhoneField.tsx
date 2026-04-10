@@ -1,7 +1,7 @@
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import type { AnyFieldApi } from '@tanstack/react-form'
-import { InputMessageError } from './InputMessageError'
+import { InputMessageError } from '../../../shared/components/InputMessageError'
 
 export function PhoneField({ field }: { field: AnyFieldApi }) {
     return (

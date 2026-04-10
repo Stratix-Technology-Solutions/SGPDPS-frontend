@@ -1,12 +1,12 @@
 import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { LoginSchema } from '../../dtos/auth.dto'
-import { useLogin } from '../../hooks/useAuth'
+import { LoginSchema } from '../../features/auth/dtos/login.dto'
+import { useLogin } from '../../features/auth/hooks/useLogin'
 import { MdMail, MdLock, MdLogin } from 'react-icons/md'
-import { InputMessageError } from '../../components/InputMessageError'
-import { ButtonLoader } from '../../components/ButtonLoader'
-import { BannerMessageError } from '../../components/BannerMessageError'
-import { PasswordInput } from '../../components/Input/PasswordInput'
+import { InputMessageError } from '../../shared/components/InputMessageError'
+import { ButtonLoader } from '../../shared/components/ButtonLoader'
+import { BannerMessageError } from '../../shared/components/BannerMessageError'
+import { PasswordInput } from '../../features/auth/components/PasswordInput'
 
 export const Route = createFileRoute('/_public/login')({
   component: RouteComponent,

@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import '/node_modules/flag-icons/css/flag-icons.min.css'
 import type { AnyFieldApi } from '@tanstack/react-form'
-import { InputMessageError } from './InputMessageError'
-import paisesRaw from './cuntries/paises.json'
+import { InputMessageError } from '../../../shared/components/InputMessageError'
+import paisesRaw from '../../../shared/assets/data/countries.json'
 
 const ALPHA2_MAP: Record<string, string> = {
   'Afganistán': 'af', 'Albania': 'al', 'Alemania': 'de', 'Andorra': 'ad',

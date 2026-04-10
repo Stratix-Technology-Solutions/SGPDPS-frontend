@@ -1,5 +1,5 @@
 import type { AnyFieldApi } from '@tanstack/react-form'
-import { InputMessageError } from './InputMessageError'
+import { InputMessageError } from '../../../shared/components/InputMessageError'
 
 export function ProfessionsField({ field }: { field: AnyFieldApi }) {
   return (
