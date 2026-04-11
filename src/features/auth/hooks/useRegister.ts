@@ -8,8 +8,8 @@ export const useRegister = () => {
   const navigate = useNavigate()
 
   return useMutation<unknown, ApiError, RegisterDto>({
-    mutationFn: async ({ email, password }) => {
-      const res = await api.post('/auth/register', { email, password })
+    mutationFn: async (data) => {
+      const res = await api.post('/auth/register', data)
       return res.data
     },
     onSuccess: (_, variables) => {

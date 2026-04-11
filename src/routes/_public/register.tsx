@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_public/register')({
 })
 
 function RouteComponent() {
-  const { mutate: register, error, isPending } = useRegister()
+  const { mutate: register, error, isError, isPending } = useRegister()
 
   const form = useForm({
     defaultValues,
@@ -21,7 +21,7 @@ function RouteComponent() {
       register(value)
     },
     validators: {
-      onChange: RegisterSchema,
+      onSubmit: RegisterSchema,
     },
   })
 
@@ -32,7 +32,7 @@ function RouteComponent() {
         <h2 className="text-white text-center text-4xl font-extrabold">Registrarse</h2>
       </div>
 
-      {!!error && (
+      {isError && (
         <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante la creación de la cuenta'} />
       )}
 
@@ -44,12 +44,38 @@ function RouteComponent() {
         className="flex flex-col gap-6 w-full"
       >
         <form.Field
+          name="username"
+          children={(field) => (
+            <div className="flex flex-col gap-2">
+              <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
+                <MdMail className="w-6 h-6" />
+                <span>Nombre de usuario</span>
+              </label>
+              <input
+                id={field.name}
+                name={field.name}
+                type="text"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="Ingrese su nombre de usuario"
+                required
+                aria-required="true"
+                className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
+              />
+              {!field.state.meta.isValid && (
+                <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
+              )}
+            </div>
+          )}
+        />
+
+        <form.Field
           name="email"
           children={(field) => (
             <div className="flex flex-col gap-2">
               <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
                 <MdMail className="w-6 h-6" />
-                <span>Email</span>
+                <span>Correo Electrónico</span>
               </label>
               <input
                 id={field.name}
@@ -57,7 +83,7 @@ function RouteComponent() {
                 type="email"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="Ingrese su email"
+                placeholder="Ingrese su correo electrónico"
                 required
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"
@@ -76,7 +102,7 @@ function RouteComponent() {
 
         <form.Field
           name="confirmPassword"
-          children={(field) => <PasswordInput field={field} Icon={MdPassword}/>}
+          children={(field) => <PasswordInput field={field} Icon={MdPassword} label="Confirmar contraseña" />}
         />
 
         <div className="flex flex-col mt-2 gap-3">

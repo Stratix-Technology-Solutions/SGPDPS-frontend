@@ -16,17 +16,18 @@ interface Props {
     handleChange: (value: string) => void
     handleBlur: () => void
   },
-  Icon : IconType
+  Icon: IconType
+  label?: string
 }
 
-export function PasswordInput({ field, Icon }: Props) {
+export function PasswordInput({ field, Icon, label = 'Contraseña' }: Props) {
   const [show, setShow] = useState(false)
 
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
         <Icon className="w-6 h-6" />
-        <span>Contraseña</span>
+        <span>{label}</span>
       </label>
       <div className="relative">
         <input
