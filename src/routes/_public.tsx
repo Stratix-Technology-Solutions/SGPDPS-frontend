@@ -1,13 +1,13 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { useAuth } from '../features/auth/hooks/useAuth'
+import { validateToken } from '../features/auth/services/auth.service'
 
 export const Route = createFileRoute('/_public')({
   component: RouteComponent,
-  beforeLoad: () => {
-    const isAuthenticated = useAuth()
+  beforeLoad: async () => {
+    const isAuthenticated = await validateToken()
 
     if (isAuthenticated) {
-      throw redirect({ to: '/' })
+      throw redirect({ to: '/dashboard' })
     }
   },
 })

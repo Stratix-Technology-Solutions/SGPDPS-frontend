@@ -14,7 +14,7 @@ export const useVerifyEmail = () => {
     },
     onSuccess: (token) => {
       localStorage.setItem('access_token', token)
-      navigate({ to: '/' })
+      navigate({ to: '/dashboard' })
     },
   })
 }
