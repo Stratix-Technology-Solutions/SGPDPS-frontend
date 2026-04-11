@@ -6,7 +6,7 @@ import { InputMessageError } from '../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
 import { MdLock, MdLogin, MdMail, MdPassword } from 'react-icons/md'
-import { FaUser } from "react-icons/fa";
+import { FaUser } from 'react-icons/fa'
 import { PasswordInput } from '../../features/auth/components/PasswordInput'
 
 export const Route = createFileRoute('/_public/register')({
@@ -18,11 +18,9 @@ function RouteComponent() {
 
   const form = useForm({
     defaultValues,
+    validators: { onSubmit: RegisterSchema },
     onSubmit: ({ value }) => {
       register(value)
-    },
-    validators: {
-      onSubmit: RegisterSchema,
     },
   })
 

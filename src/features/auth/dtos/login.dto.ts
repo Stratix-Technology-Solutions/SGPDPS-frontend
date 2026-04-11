@@ -1,10 +1,9 @@
 import { z } from 'zod'
 
 export const LoginSchema = z.object({
-  email: z
+  username: z
     .string()
-    .nonempty('El correo es requerido')
-    .email('Correo electrónico inválido'),
+    .nonempty('Este campo requerido'),
 
   password: z
     .string()
@@ -14,6 +13,6 @@ export const LoginSchema = z.object({
 export type LoginDto = z.infer<typeof LoginSchema>
 
 export const defaultValues = {
-  email: '',
+  username: '',
   password: '',
 }

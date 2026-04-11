@@ -2,7 +2,8 @@ import { useForm } from '@tanstack/react-form'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LoginSchema, defaultValues } from '../../features/auth/dtos/login.dto'
 import { useLogin } from '../../features/auth/hooks/useLogin'
-import { MdMail, MdLock, MdLogin } from 'react-icons/md'
+import { MdLock, MdLogin } from 'react-icons/md'
+import { FaUser } from 'react-icons/fa'
 import { InputMessageError } from '../../shared/components/InputMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
@@ -13,15 +14,13 @@ export const Route = createFileRoute('/_public/login')({
 })
 
 function RouteComponent() {
-  const { mutate: login, error, isPending } = useLogin()
+  const { mutate: login, error, isError, isPending } = useLogin()
 
   const form = useForm({
     defaultValues,
+    validators: { onSubmit: LoginSchema },
     onSubmit: ({ value }) => {
       login(value)
-    },
-    validators: {
-      onChange: LoginSchema,
     },
   })
 
@@ -32,7 +31,7 @@ function RouteComponent() {
         <h2 className="text-white text-center text-4xl font-extrabold">Inicia sesión en FolioX</h2>
       </div>
 
-      {!!error && (
+      {isError && (
         <BannerMessageError message={error.response?.data?.message || 'Surgió un error durante el inicio de sesión'} />
       )}
 
@@ -44,20 +43,20 @@ function RouteComponent() {
         className="flex flex-col gap-6 w-full"
       >
         <form.Field
-          name="email"
+          name="username"
           children={(field) => (
             <div className="flex flex-col gap-2">
               <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
-                <MdMail className="w-6 h-6" />
-                <span>Email</span>
+                <FaUser className="w-6 h-6" />
+                <span>Nombre de usuario</span>
               </label>
               <input
                 id={field.name}
                 name={field.name}
-                type="email"
+                type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="Ingrese su email"
+                placeholder="Ingrese su nombre de usuario o su correo electrónico"
                 required
                 aria-required="true"
                 className="bg-neutral-light text-gray-800 placeholder-gray-500 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-transparent"

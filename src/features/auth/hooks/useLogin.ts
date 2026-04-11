@@ -8,8 +8,8 @@ export const useLogin = () => {
   const navigate = useNavigate()
 
   return useMutation<string, ApiError, LoginDto>({
-    mutationFn: async ({ email, password }) => {
-      const res = await api.post('/auth/login', { email, password })
+    mutationFn: async (data) => {
+      const res = await api.post('/auth/login', data)
       return res.data.token
     },
     onSuccess: (token) => {
