@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen bg-neutral-light/40">
+    <div className="min-h-screen bg-neutral-light/40 pt-20">
       <Header />
 
       <main className="px-4 md:w-10/12 md:px-0 m-auto">

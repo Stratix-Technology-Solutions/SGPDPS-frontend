@@ -7,8 +7,8 @@ export const Header = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="w-full bg-white border-b border-neutral-light">
-      <div className="px-4 md:w-10/12 md:px-0 m-auto py-3 flex justify-between items-center">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white border-b border-neutral-light">
+      <div className="px-4 md:w-10/12 md:px-0 mx-auto flex justify-between items-center h-20">
         <Link
           to="/"
           className="flex items-center gap-3"
@@ -18,7 +18,7 @@ export const Header = () => {
             alt="logo FolioX"
             className="w-12 md:w-14"
           />
-          <span className="text-2xl md:text-3xl font-semibold leading-none">
+          <span className="text-2xl md:text-3xl font-semibold leading-none tracking-widest">
             FOLIO
             <span className="text-primary text-3xl md:text-4xl">X</span>
           </span>
