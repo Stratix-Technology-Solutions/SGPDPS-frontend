@@ -8,8 +8,6 @@ export const Route = createFileRoute('/_authenticated')({
     const isAuthenticated = await validateToken()
 
     if (!isAuthenticated) {
-      localStorage.removeItem('access_token')
-
       throw redirect({ to: '/login' })
     }
   }
