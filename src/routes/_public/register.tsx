@@ -6,6 +6,7 @@ import { InputMessageError } from '../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
 import { MdLock, MdLogin, MdMail, MdPassword } from 'react-icons/md'
+import { FaUser } from "react-icons/fa";
 import { PasswordInput } from '../../features/auth/components/PasswordInput'
 
 export const Route = createFileRoute('/_public/register')({
@@ -48,7 +49,7 @@ function RouteComponent() {
           children={(field) => (
             <div className="flex flex-col gap-2">
               <label htmlFor={field.name} className="text-white font-medium flex items-center gap-2 flex-wrap">
-                <MdMail className="w-6 h-6" />
+                <FaUser className="w-6 h-6" />
                 <span>Nombre de usuario</span>
               </label>
               <input
