@@ -7,7 +7,7 @@ import { CardTechnicalSkill } from './CardTechnicalSkill'
 import type { TechnicalSkillsResponse } from '../interfaces/technical.interface'
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md'
 
-export const ListSkills = () => {
+export const ListSkillsTechnical = () => {
   const [page, setPage] = useState(1)
   const { data, error, isLoading, isError, isSuccess } = useQuery<TechnicalSkillsResponse, ApiError>({
     queryKey: ['user', 'skills', 'technical', page],
@@ -53,7 +53,7 @@ export const ListSkills = () => {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="w-8 h-8 flex items-center justify-center border rounded disabled:opacity-50 cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white"
           >
             <MdArrowBackIosNew className="w-6 aspect-square" />
           </button>
@@ -62,7 +62,7 @@ export const ListSkills = () => {
             <button
               key={i}
               onClick={() => setPage(i + 1)}
-              className={`w-8 h-8 flex items-center justify-center border rounded cursor-pointer ${page === i + 1 ? 'bg-primary text-white' : ''}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-md cursor-pointer ${page === i + 1 ? 'bg-primary text-white' : 'bg-white'}`}
             >
               {i + 1}
             </button>
@@ -71,7 +71,7 @@ export const ListSkills = () => {
           <button
             disabled={page === data.meta.last_page}
             onClick={() => setPage(page + 1)}
-            className="w-8 h-8 flex items-center justify-center border rounded disabled:opacity-50 cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white"
           >
             <MdArrowForwardIos className="w-6 aspect-square" />
           </button>
