@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SectionTitle } from '../../../features/skills/components/SectionTitle'
-import { FormTechnical } from '../../../features/skills/components/FormTechnical'
+import { FormCreateSkillTechnical } from '../../../features/skills/components/FormCreateSkillTechnical'
 import { ListSkillsTechnical } from '../../../features/skills/components/ListSkillsTechnical'
 
 export const Route = createFileRoute('/_authenticated/profile/skills')({
@@ -24,7 +24,7 @@ function RouteComponent() {
       </div>
 
       {technical && (
-        <FormTechnical onClose={() => setTechnical(false)} />
+        <FormCreateSkillTechnical onClose={() => setTechnical(false)} />
       )}
     </div>
   )

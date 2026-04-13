@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 
 const domainValue: Record<string, number> = {
   'Básico': 20,
@@ -51,15 +52,17 @@ export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
 
       <div className="flex justify-end gap-2 flex-wrap lg:justify-start lg:w-auto">
         <button
-          className="px-3 py-1 border border-gray-300 rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors"
+          className="px-3 py-1 border border-gray-300 cursor-pointer rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors flex items-center gap-1"
         >
+          <FaEdit className="inline" />
           Editar
         </button>
         <button
           disabled={isPending}
           onClick={() => remove()}
-          className="px-3 py-1 border border-gray-300 rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors"
+          className="px-3 py-1 border border-gray-300 cursor-pointer rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors flex items-center gap-1 disabled:cursor-not-allowed"
         >
+          <FaTrash className="inline" />
           Eliminar
         </button>
       </div>

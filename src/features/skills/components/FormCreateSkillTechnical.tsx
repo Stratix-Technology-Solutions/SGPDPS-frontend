@@ -11,7 +11,7 @@ interface Props {
   onClose: () => void
 }
 
-export const FormTechnical = ({ onClose }: Props) => {
+export const FormCreateSkillTechnical = ({ onClose }: Props) => {
   const queryClient = useQueryClient()
   const { mutate: create, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
     mutationFn: async (data) => {
@@ -89,7 +89,7 @@ export const FormTechnical = ({ onClose }: Props) => {
             name="domain_level"
             children={(field) => (
               <div>
-                <label className="block font-semibold text-background-dark mb-1.5">Dominio</label>
+                <label className="block font-semibold text-background-dark mb-1.5">NIvel de dominio</label>
                 <select
                   id={field.name}
                   value={field.state.value}

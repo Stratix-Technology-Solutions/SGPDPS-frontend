@@ -53,7 +53,7 @@ export const ListSkillsTechnical = () => {
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white"
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white disabled:cursor-not-allowed"
           >
             <MdArrowBackIosNew className="w-6 aspect-square" />
           </button>
@@ -71,7 +71,7 @@ export const ListSkillsTechnical = () => {
           <button
             disabled={page === data.meta.last_page}
             onClick={() => setPage(page + 1)}
-            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white"
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white disabled:cursor-not-allowed"
           >
             <MdArrowForwardIos className="w-6 aspect-square" />
           </button>
