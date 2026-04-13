@@ -6,10 +6,7 @@ export interface TechnicalSkillResponse {
 
 export interface TechnicalSkillsResponse {
   data: TechnicalSkillResponse[]
-  links: {
-    first: string
-    last: string
-    prev: string | null
-    next: string | null
+  meta: {
+    last_page: number
   }
 }
