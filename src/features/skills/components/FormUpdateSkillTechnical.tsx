@@ -1,21 +1,23 @@
 import { useForm } from '@tanstack/react-form'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
-import { TechnicalSchema, defaultValues } from '../dtos/technical.dto'
+import { TechnicalSchema } from '../dtos/technical.dto'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
 import type { TechnicalDto } from '../dtos/technical.dto'
+import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
 
 interface Props {
+  technology: TechnicalSkillResponse
   onClose: () => void
 }
 
-export const FormCreateSkillTechnical = ({ onClose }: Props) => {
+export const FormUpdateSkillTechnical = ({ technology, onClose }: Props) => {
   const queryClient = useQueryClient()
-  const { mutate: create, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
+  const { mutate: update, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
     mutationFn: async (data) => {
-      const res = await api.post('/skills', data)
+      const res = await api.patch(`/skills/${technology.id}`, data)
       return res.data
     },
     onSuccess: () => {
@@ -27,10 +29,13 @@ export const FormCreateSkillTechnical = ({ onClose }: Props) => {
   })
 
   const form = useForm({
-    defaultValues,
+    defaultValues: {
+      name: technology.name,
+      domain_level: technology.domain_level,
+    },
     validators: { onSubmit: TechnicalSchema },
     onSubmit: ({ value }) => {
-      create(value)
+      update(value)
     },
   })
 
@@ -48,14 +53,14 @@ export const FormCreateSkillTechnical = ({ onClose }: Props) => {
           </h3>
 
           <p className="text-neutral-medium/70">
-            Aquí podrás agregar tecnologías y tu nivel.
+            Aquí podrás editar el nivel de la tecnología agregada.
           </p>
         </div>
 
         {isError && (
           <BannerMessageError
             message={error.response?.data?.message
-              || 'Surgió un error durante el registro de la habilidad técnica'
+              || 'Surgió un error durante la actualización de la habilidad técnica'
             }
           />
         )}
@@ -78,9 +83,8 @@ export const FormCreateSkillTechnical = ({ onClose }: Props) => {
                   type="text"
                   placeholder="Ingrese su habilidad técnica"
                   value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-                  required
+                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled
                 />
                 {!field.state.meta.isValid && (
                   <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />

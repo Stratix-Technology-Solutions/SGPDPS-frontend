@@ -12,7 +12,7 @@ interface IUserMenu {
 }
 
 const links = [
-  { label: 'Inicio', to: '/' },
+  { label: 'Inicio', to: '/dashboard' },
   { label: 'Editar perfil', to: '/profile/edit' },
 ]
 
