@@ -18,6 +18,7 @@ import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedProfileSkillsRouteImport } from './routes/_authenticated/profile/skills'
 import { Route as AuthenticatedProfileRegisterRouteImport } from './routes/_authenticated/profile/register'
 import { Route as AuthenticatedProfileEditRouteImport } from './routes/_authenticated/profile/edit'
 
@@ -64,6 +65,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedProfileSkillsRoute =
+  AuthenticatedProfileSkillsRouteImport.update({
+    id: '/profile/skills',
+    path: '/profile/skills',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedProfileRegisterRoute =
   AuthenticatedProfileRegisterRouteImport.update({
     id: '/profile/register',
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof PublicVerifyEmailRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/profile/skills': typeof AuthenticatedProfileSkillsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
   '/verify-email': typeof PublicVerifyEmailRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/profile/skills': typeof AuthenticatedProfileSkillsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -112,6 +121,7 @@ export interface FileRoutesById {
   '/_public/verify-email': typeof PublicVerifyEmailRoute
   '/_authenticated/profile/edit': typeof AuthenticatedProfileEditRoute
   '/_authenticated/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/_authenticated/profile/skills': typeof AuthenticatedProfileSkillsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/profile/edit'
     | '/profile/register'
+    | '/profile/skills'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/profile/edit'
     | '/profile/register'
+    | '/profile/skills'
   id:
     | '__root__'
     | '/'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
     | '/_public/verify-email'
     | '/_authenticated/profile/edit'
     | '/_authenticated/profile/register'
+    | '/_authenticated/profile/skills'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -222,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/skills': {
+      id: '/_authenticated/profile/skills'
+      path: '/profile/skills'
+      fullPath: '/profile/skills'
+      preLoaderRoute: typeof AuthenticatedProfileSkillsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/profile/register': {
       id: '/_authenticated/profile/register'
       path: '/profile/register'
@@ -243,12 +263,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileEditRoute: typeof AuthenticatedProfileEditRoute
   AuthenticatedProfileRegisterRoute: typeof AuthenticatedProfileRegisterRoute
+  AuthenticatedProfileSkillsRoute: typeof AuthenticatedProfileSkillsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileEditRoute: AuthenticatedProfileEditRoute,
   AuthenticatedProfileRegisterRoute: AuthenticatedProfileRegisterRoute,
+  AuthenticatedProfileSkillsRoute: AuthenticatedProfileSkillsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
