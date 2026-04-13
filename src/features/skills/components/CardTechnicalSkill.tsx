@@ -1,3 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { ApiError } from '../../../shared/interfaces/api.interface'
+import api from '../../../app/api/axios'
+
 const domainValue: Record<string, number> = {
   'Básico': 20,
   'Intermedio': 50,
@@ -5,19 +9,30 @@ const domainValue: Record<string, number> = {
 }
 
 const getLevelConfig = (value: number) => {
-  if (value <= 33) return "bg-amber-500"
-  else if (value <= 66) return "bg-amber-300"
-  return  "bg-green-500"
+  if (value <= 33) return 'bg-amber-500'
+  else if (value <= 66) return 'bg-amber-300'
+  return  'bg-green-500'
 }
 
 interface Props {
+  id: number
   name: string
   domain_level: string
-  onEdit?: () => void
-  onDelete?: () => void
 }
 
-export const CardTechnicalSkill = ({ name, domain_level, onEdit, onDelete }: Props) => {
+export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
+  const queryClient = useQueryClient()
+  const { mutate: remove, isPending } = useMutation<void, ApiError, void>({
+    mutationFn: async () => {
+      await api.delete(`/skills/${id}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['user', 'skills', 'technical']
+      })
+    },
+  })
+
   const value = domainValue[domain_level]
   const color = getLevelConfig(value)
 
@@ -36,13 +51,13 @@ export const CardTechnicalSkill = ({ name, domain_level, onEdit, onDelete }: Pro
 
       <div className="flex justify-end gap-2 flex-wrap lg:justify-start lg:w-auto">
         <button
-          onClick={onEdit}
           className="px-3 py-1 border border-gray-300 rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors"
         >
           Editar
         </button>
         <button
-          onClick={onDelete}
+          disabled={isPending}
+          onClick={() => remove()}
           className="px-3 py-1 border border-gray-300 rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors"
         >
           Eliminar

@@ -1,5 +1,5 @@
 export interface TechnicalSkillResponse {
-  id: string
+  id: number
   name: string
   domain_level: string
 }

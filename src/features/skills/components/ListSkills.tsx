@@ -33,10 +33,10 @@ export const ListSkills = () => {
       )}
 
       {isSuccess && !!data.data.length && (
-        <div className="flex flex-col gap-1">
-          {data.data.map(({ id, ...data }) => (
+        <div className="flex flex-col gap-2">
+          {data.data.map((data) => (
             <CardTechnicalSkill
-              key={id}
+              key={data.id}
               {...data}
             />
           ))}
