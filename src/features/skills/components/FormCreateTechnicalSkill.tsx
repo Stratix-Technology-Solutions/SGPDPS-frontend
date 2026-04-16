@@ -11,7 +11,7 @@ interface Props {
   onClose: () => void
 }
 
-export const FormCreateSkillTechnical = ({ onClose }: Props) => {
+export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
   const queryClient = useQueryClient()
   const { mutate: create, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
     mutationFn: async (data) => {

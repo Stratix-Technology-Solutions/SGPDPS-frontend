@@ -13,7 +13,7 @@ interface Props {
   onClose: () => void
 }
 
-export const FormUpdateSkillTechnical = ({ technology, onClose }: Props) => {
+export const FormUpdateTechnicalSkill = ({ technology, onClose }: Props) => {
   const queryClient = useQueryClient()
   const { mutate: update, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
     mutationFn: async (data) => {

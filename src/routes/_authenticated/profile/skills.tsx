@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SectionTitle } from '../../../features/skills/components/SectionTitle'
-import { FormCreateSkillTechnical } from '../../../features/skills/components/FormCreateSkillTechnical'
+import { FormCreateTechnicalSkill } from '../../../features/skills/components/FormCreateTechnicalSkill'
 import { FormCreateSoftSkill } from '../../../features/skills/components/FormCreateSoftSkill'
 import { ListSkills } from '../../../features/skills/components/ListSkills'
 import { CardTechnicalSkill } from '../../../features/skills/components/CardTechnicalSkill'
@@ -35,7 +35,7 @@ function RouteComponent() {
       </div>
 
       {technical && (
-        <FormCreateSkillTechnical onClose={() => setTechnical(false)} />
+        <FormCreateTechnicalSkill onClose={() => setTechnical(false)} />
       )}
 
       <div className="flex flex-col gap-5">

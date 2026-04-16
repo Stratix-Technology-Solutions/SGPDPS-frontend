@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FaEdit } from 'react-icons/fa'
-import { FormUpdateSkillTechnical } from './FormUpdateSkillTechnical'
+import { FormUpdateTechnicalSkill } from './FormUpdateTechnicalSkill'
 import { ButtonDeleteSkill } from './ButtonDeleteSkill'
 
 const domainValue: Record<string, number> = {
@@ -58,7 +58,7 @@ export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
       </div>
 
       {edit && (
-        <FormUpdateSkillTechnical
+        <FormUpdateTechnicalSkill
           technology={{ id, name, domain_level }}
           onClose={() => setEdit(false)}
         />
