@@ -1,14 +1,20 @@
 import { Link } from '@tanstack/react-router'
-import { FaUserCircle } from 'react-icons/fa'
 import { useState } from 'react'
+import { FaUserCircle } from 'react-icons/fa'
+import { MdMenu, MdClose } from 'react-icons/md'
 import { UserMenu } from './UserMenu'
 
-export const Header = () => {
+interface Props {
+  showAside: boolean
+  toggleAside: () => void
+}
+
+export const Header = ({ showAside, toggleAside }: Props) => {
   const [open, setOpen] = useState(false)
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b border-neutral-light">
-      <div className="px-4 md:w-10/12 md:px-0 mx-auto flex justify-between items-center h-20">
+      <div className="px-4 md:w-11/12 md:px-0 mx-auto flex justify-between items-center h-20">
         <Link
           to="/"
           className="flex items-center gap-3"
@@ -24,13 +30,25 @@ export const Header = () => {
           </span>
         </Link>
 
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="cursor-pointer text-primary hover:text-primary-soft transition"
-        >
-          <FaUserCircle className="w-10 h-10" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="cursor-pointer text-primary hover:text-primary-soft transition"
+          >
+            <FaUserCircle className="w-10 h-10" />
+          </button>
+
+          <button
+            className="cursor-pointer bg-primary hover:bg-primary-soft transition text-white p-2 rounded-lg lg:hidden"
+            onClick={toggleAside}
+          >
+            {showAside
+              ? <MdClose className="w-6 h-6" />
+              : <MdMenu className="w-6 h-6" />
+            }
+          </button>
+        </div>
       </div>
 
       <UserMenu open={open} onClose={() => setOpen(false)} />
