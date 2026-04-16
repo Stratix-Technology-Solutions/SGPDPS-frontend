@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { SectionTitle } from '../../../features/skills/components/SectionTitle'
 import { FormCreateSkillTechnical } from '../../../features/skills/components/FormCreateSkillTechnical'
 import { ListSkillsTechnical } from '../../../features/skills/components/ListSkillsTechnical'
+import { FormCreateSoftSkill } from '../../../features/skills/components/FormCreateSoftSkill'
+import { ListSoftSkills } from '../../../features/skills/components/ListSoftSkills'
 
 export const Route = createFileRoute('/_authenticated/profile/skills')({
   component: RouteComponent,
@@ -10,6 +12,7 @@ export const Route = createFileRoute('/_authenticated/profile/skills')({
 
 function RouteComponent() {
   const [technical, setTechnical] = useState(false)
+  const [soft, setSoft] = useState(false)
 
   return (
     <div className="py-10 flex flex-col gap-8">
@@ -25,6 +28,20 @@ function RouteComponent() {
 
       {technical && (
         <FormCreateSkillTechnical onClose={() => setTechnical(false)} />
+      )}
+
+      <div className="flex flex-col gap-5">
+        <SectionTitle
+          title="Habilidades Blandas"
+          text="Agrega las habilidades interpersonales que forman parte de tu perfil."
+          onClick={() => setSoft(true)}
+        />
+
+        <ListSoftSkills />
+      </div>
+
+      {soft && (
+        <FormCreateSoftSkill onClose={() => setSoft(false)} />
       )}
     </div>
   )

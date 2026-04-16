@@ -3,16 +3,16 @@ import { useState } from 'react'
 import api from '../../../app/api/axios'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
-import { CardTechnicalSkill } from './CardTechnicalSkill'
-import type { TechnicalSkillsResponse } from '../interfaces/technical.interface'
+import { CardSoftSkill } from './CardSoftSkill'
+import type { SoftSkillsResponse } from '../interfaces/soft.interface'
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md'
 
-export const ListSkillsTechnical = () => {
+export const ListSoftSkills = () => {
   const [page, setPage] = useState(1)
-  const { data, error, isLoading, isError, isSuccess } = useQuery<TechnicalSkillsResponse, ApiError>({
-    queryKey: ['user', 'skills', 'technical', page],
+  const { data, error, isLoading, isError, isSuccess } = useQuery<SoftSkillsResponse, ApiError>({
+    queryKey: ['user', 'skills', 'soft', page],
     queryFn: async () => {
-      const res = await api.get(`/skills?page=${page}&per_page=6`)
+      const res = await api.get(`/soft-skills?page=${page}&per_page=6`)
       return res.data
     },
   })
@@ -38,9 +38,9 @@ export const ListSkillsTechnical = () => {
       )}
 
       {isSuccess && !!data.data.length && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {data.data.map((data) => (
-            <CardTechnicalSkill
+            <CardSoftSkill
               key={data.id}
               {...data}
             />

@@ -42,19 +42,19 @@ export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-center bg-white border border-neutral-medium/20 rounded-xl px-4 py-3 gap-2.5 lg:gap-10">
-        <span className="text-primary font-semibold lg:w-56 lg:shrink-0">
+      <div className="flex flex-col h-full bg-white border border-neutral-medium/20 rounded-xl p-4 gap-3 hover:shadow-md transition-shadow">
+        <span className="text-primary font-semibold">
           {name} - {domain_level}
         </span>
 
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden lg:flex-1 md:h-2.5">
+        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
             className={`h-full ${color} rounded-full transition-all duration-500`}
             style={{ width: `${value}%` }}
           />
         </div>
 
-        <div className="flex justify-end gap-2 flex-wrap lg:justify-start lg:w-auto">
+        <div className="flex flex-wrap gap-2 justify-end mt-auto">
           <button
             onClick={() => setEdit(true)}
             className="px-3 py-1 border border-gray-300 cursor-pointer rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors flex items-center gap-1"
@@ -62,6 +62,7 @@ export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
             <FaEdit className="inline" />
             Editar
           </button>
+
           <button
             disabled={isPending}
             onClick={() => remove()}
