@@ -14,7 +14,7 @@ export const useUpdateProfile = () => {
     },
     onSuccess: () => {
       setTimeout(() => {
-        navigate({ to: '/' })
+        navigate({ to: '/dashboard' })
       }, 2000)
     },
   })
