@@ -49,7 +49,7 @@ export const FormUpdateTechnicalSkill = ({ technology, onClose }: Props) => {
       <div className="relative bg-white rounded-lg p-6 shadow-lg w-full max-w-md mx-4 flex flex-col gap-5">
         <div className="flex flex-col gap-1">
           <h3 className="text-xl font-semibold">
-            Habilidades Técnicas
+            Editar Habilidad Técnica
           </h3>
 
           <p className="text-neutral-medium/70">
