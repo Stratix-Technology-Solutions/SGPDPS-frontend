@@ -2,9 +2,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SectionTitle } from '../../../features/skills/components/SectionTitle'
 import { FormCreateSkillTechnical } from '../../../features/skills/components/FormCreateSkillTechnical'
-import { ListSkillsTechnical } from '../../../features/skills/components/ListSkillsTechnical'
 import { FormCreateSoftSkill } from '../../../features/skills/components/FormCreateSoftSkill'
-import { ListSoftSkills } from '../../../features/skills/components/ListSoftSkills'
+import { ListSkills } from '../../../features/skills/components/ListSkills'
+import { CardTechnicalSkill } from '../../../features/skills/components/CardTechnicalSkill'
+import type { TechnicalSkillResponse } from '../../../features/skills/interfaces/technical.interface'
+import { CardSoftSkill } from '../../../features/skills/components/CardSoftSkill'
+import type { SoftSkillResponse } from '../../../features/skills/interfaces/soft.interface'
 
 export const Route = createFileRoute('/_authenticated/profile/skills')({
   component: RouteComponent,
@@ -23,7 +26,12 @@ function RouteComponent() {
           onClick={() => setTechnical(true)}
         />
 
-        <ListSkillsTechnical />
+        <ListSkills<TechnicalSkillResponse>
+          queryKey={['user', 'skills', 'technical']}
+          route="skills"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-2"
+          renderItem={(item) => <CardTechnicalSkill {...item} />}
+        />
       </div>
 
       {technical && (
@@ -37,7 +45,12 @@ function RouteComponent() {
           onClick={() => setSoft(true)}
         />
 
-        <ListSoftSkills />
+        <ListSkills<SoftSkillResponse>
+          queryKey={['user', 'skills', 'soft']}
+          route="soft-skills"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          renderItem={(item) => <CardSoftSkill {...item} />}
+        />
       </div>
 
       {soft && (

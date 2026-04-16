@@ -1,21 +1,35 @@
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
-import { CardSoftSkill } from './CardSoftSkill'
-import type { SoftSkillsResponse } from '../interfaces/soft.interface'
+import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md'
 
-export const ListSoftSkills = () => {
+type PaginatedResponse<T> = {
+  data: T[]
+  meta: {
+    last_page: number
+  }
+}
+
+interface Props<T> {
+  queryKey: string[]
+  route: string
+  renderItem: (item: T) => React.ReactNode
+  className?: string
+}
+
+export const ListSkills = <T,>({ queryKey, route, renderItem, className }: Props<T>) => {
   const [page, setPage] = useState(1)
-  const { data, error, isLoading, isError, isSuccess } = useQuery<SoftSkillsResponse, ApiError>({
-    queryKey: ['user', 'skills', 'soft', page],
-    queryFn: async () => {
-      const res = await api.get(`/soft-skills?page=${page}&per_page=6`)
-      return res.data
-    },
-  })
+
+  const { data, error, isLoading, isError, isSuccess } =
+    useQuery<PaginatedResponse<T>, ApiError>({
+      queryKey: [...queryKey, page],
+      queryFn: async () => {
+        const res = await api.get(`/${route}?page=${page}&per_page=6`)
+        return res.data
+      },
+    })
 
   if (isLoading) {
     return (
@@ -38,12 +52,11 @@ export const ListSoftSkills = () => {
       )}
 
       {isSuccess && !!data.data.length && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.data.map((data) => (
-            <CardSoftSkill
-              key={data.id}
-              {...data}
-            />
+        <div className={className}>
+          {data.data.map((item) => (
+            <div key={(item as any).id}>
+              {renderItem(item)}
+            </div>
           ))}
         </div>
       )}
