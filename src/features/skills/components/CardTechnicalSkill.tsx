@@ -1,9 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import type { ApiError } from '../../../shared/interfaces/api.interface'
-import api from '../../../app/api/axios'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaEdit } from 'react-icons/fa'
 import { FormUpdateSkillTechnical } from './FormUpdateSkillTechnical'
+import { ButtonDeleteSkill } from './ButtonDeleteSkill'
 
 const domainValue: Record<string, number> = {
   'Básico': 20,
@@ -25,18 +23,6 @@ interface Props {
 
 export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
   const [edit, setEdit] = useState(false)
-  const queryClient = useQueryClient()
-  const { mutate: remove, isPending } = useMutation<void, ApiError, void>({
-    mutationFn: async () => {
-      await api.delete(`/skills/${id}`)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['user', 'skills', 'technical']
-      })
-    },
-  })
-
   const value = domainValue[domain_level]
   const color = getLevelConfig(value)
 
@@ -63,14 +49,11 @@ export const CardTechnicalSkill = ({ id, name, domain_level }: Props) => {
             Editar
           </button>
 
-          <button
-            disabled={isPending}
-            onClick={() => remove()}
-            className="px-3 py-1 border border-gray-300 cursor-pointer rounded-md bg-neutral-medium/20 hover:bg-gray-100 transition-colors flex items-center gap-1 disabled:cursor-not-allowed"
-          >
-            <FaTrash className="inline" />
-            Eliminar
-          </button>
+          <ButtonDeleteSkill
+            id={id}
+            route="skills"
+            queryKey={['user', 'skills', 'technical']}
+          />
         </div>
       </div>
 
