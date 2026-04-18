@@ -5,6 +5,7 @@ import { MdOutlineWork } from 'react-icons/md'
 const links = [
   { label: 'Habilidades', to: '/profile/skills', Icon: SiHyperskill },
   { label: 'Experiencia Laboral', to: '#', Icon: MdOutlineWork },
+  { label: 'Experiencia Academica', to:'/profile/AcademicExperience', Icon:MdOutlineWork}
 ]
 
 interface Props {
