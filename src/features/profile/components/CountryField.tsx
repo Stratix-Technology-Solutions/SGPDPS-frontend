@@ -82,6 +82,7 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const selectedValue = String(field.state.value || '').trim().toLowerCase()
   const selected = paises.find((p) => p.country.trim().toLowerCase() === selectedValue) ?? null
@@ -101,9 +102,15 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  useEffect(() => {
+    if (open) {
+      searchInputRef.current?.focus()
+    }
+  }, [open])
+
   return (
     <div>
-      <label className="block text-sm font-medium text-background-dark mb-1.5">País</label>
+      <label className="block text-sm font-medium text-background-dark mb-1.5">Nacionalidad</label>
       <div ref={containerRef} className="relative">
         <button
           type="button"
@@ -127,6 +134,7 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
           <div className="absolute z-50 mt-1 w-full bg-white rounded-xl shadow-lg border border-neutral-light overflow-hidden">
             <div className="p-2 border-b border-neutral-light">
               <input
+                ref={searchInputRef}
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -135,19 +143,21 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
               />
             </div>
             <ul className="max-h-52 overflow-y-auto">
-              <li>
-                <button
-                  type="button"
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-neutral-400 hover:bg-neutral-50 transition-colors"
-                  onClick={() => {
-                    field.handleChange('')
-                    setOpen(false)
-                    setSearch('')
-                  }}
-                >
-                  Sin país
-                </button>
-              </li>
+              {selected && (
+                <li>
+                  <button
+                    type="button"
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-neutral-400 hover:bg-neutral-50 transition-colors"
+                    onClick={() => {
+                      field.handleChange('')
+                      setOpen(false)
+                      setSearch('')
+                    }}
+                  >
+                    Quitar selección
+                  </button>
+                </li>
+              )}
               {filtered.length === 0 && (
                 <li className="px-4 py-2 text-sm text-neutral-medium">
                   No se encontraron países.
