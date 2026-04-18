@@ -199,19 +199,24 @@ export function CountrySelector({
 
             <ul className="max-h-52 overflow-y-auto">
               {showClear && selected && onClear && (
-                <li>
-                  <button
-                    type="button"
-                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-neutral-400 hover:bg-neutral-50 transition-colors"
-                    onClick={() => {
-                      onClear()
-                      setOpen(false)
-                      setSearch('')
-                    }}
-                  >
-                    {clearLabel}
-                  </button>
-                </li>
+                <>
+                  <li>
+                    <button
+                      type="button"
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-background-dark hover:bg-neutral-50 transition-colors"
+                      onClick={() => {
+                        onClear()
+                        setOpen(false)
+                        setSearch('')
+                      }}
+                    >
+                      {clearLabel}
+                    </button>
+                  </li>
+                  <li className="px-4 py-1" aria-hidden="true">
+                    <div className="border-t border-[#E5E7EB]" />
+                  </li>
+                </>
               )}
 
               {filtered.length === 0 && (
