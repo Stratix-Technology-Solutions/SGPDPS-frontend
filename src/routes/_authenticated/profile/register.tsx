@@ -6,6 +6,7 @@ import { CountryField } from '../../../features/profile/components/CountryField'
 import { PhoneField } from '../../../features/profile/components/PhoneField'
 import { ProfessionsField } from '../../../features/profile/components/ProfessionsField'
 import { RegisterAccountSchema, defaultValues } from '../../../features/profile/dtos/user.dto'
+import { useGetProfile } from '../../../features/profile/hooks/useGetProfile'
 import { useCreateProfile } from '../../../features/profile/hooks/useCreateProfile'
 import { ButtonLoader } from '../../../shared/components/ButtonLoader'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/_authenticated/profile/register')({
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const { data: currentProfile, isLoading: isLoadingProfile } = useGetProfile()
   const { mutate: create, error, isPending, isSuccess } = useCreateProfile()
 
   const form = useForm({
@@ -46,6 +48,27 @@ function RouteComponent() {
       errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }, [error])
+
+  useEffect(() => {
+    if (currentProfile) {
+      navigate({ to: '/profile/edit' })
+    }
+  }, [currentProfile, navigate])
+
+  if (isLoadingProfile || currentProfile) {
+    return (
+      <div className="py-10">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex justify-center items-center py-12">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-sm text-neutral-medium mt-2">Verificando tu perfil...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="py-10">

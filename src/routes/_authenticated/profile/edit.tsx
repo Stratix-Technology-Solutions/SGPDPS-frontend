@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../../features/profile/components/ProfileFormField'
@@ -21,6 +21,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { data, isLoading, isError, error: errorGetData, isSuccess: isSuccessGetData } = useGetProfile()
   const { mutate: update, error, isPending, isSuccess } = useUpdateProfile()
+  const isProfileMissing = isError && errorGetData.response?.status === 404
 
   const form = useForm({
     defaultValues: {
@@ -70,6 +71,12 @@ function RouteComponent() {
       errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }, [error])
+
+  useEffect(() => {
+    if (isProfileMissing) {
+      navigate({ to: '/profile/register' })
+    }
+  }, [isProfileMissing, navigate])
 
   return (
     <div className="py-10">
@@ -126,10 +133,9 @@ function RouteComponent() {
           </div>
         )}
 
-        {isError && errorGetData.response?.status === 404 && (
-          <div className="flex flex-col justify-center items-center gap-2 py-10 px-4 bg-white border border-primary-soft rounded-xl text-center">
-            <p className="text-neutral-medium">No tienes información registrada.</p>
-            <Link to='/profile/register' className="text-primary hover:underline">Registra tu perfil</Link>
+        {isProfileMissing && (
+          <div className="flex justify-center items-center py-12">
+            <p className="text-sm text-neutral-medium">Redirigiendo al registro de perfil...</p>
           </div>
         )}
 
