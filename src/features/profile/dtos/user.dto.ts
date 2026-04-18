@@ -6,7 +6,7 @@ export const RegisterAccountSchema = z.object({
   date_of_birth: z.string(),
   gender: z.string(),
   biography: z.string().nonempty('La biografía es obligatoria'),
-  country: z.string().max(20, 'El país no debe exceder los 20 caracteres'),
+  country: z.string().max(100, 'El país no debe exceder los 100 caracteres'),
   phone: z.string().max(20, 'El teléfono no debe exceder los 20 caracteres').regex(/^\+?\d*$/, 'El teléfono solo debe contener números'),
   professions: z.array(
     z.string().nonempty('Cada profesión debe tener un nombre').max(50, 'Cada profesión no debe exceder los 50 caracteres')

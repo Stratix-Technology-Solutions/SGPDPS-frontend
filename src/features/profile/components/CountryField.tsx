@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import '/node_modules/flag-icons/css/flag-icons.min.css'
+import 'flag-icons/css/flag-icons.min.css'
 import type { AnyFieldApi } from '@tanstack/react-form'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import paisesRaw from '../../../shared/assets/data/countries.json'
@@ -125,6 +125,15 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
 
         {open && (
           <div className="absolute z-50 mt-1 w-full bg-white rounded-xl shadow-lg border border-neutral-light overflow-hidden">
+            <div className="p-2 border-b border-neutral-light">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Buscar país"
+                className="w-full px-3 py-2 rounded-lg border border-neutral-light bg-white text-sm text-background-dark outline-none focus:border-primary transition-colors"
+              />
+            </div>
             <ul className="max-h-52 overflow-y-auto">
               <li>
                 <button
@@ -139,6 +148,11 @@ export function CountryField({ field }: { field: AnyFieldApi }) {
                   Sin país
                 </button>
               </li>
+              {filtered.length === 0 && (
+                <li className="px-4 py-2 text-sm text-neutral-medium">
+                  No se encontraron países.
+                </li>
+              )}
               {filtered.map((p) => (
                 <li key={p.country}>
                   <button

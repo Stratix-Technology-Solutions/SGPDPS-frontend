@@ -10,7 +10,6 @@ export function PhoneField({ field }: { field: AnyFieldApi }) {
             <PhoneInput
                 international
                 countryCallingCodeEditable={false}
-                defaultCountry="VE"
                 value={field.state.value || undefined}
                 onChange={(val) => field.handleChange(val ?? '')}
                 className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
