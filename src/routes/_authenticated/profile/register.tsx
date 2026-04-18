@@ -19,8 +19,9 @@ export const Route = createFileRoute('/_authenticated/profile/register')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const { data: currentProfile, isLoading: isLoadingProfile } = useGetProfile()
+  const { data: currentProfile, isLoading: isLoadingProfile, isError } = useGetProfile()
   const { mutate: create, error, isPending, isSuccess } = useCreateProfile()
+  const hasProfile = !isError && Boolean(currentProfile)
 
   const form = useForm({
     defaultValues,
@@ -50,12 +51,12 @@ function RouteComponent() {
   }, [error])
 
   useEffect(() => {
-    if (currentProfile) {
+    if (hasProfile) {
       navigate({ to: '/profile/edit' })
     }
-  }, [currentProfile, navigate])
+  }, [hasProfile, navigate])
 
-  if (isLoadingProfile || currentProfile) {
+  if (isLoadingProfile || hasProfile) {
     return (
       <div className="py-10">
         <div className="max-w-2xl mx-auto">

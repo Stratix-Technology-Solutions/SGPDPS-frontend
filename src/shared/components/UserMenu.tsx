@@ -3,7 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { CgClose } from 'react-icons/cg'
 import { useLogout } from '../../features/auth/hooks/useLogout'
-import { useGetProfile } from '../../features/profile/hooks/useGetProfile'
+import { useProfileStatus } from '../../features/profile/hooks/useProfileStatus'
 import { SuccessModal } from './SuccessModal'
 import { ErrorModal } from './ErrorModal'
 
@@ -15,18 +15,19 @@ interface IUserMenu {
 export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
   const navigate = useNavigate()
-  const { isError, error } = useGetProfile()
+  const { hasProfile, isLoadingProfile, isProfileMissing } = useProfileStatus()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const isProfileMissing = isError && error?.response?.status === 404
-  const profileLink = isProfileMissing
-    ? { label: 'Registrar perfil', to: '/profile/register' }
-    : { label: 'Editar perfil', to: '/profile/edit' }
-
   const links = [
     { label: 'Inicio', to: '/dashboard' },
-    profileLink,
+    ...(!isLoadingProfile
+      ? [
+          isProfileMissing || !hasProfile
+            ? { label: 'Registrar perfil', to: '/profile/register', disabled: false }
+            : { label: 'Editar perfil', to: '/profile/edit', disabled: false },
+        ]
+      : []),
   ]
 
   const handleLogout = () => {
@@ -67,8 +68,21 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
         </button>
 
         <nav className="flex flex-col gap-4 py-4 border-b mb-4">
-          {links.map(({ label, to }) => (
-            <Link key={`${label}-${to}`} to={to} onClick={onClose}>{label}</Link>
+          {links.map(({ label, to, disabled }) => (
+            <Link
+              key={`${label}-${to}`}
+              to={to}
+              onClick={(e) => {
+                if (disabled) {
+                  e.preventDefault()
+                  return
+                }
+                onClose()
+              }}
+              className={disabled ? 'text-neutral-medium cursor-not-allowed' : ''}
+            >
+              {label}
+            </Link>
           ))}
         </nav>
 
@@ -83,12 +97,18 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
 
       <div className="hidden md:block absolute right-6 top-16 z-50 w-56 bg-white border rounded-xl shadow-lg p-2">
         <nav className="flex flex-col border-b mb-2 pb-2">
-          {links.map(({ label, to }) => (
+          {links.map(({ label, to, disabled }) => (
             <Link
               key={`${label}-${to}`}
               to={to}
-              onClick={onClose}
-              className="px-3 py-2 rounded-lg hover:bg-gray-100"
+              onClick={(e) => {
+                if (disabled) {
+                  e.preventDefault()
+                  return
+                }
+                onClose()
+              }}
+              className={`px-3 py-2 rounded-lg ${disabled ? 'text-neutral-medium cursor-not-allowed' : 'hover:bg-gray-100'}`}
             >
               {label}
             </Link>
