@@ -2,16 +2,30 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../../features/profile/components/ProfileFormField'
-import { CountryField } from '../../../features/profile/components/CountryField'
-import { PhoneField } from '../../../features/profile/components/PhoneField'
+import { CountryField } from '../../../features/profile/components/CountryField.tsx'
+import { PhoneField } from '../../../features/profile/components/PhoneField.tsx'
 import { ProfessionsField } from '../../../features/profile/components/ProfessionsField'
 import { RegisterAccountSchema } from '../../../features/profile/dtos/user.dto'
 import { useGetProfile } from '../../../features/profile/hooks/useGetProfile'
 import { useUpdateProfile } from '../../../features/profile/hooks/useUpdateProfile'
+import countriesRaw from '../../../shared/assets/data/countries.json'
 import { ButtonLoader } from '../../../shared/components/ButtonLoader'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { SuccessModal } from '../../../shared/components/SuccessModal'
+
+type CountryCodeRow = { country: string; code: string }
+
+const COUNTRY_DIAL_CODE_MAP = new Map(
+  (countriesRaw as CountryCodeRow[]).map(({ country, code }) => [country, code]),
+)
+
+const normalizeDialCode = (code: string) => `+${code.replace(/\D/g, '')}`
+const DIAL_CODES = new Set((countriesRaw as CountryCodeRow[]).map(({ code }) => normalizeDialCode(code)))
+const normalizePhoneValue = (value: string) => {
+  const digits = value.replace(/\D/g, '')
+  return digits ? `+${digits}` : ''
+}
 
 export const Route = createFileRoute('/_authenticated/profile/edit')({
   component: RouteComponent,
@@ -51,7 +65,31 @@ function RouteComponent() {
   })
 
   const errorRef = useRef<HTMLDivElement>(null)
+  const lastAutoPhoneRef = useRef<string | null>(null)
   const [showCancelModal, setShowCancelModal] = useState(false)
+
+  const syncPhoneWithCountry = (selectedCountry: string) => {
+    const currentPhone = String(form.state.values.phone || '').trim()
+    const normalizedCurrentPhone = normalizePhoneValue(currentPhone)
+    const dialCode = COUNTRY_DIAL_CODE_MAP.get(selectedCountry)
+
+    if (!dialCode) {
+      return
+    }
+
+    const suggestedPhone = normalizeDialCode(dialCode)
+    const isAutoManaged =
+      !normalizedCurrentPhone ||
+      normalizedCurrentPhone === lastAutoPhoneRef.current ||
+      DIAL_CODES.has(normalizedCurrentPhone)
+
+    if (!isAutoManaged || normalizedCurrentPhone === suggestedPhone) {
+      return
+    }
+
+    form.setFieldValue('phone', suggestedPhone)
+    lastAutoPhoneRef.current = suggestedPhone
+  }
 
   useEffect(() => {
     if (data) {
@@ -60,8 +98,8 @@ function RouteComponent() {
       form.setFieldValue('date_of_birth', data.date_of_birth || '')
       form.setFieldValue('gender', data.gender || '')
       form.setFieldValue('biography', data.biography)
-      form.setFieldValue('country', data.country || '')
       form.setFieldValue('phone', data.phone || '')
+      form.setFieldValue('country', data.country || '')
       form.setFieldValue('professions', data.professions || [])
     }
   }, [data, isLoading, isSuccessGetData])
@@ -78,6 +116,14 @@ function RouteComponent() {
     }
   }, [isProfileMissing, navigate])
 
+  useEffect(() => {
+    const selectedCountry = String(form.state.values.country || '').trim()
+    if (!selectedCountry) {
+      return
+    }
+    syncPhoneWithCountry(selectedCountry)
+  }, [form.state.values.country])
+
   return (
     <div className="py-10">
       {showCancelModal && (
@@ -89,7 +135,7 @@ function RouteComponent() {
             <p className="text-sm text-neutral-medium mb-6">
               {data
                 ? "¿Estás seguro de que deseas cancelar la edición de tu perfil? Los cambios no guardados se perderán."
-                : "¿Estás seguro de que deseas cancelar la creación de tu perfil? Puedes completarlo más tarde."}
+                : "¿Estás seguro de que deseas cancelar la creación de tu perfil? Los datos no guardados se perderán. Sin embargo, puedes completar el perfil más tarde."}
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -201,7 +247,16 @@ function RouteComponent() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <form.Field name="country" children={(field) => (
-                    <CountryField field={field} />
+                    <CountryField
+                      field={field}
+                      onCountrySelect={(country: string) => syncPhoneWithCountry(country)}
+                      onCountryClear={() => {
+                        if (normalizePhoneValue(String(form.state.values.phone || '').trim()) === lastAutoPhoneRef.current) {
+                          form.setFieldValue('phone', '')
+                        }
+                        lastAutoPhoneRef.current = null
+                      }}
+                    />
                   )} />
 
                   <form.Field name="phone" children={(field) => (

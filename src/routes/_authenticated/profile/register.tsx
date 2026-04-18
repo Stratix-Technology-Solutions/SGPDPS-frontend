@@ -2,16 +2,30 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { ProfileFormField } from '../../../features/profile/components/ProfileFormField'
-import { CountryField } from '../../../features/profile/components/CountryField'
-import { PhoneField } from '../../../features/profile/components/PhoneField'
+import { CountryField } from '../../../features/profile/components/CountryField.tsx'
+import { PhoneField } from '../../../features/profile/components/PhoneField.tsx'
 import { ProfessionsField } from '../../../features/profile/components/ProfessionsField'
 import { RegisterAccountSchema, defaultValues } from '../../../features/profile/dtos/user.dto'
 import { useGetProfile } from '../../../features/profile/hooks/useGetProfile'
 import { useCreateProfile } from '../../../features/profile/hooks/useCreateProfile'
+import countriesRaw from '../../../shared/assets/data/countries.json'
 import { ButtonLoader } from '../../../shared/components/ButtonLoader'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { SuccessModal } from '../../../shared/components/SuccessModal'
+
+type CountryCodeRow = { country: string; code: string }
+
+const COUNTRY_DIAL_CODE_MAP = new Map(
+  (countriesRaw as CountryCodeRow[]).map(({ country, code }) => [country, code]),
+)
+
+const normalizeDialCode = (code: string) => `+${code.replace(/\D/g, '')}`
+const DIAL_CODES = new Set((countriesRaw as CountryCodeRow[]).map(({ code }) => normalizeDialCode(code)))
+const normalizePhoneValue = (value: string) => {
+  const digits = value.replace(/\D/g, '')
+  return digits ? `+${digits}` : ''
+}
 
 export const Route = createFileRoute('/_authenticated/profile/register')({
   component: RouteComponent,
@@ -42,7 +56,31 @@ function RouteComponent() {
   })
 
   const errorRef = useRef<HTMLDivElement>(null)
+  const lastAutoPhoneRef = useRef<string | null>(null)
   const [showCancelModal, setShowCancelModal] = useState(false)
+
+  const syncPhoneWithCountry = (selectedCountry: string) => {
+    const currentPhone = String(form.state.values.phone || '').trim()
+    const normalizedCurrentPhone = normalizePhoneValue(currentPhone)
+    const dialCode = COUNTRY_DIAL_CODE_MAP.get(selectedCountry)
+
+    if (!dialCode) {
+      return
+    }
+
+    const suggestedPhone = normalizeDialCode(dialCode)
+    const isAutoManaged =
+      !normalizedCurrentPhone ||
+      normalizedCurrentPhone === lastAutoPhoneRef.current ||
+      DIAL_CODES.has(normalizedCurrentPhone)
+
+    if (!isAutoManaged || normalizedCurrentPhone === suggestedPhone) {
+      return
+    }
+
+    form.setFieldValue('phone', suggestedPhone)
+    lastAutoPhoneRef.current = suggestedPhone
+  }
 
   useEffect(() => {
     if (error && errorRef.current) {
@@ -55,6 +93,14 @@ function RouteComponent() {
       navigate({ to: '/profile/edit' })
     }
   }, [hasProfile, navigate])
+
+  useEffect(() => {
+    const selectedCountry = String(form.state.values.country || '').trim()
+    if (!selectedCountry) {
+      return
+    }
+    syncPhoneWithCountry(selectedCountry)
+  }, [form.state.values.country])
 
   if (isLoadingProfile || hasProfile) {
     return (
@@ -80,7 +126,7 @@ function RouteComponent() {
               ¿Cancelar creación?
             </h3>
             <p className="text-sm text-neutral-medium mb-6">
-              ¿Estás seguro de que deseas cancelar la creación de tu perfil? Puedes completarlo más tarde.
+              ¿Estás seguro de que deseas cancelar la creación de tu perfil? Los datos no guardados se perderán. Sin embargo, puedes completar el perfil más tarde.
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -175,7 +221,16 @@ function RouteComponent() {
 
             <div className="grid grid-cols-2 gap-4">
               <form.Field name="country" children={(field) => (
-                <CountryField field={field} />
+                <CountryField
+                  field={field}
+                  onCountrySelect={(country: string) => syncPhoneWithCountry(country)}
+                  onCountryClear={() => {
+                    if (normalizePhoneValue(String(form.state.values.phone || '').trim()) === lastAutoPhoneRef.current) {
+                      form.setFieldValue('phone', '')
+                    }
+                    lastAutoPhoneRef.current = null
+                  }}
+                />
               )} />
 
               <form.Field name="phone" children={(field) => (
