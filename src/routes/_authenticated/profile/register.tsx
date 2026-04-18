@@ -105,8 +105,8 @@ function RouteComponent() {
 
   if (isLoadingProfile || hasProfile) {
     return (
-      <div className="py-10">
-        <div className="max-w-2xl mx-auto">
+      <div className="py-6 sm:py-10">
+        <div className="max-w-2xl mx-auto px-3 sm:px-0">
           <div className="flex justify-center items-center py-12">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -119,21 +119,21 @@ function RouteComponent() {
   }
 
   return (
-    <div className="py-10">
+    <div className="py-6 sm:py-10">
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
             <h3 className="text-lg font-bold text-background-dark mb-2">
               ¿Cancelar creación?
             </h3>
             <p className="text-sm text-neutral-medium mb-6">
               ¿Estás seguro de que deseas cancelar la creación de tu perfil? Los datos no guardados se perderán. Sin embargo, puedes completar el perfil más tarde.
             </p>
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setShowCancelModal(false)}
-                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
               >
                 Seguir editando
               </button>
@@ -143,7 +143,7 @@ function RouteComponent() {
                   setShowCancelModal(false)
                   navigate({ to: '/' })
                 }}
-                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
               >
                 Sí, salir
               </button>
@@ -152,12 +152,12 @@ function RouteComponent() {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto px-3 sm:px-0">
         {isSuccess && (
           <SuccessModal message="Perfil creado exitosamente." redirect="Redirigiendo al inicio..." />
         )}
 
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl font-bold text-background-dark">Completa tu perfil</h1>
           <p className="text-sm text-neutral-medium mt-1">Esta información será visible en tu portafolio público.</p>
         </div>
@@ -175,10 +175,10 @@ function RouteComponent() {
           }}
           className="flex flex-col gap-6"
         >
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
+          <section className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-4">Información personal</h2>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <form.Field name="first_name" children={(field) => (
                 <ProfileFormField label="Nombre(s)" required field={field} type="text" placeholder="Tu(s) nombre(s)" />
               )} />
@@ -188,7 +188,7 @@ function RouteComponent() {
               )} />
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <form.Field name="date_of_birth" children={(field) => (
                 <ProfileFormField label="Fecha de nacimiento" field={field} type="date" />
               )} />
@@ -198,7 +198,7 @@ function RouteComponent() {
               )} />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <form.Field name="country" children={(field) => (
                 <CountryField
                   field={field}
@@ -218,7 +218,7 @@ function RouteComponent() {
             </div>
           </section>
 
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
+          <section className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Profesiones <span className="text-red-500">*</span></h2>
             <p className="text-xs text-neutral-medium mb-4">Agrega hasta 5 profesiones que te describan.</p>
 
@@ -227,7 +227,7 @@ function RouteComponent() {
             )} />
           </section>
 
-          <section className="bg-white rounded-2xl p-6 shadow-sm">
+          <section className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm">
             <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Acerca de ti <span className="text-red-500">*</span></h2>
             <p className="text-xs text-neutral-medium mb-4">Cuéntale al mundo quién eres y qué haces.</p>
 
@@ -247,19 +247,19 @@ function RouteComponent() {
             )} />
           </section>
 
-          <div className="flex justify-end gap-3 pb-4">
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pb-2 sm:pb-4">
             <button
               type="button"
               disabled={isPending}
               onClick={() => setShowCancelModal(true)}
-              className="bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isPending ? <ButtonLoader message="Guardando..." /> : "Guardar perfil"}
             </button>
