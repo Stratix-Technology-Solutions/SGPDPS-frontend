@@ -228,13 +228,13 @@ function RouteComponent() {
           </section>
 
           <section className="bg-white rounded-2xl p-6 shadow-sm">
-            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Biografía <span className="text-red-500">*</span></h2>
+            <h2 className="text-sm font-semibold text-primary uppercase tracking-wide mb-1">Acerca de ti <span className="text-red-500">*</span></h2>
             <p className="text-xs text-neutral-medium mb-4">Cuéntale al mundo quién eres y qué haces.</p>
 
             <form.Field name="biography" children={(field) => (
               <div>
                 <textarea
-                  placeholder="Escribe una breve descripción sobre ti..."
+                  placeholder="Ejemplo: Desarrollador frontend con enfoque en React y diseño de interfaces..."
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors resize-none"
