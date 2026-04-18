@@ -63,7 +63,7 @@ export function PhoneField({ field }: { field: AnyFieldApi }) {
   }
 
   const handleCountryClear = () => {
-    field.handleChange(parsedPhone.localNumber)
+    field.handleChange('')
   }
 
   const handleNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +90,7 @@ export function PhoneField({ field }: { field: AnyFieldApi }) {
               onClear={parsedPhone.selectedCountry ? handleCountryClear : undefined}
               placeholder="Prefijo"
               searchPlaceholder="Buscar país"
-              clearLabel="Quitar prefijo"
+              clearLabel={parsedPhone.localNumber ? 'Quitar prefijo y numero' : 'Quitar prefijo'}
               showClear={Boolean(parsedPhone.selectedCountry)}
               emptyIcon={<MdPublic className="h-3.5 w-3.5 text-neutral-400" />}
               variant="embedded"

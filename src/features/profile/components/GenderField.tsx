@@ -33,7 +33,7 @@ export function GenderField({ field }: { field: AnyFieldApi }) {
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors text-left"
+          className="group w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary hover:border-primary/60 hover:bg-neutral-100 transition-colors text-left cursor-pointer"
         >
           {selected ? (
             <span className="flex-1 truncate">{selected.label}</span>
@@ -41,7 +41,7 @@ export function GenderField({ field }: { field: AnyFieldApi }) {
             <span className="flex-1 truncate text-neutral-400">Seleccionar género</span>
           )}
 
-          <svg className="w-4 h-4 text-neutral-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4 text-neutral-400 group-hover:text-primary/80 shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>

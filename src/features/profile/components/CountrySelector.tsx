@@ -149,8 +149,8 @@ export function CountrySelector({
   const isEmbedded = variant === 'embedded'
 
   const buttonClassName = variant === 'outlined'
-    ? 'w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors text-left'
-    : 'w-full flex items-center gap-1.5 px-2.5 py-2 bg-transparent text-xs text-background-dark outline-none text-left'
+    ? 'group w-full flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary hover:border-primary/60 hover:bg-neutral-100 transition-colors text-left cursor-pointer'
+    : 'group w-full flex items-center gap-1.5 px-2.5 py-2 bg-transparent hover:bg-neutral-100/80 text-xs text-background-dark outline-none text-left transition-colors cursor-pointer'
 
   const dropdownBaseClassName = 'absolute z-50 mt-1 bg-white rounded-xl shadow-lg border border-neutral-light overflow-hidden'
   const dropdownResolvedClassName = dropdownClassName
@@ -179,7 +179,7 @@ export function CountrySelector({
             </>
           )}
 
-          <svg className={`${isEmbedded ? 'w-3.5 h-3.5' : 'w-4 h-4'} text-neutral-400 shrink-0`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className={`${isEmbedded ? 'w-3.5 h-3.5' : 'w-4 h-4'} text-neutral-400 group-hover:text-primary/80 shrink-0 transition-colors`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>

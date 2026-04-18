@@ -17,10 +17,11 @@ export function ProfileFormField({
   const [isDateBadInput, setIsDateBadInput] = useState(false)
   const [allowDatePlaceholderStyle, setAllowDatePlaceholderStyle] = useState(false)
   const dateKeyboardInteractionRef = useRef(false)
-  const isEmptyDate = inputProps.type === 'date' && !field.state.value && !dateInputError && !isDateBadInput && (allowDatePlaceholderStyle || !isFocused)
+  const isDateInput = inputProps.type === 'date'
+  const isEmptyDate = isDateInput && !field.state.value && !dateInputError && !isDateBadInput && (allowDatePlaceholderStyle || !isFocused)
   const today = new Date()
   const todayIsoDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-  const resolvedMax = inputProps.type === 'date'
+  const resolvedMax = isDateInput
     ? (inputProps.max ?? todayIsoDate)
     : inputProps.max
 
@@ -34,7 +35,7 @@ export function ProfileFormField({
         max={resolvedMax}
         value={field.state.value as string}
         onInput={(e) => {
-          if (inputProps.type === 'date') {
+          if (isDateInput) {
             const hasBadInput = e.currentTarget.validity.badInput
             setIsDateBadInput(hasBadInput)
 
@@ -48,7 +49,7 @@ export function ProfileFormField({
         onChange={(e) => {
           field.handleChange(e.target.value)
 
-          if (inputProps.type === 'date') {
+          if (isDateInput) {
             const hasBadInput = e.currentTarget.validity.badInput
             setIsDateBadInput(hasBadInput)
 
@@ -66,7 +67,7 @@ export function ProfileFormField({
           inputProps.onChange?.(e)
         }}
         onKeyDown={(e) => {
-          if (inputProps.type === 'date') {
+          if (isDateInput) {
             dateKeyboardInteractionRef.current = e.key === 'Backspace' || e.key === 'Delete'
           }
 
@@ -75,7 +76,7 @@ export function ProfileFormField({
         onFocus={(e) => {
           setIsFocused(true)
 
-          if (inputProps.type === 'date') {
+          if (isDateInput) {
             if (dateInputError) {
               setDateInputError('')
             }
@@ -90,7 +91,7 @@ export function ProfileFormField({
         onBlur={(e) => {
           setIsFocused(false)
 
-          if (inputProps.type === 'date') {
+          if (isDateInput) {
             if (e.currentTarget.validity.badInput) {
               setIsDateBadInput(true)
               setDateInputError('Ingresa una fecha válida.')
@@ -108,7 +109,7 @@ export function ProfileFormField({
 
           inputProps.onBlur?.(e)
         }}
-        className={`w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm outline-none focus:border-primary transition-colors ${isEmptyDate ? 'text-neutral-400' : 'text-background-dark'}`}
+        className={`w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm outline-none focus:border-primary hover:border-primary/60 transition-colors ${isDateInput ? 'date-calendar-hover' : ''} ${isEmptyDate ? 'text-neutral-400' : 'text-background-dark'}`}
       />
       {dateInputError && <InputMessageError message={dateInputError} />}
       {!dateInputError && !field.state.meta.isValid && field.state.meta.errors.length > 0 && (
