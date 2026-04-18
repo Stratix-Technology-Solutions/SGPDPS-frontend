@@ -133,11 +133,11 @@ function RouteComponent() {
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <form.Field name="first_name" children={(field) => (
-                <ProfileFormField label="Nombre" required field={field} type="text" placeholder="Tu nombre" />
+                <ProfileFormField label="Nombre(s)" required field={field} type="text" placeholder="Tu(s) nombre(s)" />
               )} />
 
               <form.Field name="last_name" children={(field) => (
-                <ProfileFormField label="Apellidos" required field={field} type="text" placeholder="Tus apellidos" />
+                <ProfileFormField label="Apellido(s)" required field={field} type="text" placeholder="Tus apellido(s)" />
               )} />
             </div>
 
@@ -149,16 +149,26 @@ function RouteComponent() {
               <form.Field name="gender" children={(field) => (
                 <div>
                   <label className="block text-sm font-medium text-background-dark mb-1.5">Género</label>
-                  <select
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className={`w-full appearance-none px-4 pr-10 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm outline-none focus:border-primary transition-colors ${field.state.value ? 'text-background-dark' : 'text-neutral-400'}`}
+                    >
+                      <option value="" disabled>Seleccionar</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="femenino">Femenino</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                    <svg
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </div>
               )} />
             </div>
