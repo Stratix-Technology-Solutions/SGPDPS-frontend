@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { CgClose } from 'react-icons/cg'
 import { useLogout } from '../../features/auth/hooks/useLogout'
+import { useGetProfile } from '../../features/profile/hooks/useGetProfile'
 import { SuccessModal } from './SuccessModal'
 import { ErrorModal } from './ErrorModal'
 
@@ -11,16 +12,22 @@ interface IUserMenu {
   onClose: () => void
 }
 
-const links = [
-  { label: 'Inicio', to: '/dashboard' },
-  { label: 'Editar perfil', to: '/profile/edit' },
-]
-
 export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
   const navigate = useNavigate()
+  const { isError, error } = useGetProfile()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const isProfileMissing = isError && error?.response?.status === 404
+  const profileLink = isProfileMissing
+    ? { label: 'Registrar perfil', to: '/profile/register' }
+    : { label: 'Editar perfil', to: '/profile/edit' }
+
+  const links = [
+    { label: 'Inicio', to: '/dashboard' },
+    profileLink,
+  ]
 
   const handleLogout = () => {
     logout.mutate(undefined, {
