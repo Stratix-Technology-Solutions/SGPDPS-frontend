@@ -1,5 +1,5 @@
-import { FormAcademic } from './FormAcademic'
-import { useAcademic } from '../hooks/useAcademic'
+import { FormAcademic } from '../form/FormAcademic'
+import { useAcademic } from '../../hooks/useAcademic'
 
 interface Props {
   onClose: () => void
@@ -14,6 +14,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
         <h2 className="text-xl font-semibold text-background-dark">Crear experiencia académica</h2>
         <FormAcademic
           onCancel={onClose}     
+          submitLabel="Guardar"
           onSubmit={(values) => create.mutate(values, { onSuccess: onClose })}
           isPending={create.isPending}
           serverError={create.isError ? (create.error?.response?.data?.message ?? 'Ocurrió un error al guardar la experiencia académica') : undefined}

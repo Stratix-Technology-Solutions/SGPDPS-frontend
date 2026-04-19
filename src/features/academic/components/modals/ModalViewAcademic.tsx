@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useAcademic } from '../hooks/useAcademic'
-import { AcademicDetail } from './AcademicDetail'
-import { AcademicList } from './AcademicList'
-import type { AcademicExperienceResponse } from '../dtos/academic.interface'
+import { useAcademic } from '../../hooks/useAcademic'
+import { AcademicDetail } from '../AcademicDetail'
+import { AcademicList } from '../AcademicList'
+import type { AcademicExperienceResponse } from '../../dtos/academic.interface'
 
 interface Props {
   onClose: () => void

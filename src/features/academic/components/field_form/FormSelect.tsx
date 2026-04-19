@@ -1,0 +1,37 @@
+import { InputMessageError } from '../../../../shared/components/InputMessageError'
+import type { FieldApi } from '@tanstack/react-form'
+
+interface Option {
+  value: string
+  label: string
+}
+
+interface Props {
+  label: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  field: FieldApi<any, any, any, any>
+  options: Option[]
+}
+
+export const FormSelect = ({ label, field, options }: Props) => {
+  const errors = field.state.meta.errors
+  const errorMessage = errors.length > 0
+    ? errors.map((e: unknown) => typeof e === 'string' ? e : (e as { message?: string })?.message).join(', ')
+    : undefined
+
+  return (
+    <div>
+      <label className="block font-semibold text-background-dark mb-1.5">{label}</label>
+      <select
+        value={field.state.value ?? ''}
+        onChange={(e) => field.handleChange(e.target.value)}
+        className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+      {errorMessage && <InputMessageError message={errorMessage} />}
+    </div>
+  )
+}
