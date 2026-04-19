@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { FiPlusCircle, FiEdit2, FiTrash2, FiEye } from 'react-icons/fi'
 import { ActionButton } from '../../../features/academic/components/ActionButton'
-import { ModalAddAcademic } from '../../../features/academic/components/ModalAddAcademic'
-import { ModalEditAcademic } from '../../../features/academic/components/ModalEditAcademic'
-import { ModalDeleteAcademic } from '../../../features/academic/components/ModalDeleteAcademic'
-import { ModalViewAcademic } from '../../../features/academic/components/ModalViewAcademic'
+import { ModalAddAcademic } from '../../../features/academic/components/modals/ModalAddAcademic'
+import { ModalEditAcademic } from '../../../features/academic/components/modals/ModalEditAcademic'
+import { ModalDeleteAcademic } from '../../../features/academic/components/modals/ModalDeleteAcademic'
+import { ModalViewAcademic } from '../../../features/academic/components/modals/ModalViewAcademic'
 
 export const Route = createFileRoute(
   '/_authenticated/profile/AcademicExperience',
