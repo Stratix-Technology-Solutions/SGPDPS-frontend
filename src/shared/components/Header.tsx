@@ -16,7 +16,7 @@ export const Header = ({ showAside, toggleAside }: Props) => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b border-neutral-light">
       <div className="px-4 md:w-11/12 md:px-0 mx-auto flex justify-between items-center h-20">
         <Link
-          to="/"
+          to="/dashboard"
           className="flex items-center gap-3"
         >
           <img

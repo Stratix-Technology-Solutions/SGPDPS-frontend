@@ -93,7 +93,7 @@ export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
             name="domain_level"
             children={(field) => (
               <div>
-                <label className="block font-semibold text-background-dark mb-1.5">NIvel de dominio</label>
+                <label className="block font-semibold text-background-dark mb-1.5">Nivel de dominio</label>
                 <select
                   id={field.name}
                   value={field.state.value}
