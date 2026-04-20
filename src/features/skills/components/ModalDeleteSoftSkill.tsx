@@ -40,7 +40,7 @@ export const ModalDeleteSoftSkill = ({ onClose }: Props) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
             <h3 className="text-xl font-bold text-background-dark mb-2">
-              ¿Eliminar habilididad?
+              ¿Eliminar habilidad?
             </h3>
             <p className="text-neutral-medium mb-6">
               ¿Estás seguro de que deseas eliminar la habilidad registrada? Puedes crear nuevos mas tarde.
