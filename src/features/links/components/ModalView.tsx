@@ -1,4 +1,5 @@
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
+import { CloseButton } from '../../../shared/components/CloseButton'
 import { useGetLinks } from '../hooks/useGetLinks'
 import type { LinkResponse } from '../interfaces/link.interface'
 
@@ -23,12 +24,10 @@ export const ModalView = ({ onClose }: Props) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
-      <div className="relative bg-white rounded-lg p-6 shadow-lg w-full max-w-lg mx-4 flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold text-background-dark">Enlaces</h2>
-          <button type="button" onClick={onClose} className="text-sm text-neutral-medium/70 hover:text-background-dark cursor-pointer">
-            Cerrar
-          </button>
+      <div className="relative bg-white rounded-lg p-6 shadow-lg w-full max-w-lg mx-4 flex flex-col gap-5">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-xl font-semibold text-background-dark">Enlaces</h3>
+          <CloseButton onClick={onClose} />
         </div>
 
         {isError && (

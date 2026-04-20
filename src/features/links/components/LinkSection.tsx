@@ -11,8 +11,8 @@ export const LinkSection = () => {
   return (
     <>
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
-        <ActionButton icon={FiEye} label="Visualizar" onClick={() => setModal('view')} />
-        <ActionButton icon={FiEdit2} label="Actualizar" onClick={() => setModal('edit')} />
+        <ActionButton icon={FiEdit2} label="Editar Enlaces" onClick={() => setModal('edit')} />
+        <ActionButton icon={FiEye} label="Visualizar Enlaces" onClick={() => setModal('view')} />
       </div>
       {modal === 'view' && <ModalView onClose={() => setModal(null)} />}
       {modal === 'edit' && <ModalEdit onClose={() => setModal(null)} />}

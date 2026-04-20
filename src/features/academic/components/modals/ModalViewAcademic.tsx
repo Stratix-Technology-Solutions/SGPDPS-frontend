@@ -3,6 +3,7 @@ import { useAcademic } from '../../hooks/useAcademic'
 import { AcademicDetail } from '../AcademicDetail'
 import { AcademicList } from '../AcademicList'
 import type { AcademicExperienceResponse } from '../../dtos/academic.interface'
+import { CloseButton } from '../../../../shared/components/CloseButton'
 
 interface Props {
   onClose: () => void
@@ -25,12 +26,17 @@ export const ModalViewAcademic = ({ onClose }: Props) => {
           />
         ) : (
           <>
-            <h2 className="text-xl font-semibold text-background-dark">Selecciona una experiencia para ver</h2>
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex flex-col gap-1">
+                <h3 className="text-xl font-semibold text-background-dark">Selecciona una experiencia para editar</h3>
+              </div>
+              <CloseButton onClick={onClose} />
+            </div>
             <AcademicList
               data={data?.data}
               isLoading={isLoading}
               onSelect={setSelected}
-              onClose={onClose}
+              itemClassName="hover:border-gray-500 hover:bg-gray-50"
             />
           </>
         )}

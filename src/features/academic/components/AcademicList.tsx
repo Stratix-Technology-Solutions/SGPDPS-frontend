@@ -4,11 +4,10 @@ interface Props {
   data: AcademicExperienceResponse[] | undefined
   isLoading: boolean
   onSelect: (item: AcademicExperienceResponse) => void
-  onClose: () => void
   itemClassName?: string
 }
 
-export const AcademicList = ({ data, isLoading, onSelect, onClose, itemClassName }: Props) => {
+export const AcademicList = ({ data, isLoading, onSelect, itemClassName }: Props) => {
   return (
     <>
       {isLoading && <p className="text-neutral-medium/70 text-sm">Cargando...</p>}
@@ -30,12 +29,6 @@ export const AcademicList = ({ data, isLoading, onSelect, onClose, itemClassName
           </li>
         ))}
       </ul>
-
-      <div className="flex justify-end">
-        <button onClick={onClose} className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light">
-          Cancelar
-        </button>
-      </div>
     </>
   )
 }

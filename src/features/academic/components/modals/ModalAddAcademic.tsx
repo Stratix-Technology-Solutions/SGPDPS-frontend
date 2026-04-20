@@ -13,7 +13,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
       <div className="relative bg-white rounded-lg p-6 shadow-lg w-full max-w-lg mx-4 flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold text-background-dark">Crear experiencia académica</h2>
         <FormAcademic
-          onCancel={onClose}     
+          onCancel={onClose}
           submitLabel="Guardar"
           onSubmit={(values) => create.mutate(values, { onSuccess: onClose })}
           isPending={create.isPending}
