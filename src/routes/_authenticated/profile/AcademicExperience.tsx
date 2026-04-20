@@ -6,6 +6,7 @@ import { ModalAddAcademic } from '../../../features/academic/components/modals/M
 import { ModalEditAcademic } from '../../../features/academic/components/modals/ModalEditAcademic'
 import { ModalDeleteAcademic } from '../../../features/academic/components/modals/ModalDeleteAcademic'
 import { ModalViewAcademic } from '../../../features/academic/components/modals/ModalViewAcademic'
+import { SectionTitle } from '../../../shared/components/SectionTitle'
 
 export const Route = createFileRoute(
   '/_authenticated/profile/AcademicExperience',
@@ -17,10 +18,11 @@ function RouteComponent() {
   const [modal, setModal] = useState<Modal>(null)
   return (
     <div className="py-10 flex flex-col gap-6">
-      <div className="border-l-4 border-primary pl-4">
-        <h2 className="text-2xl font-bold text-background-dark">Experiencia Academica</h2>
-        <p className="text-sm text-neutral-medium/70">Gestiona tu historial de experiencia academica</p>
-      </div>
+      <SectionTitle
+        title="Experiencia Academica"
+        description="Gestiona tu historial de experiencia academica."
+      />
+
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
         <ActionButton icon={FiPlusCircle} label="Crear experiencia academica" onClick={() => setModal('add')} />
         <ActionButton icon={FiEdit2} label="Editar experiencia academica" onClick={() => setModal('edit')} />

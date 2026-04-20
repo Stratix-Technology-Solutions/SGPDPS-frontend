@@ -16,17 +16,17 @@ interface Props<T> {
   queryKey: string[]
   route: string
   renderItem: (item: T) => React.ReactNode
-  className?: string
+  action?: (item: unknown) => void
 }
 
-export const ListSkills = <T,>({ queryKey, route, renderItem, className }: Props<T>) => {
+export const ListSkills = <T,>({ queryKey, route, renderItem, action }: Props<T>) => {
   const [page, setPage] = useState(1)
 
   const { data, error, isLoading, isError, isSuccess } =
     useQuery<PaginatedResponse<T>, ApiError>({
       queryKey: [...queryKey, page],
       queryFn: async () => {
-        const res = await api.get(`/${route}?page=${page}&per_page=6`)
+        const res = await api.get(`/${route}?page=${page}&per_page=5`)
         return res.data
       },
     })
@@ -52,11 +52,14 @@ export const ListSkills = <T,>({ queryKey, route, renderItem, className }: Props
       )}
 
       {isSuccess && !!data.data.length && (
-        <div className={className}>
+        <div className="flex flex-col gap-2 max-h-80 overflow-y-auto">
           {data.data.map((item) => (
-            <div key={(item as any).id}>
+            <button
+              key={(item as any).id}
+              onClick={() => { if (action) action(item) }}
+            >
               {renderItem(item)}
-            </div>
+            </button>
           ))}
         </div>
       )}
