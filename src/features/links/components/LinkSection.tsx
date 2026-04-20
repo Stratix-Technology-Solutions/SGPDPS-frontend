@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ActionButton } from './ActionButton'
+import { ActionButton } from '../../../shared/components/ActionButton'
 import { FiEdit2, FiEye } from 'react-icons/fi'
 import { ModalView } from './ModalView'
 import { ModalEdit } from './ModalEdit'
