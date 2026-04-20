@@ -2,11 +2,12 @@ import { Link } from '@tanstack/react-router'
 import { SiHyperskill } from 'react-icons/si'
 import { MdOutlineWork } from 'react-icons/md'
 import { MdLink } from 'react-icons/md'
+import { GiGraduateCap } from 'react-icons/gi'
 
 const links = [
   { label: 'Habilidades', to: '/profile/skills', Icon: SiHyperskill },
   { label: 'Experiencia Laboral', to: '#', Icon: MdOutlineWork },
-  { label: 'Experiencia Academica', to: '/profile/AcademicExperience', Icon: MdOutlineWork },
+  { label: 'Experiencia Academica', to: '/profile/AcademicExperience', Icon: GiGraduateCap },
   { label: 'Enlaces', to: '/profile/links', Icon: MdLink },
 ]
 
