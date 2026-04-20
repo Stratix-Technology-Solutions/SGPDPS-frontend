@@ -61,6 +61,7 @@ export const ModalDeleteSoftSkill = ({ onClose }: Props) => {
                 onClick={() => {
                   mutate()
                   setId(null)
+                  onClose()
                 }}
                 className="px-5 py-2.5 rounded-xl font-medium bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
               >
