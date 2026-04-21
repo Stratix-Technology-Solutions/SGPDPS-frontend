@@ -6,7 +6,7 @@ import { GiGraduateCap } from 'react-icons/gi'
 
 const links = [
   { label: 'Habilidades', to: '/profile/skills', Icon: SiHyperskill },
-  { label: 'Experiencia Laboral', to: '#', Icon: MdOutlineWork },
+  { label: 'Experiencia Laboral', to: '/profile/LaboralExperience', Icon: MdOutlineWork },
   { label: 'Experiencia Academica', to: '/profile/AcademicExperience', Icon: GiGraduateCap },
   { label: 'Enlaces', to: '/profile/links', Icon: MdLink },
 ]
