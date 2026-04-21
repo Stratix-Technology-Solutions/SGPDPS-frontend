@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal } from '../components/Modal'
+import { Modal } from '../../../shared/components/Modal'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'
@@ -34,7 +34,6 @@ export const ModalEdit = ({ onClose }: Props) => {
           : 'Selecciona la experiencia laboral que deseas editar.'
       }
       onClose={onClose}
-      onBack={selected ? () => setSelected(null) : undefined}
     >
       {!selected && (
         <WorkExperienceList

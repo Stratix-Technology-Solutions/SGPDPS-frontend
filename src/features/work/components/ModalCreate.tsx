@@ -1,4 +1,4 @@
-import { Modal } from '../components/Modal'
+import { Modal } from '../../../shared/components/Modal'
 import { useCreateWorkExperience } from '../hooks/useCreateWorkExperience'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 

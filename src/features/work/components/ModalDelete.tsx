@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal } from '../components/Modal'
+import { Modal } from '../../../shared/components/Modal'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { ConfirmDeleteWorkExperience } from '../components/ConfirmDeleteWorkExperience'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'

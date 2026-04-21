@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal } from '../components/Modal'
+import { Modal } from '../../../shared/components/Modal'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'
 import type { WorkExperience } from '../dtos/workExperience'
@@ -23,7 +23,6 @@ export const ModalView = ({ onClose }: Props) => {
           : 'Selecciona una experiencia para ver su detalle.'
       }
       onClose={onClose}
-      onBack={selected ? () => setSelected(null) : undefined}
     >
       {!selected && (
         <WorkExperienceList
