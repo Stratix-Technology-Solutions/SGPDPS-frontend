@@ -2,11 +2,12 @@ import { useForm } from '@tanstack/react-form'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { TechnicalSchema, defaultValues } from '../dtos/technical.dto'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
 import type { TechnicalDto } from '../dtos/technical.dto'
 import { ModalSkills } from './ModalSkills'
+import { AutocompleteInput } from './AutoCompleteInput'
 
 interface Props {
   onClose: () => void
@@ -14,6 +15,7 @@ interface Props {
 
 export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
   const queryClient = useQueryClient()
+
   const { mutate: create, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
     mutationFn: async (data) => {
       const res = await api.post('/skills', data)
@@ -24,6 +26,14 @@ export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
         queryKey: ['user', 'skills', 'technical'],
       })
       onClose()
+    },
+  })
+
+  const { data } = useQuery<{ name: string }[], ApiError>({
+    queryKey: ['skills', 'systema'],
+    queryFn: async () => {
+      const res = await api.get('/skills/list-all')
+      return res.data
     },
   })
 
@@ -61,16 +71,14 @@ export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
           children={(field) => (
             <div>
               <label className="block font-semibold text-background-dark mb-1.5">Habilidad técnica</label>
-              <input
-                id={field.name}
-                name={field.name}
-                type="text"
-                placeholder="Ingrese su habilidad técnica"
+
+              <AutocompleteInput
                 value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-                required
+                onChange={field.handleChange}
+                options={data?.map(item => item.name) ?? []}
+                placeholder="Ingrese su habilidad técnica"
               />
+
               {!field.state.meta.isValid && (
                 <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
               )}
