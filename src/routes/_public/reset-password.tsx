@@ -1,8 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
-import { ResetPasswordSearchSchema } from '../../features/auth/dtos/resetPasswordSearch.dto'
+import { ResetPasswordSchema, ResetPasswordSearchSchema, defaultValues } from '../../features/auth/dtos/resetPasswordSearch.dto'
 import { useResetPassword } from '../../features/auth/hooks/useResetPassword'
-import { RegisterSchema, defaultValues } from '../../features/auth/dtos/register.dto'
 import { InputMessageError } from '../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../shared/components/ButtonLoader'
@@ -28,7 +27,7 @@ function RouteComponent() {
       reset({ ...value, token })
     },
     validators: {
-      onChange: RegisterSchema,
+      onChange: ResetPasswordSchema,
     },
   })
 
