@@ -1,7 +1,7 @@
+import { Modal } from '../../../shared/components/Modal'
 import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
 import { CardTechnicalSkill } from './CardTechnicalSkill'
 import { ListSkills } from './ListSkills'
-import { ModalSkills } from './ModalSkills'
 
 interface Props {
   onClose: () => void
@@ -9,7 +9,7 @@ interface Props {
 
 export const ModalViewTechnicalSkills = ({ onClose }: Props) => {
   return (
-    <ModalSkills
+    <Modal
       title="Habilidades Técnicas"
       description="Aquí podras ver todas tus habilidades registradas."
       onClose={onClose}
@@ -19,6 +19,6 @@ export const ModalViewTechnicalSkills = ({ onClose }: Props) => {
         route="skills"
         renderItem={(item) => <CardTechnicalSkill {...item} />}
       />
-    </ModalSkills>
+    </Modal>
   )
 }

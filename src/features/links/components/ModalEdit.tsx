@@ -6,7 +6,7 @@ import { LinkSchema, type LinkDto } from '../dtos/links.dto'
 import { useGetLinks } from '../hooks/useGetLinks'
 import { useUpdateLinks } from '../hooks/useUpdateLinks'
 import type { LinkResponse } from '../interfaces/link.interface'
-import { CloseButton } from '../../../shared/components/CloseButton'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -70,75 +70,69 @@ export const ModalEdit = ({ onClose }: Props) => {
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+    <Modal
+      title="Editar enlaces"
+      onClose={onClose}
+    >
+      {isLoading && (
+        <p className="text-sm text-neutral-medium">Cargando enlaces actuales...</p>
+      )}
 
-      <div className="relative bg-white rounded-lg p-6 shadow-lg w-full max-w-lg mx-4 flex flex-col gap-5">
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="text-xl font-semibold text-background-dark">Editar enlaces</h3>
-          <CloseButton onClick={onClose} />
+      {formError && <BannerMessageError message={formError} />}
+
+      {isError && (
+        <BannerMessageError message={'Ocurrió un error al actualizar los enlaces'} />
+      )}
+
+      <form
+        key={data ? 'loaded' : 'loading'}
+        onSubmit={(e) => {
+          e.preventDefault()
+          form.handleSubmit()
+        }}
+        className="flex flex-col gap-4"
+      >
+        {LINK_FIELDS.map((fieldName, index) => (
+          <form.Field
+            key={fieldName}
+            name={fieldName}
+            children={(field) => (
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor={field.name} className="text-sm font-medium text-background-dark">
+                  Link {index + 1}
+                </label>
+                <input
+                  id={field.name}
+                  name={field.name}
+                  type="url"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                  placeholder="https://"
+                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
+                />
+              </div>
+            )}
+          />
+        ))}
+
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full sm:w-auto bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isPending ? <ButtonLoader message="Guardando..." /> : 'Guardar cambios'}
+          </button>
         </div>
-
-        {isLoading && (
-          <p className="text-sm text-neutral-medium">Cargando enlaces actuales...</p>
-        )}
-
-        {formError && <BannerMessageError message={formError} />}
-
-        {isError && (
-          <BannerMessageError message={'Ocurrió un error al actualizar los enlaces'} />
-        )}
-
-        <form
-          key={data ? 'loaded' : 'loading'}
-          onSubmit={(e) => {
-            e.preventDefault()
-            form.handleSubmit()
-          }}
-          className="flex flex-col gap-4"
-        >
-          {LINK_FIELDS.map((fieldName, index) => (
-            <form.Field
-              key={fieldName}
-              name={fieldName}
-              children={(field) => (
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor={field.name} className="text-sm font-medium text-background-dark">
-                    Link {index + 1}
-                  </label>
-                  <input
-                    id={field.name}
-                    name={field.name}
-                    type="url"
-                    value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    placeholder="https://"
-                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
-                  />
-                </div>
-              )}
-            />
-          ))}
-
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
-            >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full sm:w-auto bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {isPending ? <ButtonLoader message="Guardando..." /> : 'Guardar cambios'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      </form>
+    </Modal>
   )
 }

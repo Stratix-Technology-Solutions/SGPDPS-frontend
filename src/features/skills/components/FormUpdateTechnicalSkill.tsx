@@ -7,7 +7,7 @@ import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
 import type { TechnicalDto } from '../dtos/technical.dto'
 import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
-import { ModalSkills } from './ModalSkills'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   technology: TechnicalSkillResponse
@@ -41,7 +41,7 @@ export const FormUpdateTechnicalSkill = ({ technology, onClose }: Props) => {
   })
 
   return (
-    <ModalSkills
+    <Modal
       title="Editar Habilidad Técnica"
       description="Aquí podrás editar el nivel de la tecnología agregada."
       onClose={onClose}
@@ -123,6 +123,6 @@ export const FormUpdateTechnicalSkill = ({ technology, onClose }: Props) => {
           </button>
         </div>
       </form>
-    </ModalSkills>
+    </Modal>
   )
 }

@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
 import type { SoftDto } from '../dtos/soft.dto'
-import { ModalSkills } from './ModalSkills'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -36,7 +36,7 @@ export const FormCreateSoftSkill = ({ onClose }: Props) => {
   })
 
   return (
-    <ModalSkills
+    <Modal
       title="Crear Habilidad Blanda"
       description="Aquí podrás agregar la habilidad blanda que te caracterice."
       onClose={onClose}
@@ -96,6 +96,6 @@ export const FormCreateSoftSkill = ({ onClose }: Props) => {
           </button>
         </div>
       </form>
-    </ModalSkills>
+    </Modal>
   )
 }

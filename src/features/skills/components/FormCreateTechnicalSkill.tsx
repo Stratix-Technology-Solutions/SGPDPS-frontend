@@ -6,8 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
 import type { TechnicalDto } from '../dtos/technical.dto'
-import { ModalSkills } from './ModalSkills'
 import { AutocompleteInput } from './AutoCompleteInput'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -46,7 +46,7 @@ export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
   })
 
   return (
-    <ModalSkills
+    <Modal
       title="Crear Habilidad Técnica"
       description="Aquí podrás agregar tecnologías y tu nivel."
       onClose={onClose}
@@ -127,6 +127,6 @@ export const FormCreateTechnicalSkill = ({ onClose }: Props) => {
           </button>
         </div>
       </form>
-    </ModalSkills>
+    </Modal>
   )
 }

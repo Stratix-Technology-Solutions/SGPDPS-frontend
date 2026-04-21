@@ -2,10 +2,10 @@ import { useState } from 'react'
 import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
 import { CardTechnicalSkill } from './CardTechnicalSkill'
 import { ListSkills } from './ListSkills'
-import { ModalSkills } from './ModalSkills'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -24,7 +24,7 @@ export const ModalDeleteTechnicalSkill = ({ onClose }: Props) => {
   })
 
   return (
-    <ModalSkills
+    <Modal
       title="Eliminar Habilidades Técnicas"
       description="Aquí podras seleccionar que habilidad técnica deseas eliminar."
       onClose={onClose}
@@ -71,6 +71,6 @@ export const ModalDeleteTechnicalSkill = ({ onClose }: Props) => {
           </div>
         </div>
       )}
-    </ModalSkills>
+    </Modal>
   )
 }

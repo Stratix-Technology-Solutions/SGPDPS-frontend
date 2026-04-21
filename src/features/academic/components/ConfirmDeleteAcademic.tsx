@@ -9,7 +9,6 @@ interface Props {
 export const ConfirmDeleteAcademic = ({ title, institution, isPending, onConfirm, onCancel }: Props) => {
   return (
     <>
-      <h2 className="text-xl font-semibold text-background-dark">¿Eliminar experiencia?</h2>
       <p className="text-neutral-medium/70">
         ¿Estás seguro de que deseas eliminar <span className="font-semibold text-background-dark">"{title}"</span> de {institution}? Esta acción no se puede deshacer.
       </p>

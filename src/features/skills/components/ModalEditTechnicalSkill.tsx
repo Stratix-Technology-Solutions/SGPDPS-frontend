@@ -2,8 +2,8 @@ import { useState } from 'react'
 import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
 import { CardTechnicalSkill } from './CardTechnicalSkill'
 import { ListSkills } from './ListSkills'
-import { ModalSkills } from './ModalSkills'
 import { FormUpdateTechnicalSkill } from './FormUpdateTechnicalSkill'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -13,7 +13,7 @@ export const ModalEditTechnicalSkill = ({ onClose }: Props) => {
   const [technology, setTechnology] = useState(null)
 
   return (
-    <ModalSkills
+    <Modal
       title="Editar Habilidades Técnicas"
       description="Aquí podras seleccionar que habilidad técnica deseas editar."
       onClose={onClose}
@@ -31,6 +31,6 @@ export const ModalEditTechnicalSkill = ({ onClose }: Props) => {
           action={(item: any) => setTechnology(item)}
         />
       )}
-    </ModalSkills>
+    </Modal>
   )
 }

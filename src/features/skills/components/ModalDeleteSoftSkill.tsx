@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { ListSkills } from './ListSkills'
-import { ModalSkills } from './ModalSkills'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import type { SoftSkillResponse } from '../interfaces/soft.interface'
 import { CardSoftSkill } from './CardSoftSkill'
+import { Modal } from '../../../shared/components/Modal'
 
 interface Props {
   onClose: () => void
@@ -24,7 +24,7 @@ export const ModalDeleteSoftSkill = ({ onClose }: Props) => {
   })
 
   return (
-    <ModalSkills
+    <Modal
       title="Eliminar Habilidades Blandas"
       description="Aquí podras seleccionar que habilidad blanda deseas eliminar."
       onClose={onClose}
@@ -71,6 +71,6 @@ export const ModalDeleteSoftSkill = ({ onClose }: Props) => {
           </div>
         </div>
       )}
-    </ModalSkills>
+    </Modal>
   )
 }

@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { FormField } from '../field_form/FormField'
 import { FormSelect } from '../field_form/FormSelect'
 import { FormTextarea } from '../field_form/FormTextarea'
-import { FormCheckbox } from '../field_form/FormCheckbox'
+// import { FormCheckbox } from '../field_form/FormCheckbox'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { AcademicSchema, defaultValues as emptyValues } from '../../dtos/academic.dto'
 import type { AcademicDto } from '../../dtos/academic.dto'
@@ -58,6 +58,7 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
         <FormTextarea label="Descripción" field={field} placeholder="Ingrese una descripción" />
       )} />
 
+      {/*
       <form.Field name="is_visible" children={(field) => (
         <FormCheckbox
           label="Visible"
@@ -65,6 +66,7 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
           description="Elige si esta experiencia académica será visible para quienes revisen tu portafolio."
         />
       )} />
+      */}
       {serverError && <BannerMessageError message={serverError} />}
       <div className="flex justify-end gap-3 pt-1">
         {onCancel && (
