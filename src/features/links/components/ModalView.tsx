@@ -2,20 +2,18 @@ import type { ReactNode } from 'react'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { useGetLinks } from '../hooks/useGetLinks'
 import type { LinkResponse } from '../interfaces/link.interface'
-import { GitHubIcon } from './icons/GitHubIcon'
-import { LinkedinIcon } from './icons/LinkedinIcon'
-import { GitLabIcon } from './icons/GitLabIcon'
-import { DefaultIcon } from './icons/DefaultIcon'
 import { Modal } from '../../../shared/components/Modal'
+import { FaGithub, FaLinkedin, FaGitlab } from 'react-icons/fa'
+import { RiGlobalLine } from 'react-icons/ri'
 
 interface Props {
   onClose: () => void
 }
 
 const ICON_MAP: Record<string, ReactNode> = {
-  'github.com': <GitHubIcon />,
-  'www.linkedin.com': <LinkedinIcon />,
-  'gitlab.com': <GitLabIcon />
+  'github.com': <FaGithub />,
+  'www.linkedin.com': <FaLinkedin />,
+  'gitlab.com': <FaGitlab />
 }
 
 const extractVisibleLinks = (data: LinkResponse | undefined) => {
@@ -55,7 +53,7 @@ export const ModalView = ({ onClose }: Props) => {
           {visibleLinks.map(({ slot, url }) => {
             const domain = getDomain(url)
             {/* console.log('URL:', url, 'Domain:', domain) */ }
-            const Icon = domain && ICON_MAP[domain] ? ICON_MAP[domain] : <DefaultIcon />
+            const Icon = domain && ICON_MAP[domain] ? ICON_MAP[domain] : <RiGlobalLine />
             return (
               <a
                 key={slot}
