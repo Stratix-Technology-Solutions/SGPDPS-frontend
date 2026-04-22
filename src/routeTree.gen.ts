@@ -22,6 +22,7 @@ import { Route as AuthenticatedProfileSkillsRouteImport } from './routes/_authen
 import { Route as AuthenticatedProfileRegisterRouteImport } from './routes/_authenticated/profile/register'
 import { Route as AuthenticatedProfileLinksRouteImport } from './routes/_authenticated/profile/links'
 import { Route as AuthenticatedProfileEditRouteImport } from './routes/_authenticated/profile/edit'
+import { Route as AuthenticatedProfileLaboralExperienceRouteImport } from './routes/_authenticated/profile/LaboralExperience'
 import { Route as AuthenticatedProfileAcademicExperienceRouteImport } from './routes/_authenticated/profile/AcademicExperience'
 
 const PublicRoute = PublicRouteImport.update({
@@ -91,6 +92,12 @@ const AuthenticatedProfileEditRoute =
     path: '/profile/edit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedProfileLaboralExperienceRoute =
+  AuthenticatedProfileLaboralExperienceRouteImport.update({
+    id: '/profile/LaboralExperience',
+    path: '/profile/LaboralExperience',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedProfileAcademicExperienceRoute =
   AuthenticatedProfileAcademicExperienceRouteImport.update({
     id: '/profile/AcademicExperience',
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
   '/profile/AcademicExperience': typeof AuthenticatedProfileAcademicExperienceRoute
+  '/profile/LaboralExperience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
@@ -121,6 +129,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
   '/profile/AcademicExperience': typeof AuthenticatedProfileAcademicExperienceRoute
+  '/profile/LaboralExperience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
@@ -138,6 +147,7 @@ export interface FileRoutesById {
   '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_public/verify-email': typeof PublicVerifyEmailRoute
   '/_authenticated/profile/AcademicExperience': typeof AuthenticatedProfileAcademicExperienceRoute
+  '/_authenticated/profile/LaboralExperience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/_authenticated/profile/edit': typeof AuthenticatedProfileEditRoute
   '/_authenticated/profile/links': typeof AuthenticatedProfileLinksRoute
   '/_authenticated/profile/register': typeof AuthenticatedProfileRegisterRoute
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/profile/AcademicExperience'
+    | '/profile/LaboralExperience'
     | '/profile/edit'
     | '/profile/links'
     | '/profile/register'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/profile/AcademicExperience'
+    | '/profile/LaboralExperience'
     | '/profile/edit'
     | '/profile/links'
     | '/profile/register'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
     | '/_public/reset-password'
     | '/_public/verify-email'
     | '/_authenticated/profile/AcademicExperience'
+    | '/_authenticated/profile/LaboralExperience'
     | '/_authenticated/profile/edit'
     | '/_authenticated/profile/links'
     | '/_authenticated/profile/register'
@@ -289,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/LaboralExperience': {
+      id: '/_authenticated/profile/LaboralExperience'
+      path: '/profile/LaboralExperience'
+      fullPath: '/profile/LaboralExperience'
+      preLoaderRoute: typeof AuthenticatedProfileLaboralExperienceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/profile/AcademicExperience': {
       id: '/_authenticated/profile/AcademicExperience'
       path: '/profile/AcademicExperience'
@@ -302,6 +322,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileAcademicExperienceRoute: typeof AuthenticatedProfileAcademicExperienceRoute
+  AuthenticatedProfileLaboralExperienceRoute: typeof AuthenticatedProfileLaboralExperienceRoute
   AuthenticatedProfileEditRoute: typeof AuthenticatedProfileEditRoute
   AuthenticatedProfileLinksRoute: typeof AuthenticatedProfileLinksRoute
   AuthenticatedProfileRegisterRoute: typeof AuthenticatedProfileRegisterRoute
@@ -312,6 +333,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileAcademicExperienceRoute:
     AuthenticatedProfileAcademicExperienceRoute,
+  AuthenticatedProfileLaboralExperienceRoute:
+    AuthenticatedProfileLaboralExperienceRoute,
   AuthenticatedProfileEditRoute: AuthenticatedProfileEditRoute,
   AuthenticatedProfileLinksRoute: AuthenticatedProfileLinksRoute,
   AuthenticatedProfileRegisterRoute: AuthenticatedProfileRegisterRoute,

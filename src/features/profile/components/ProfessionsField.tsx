@@ -1,7 +1,12 @@
 import type { AnyFieldApi } from '@tanstack/react-form'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 
-export function ProfessionsField({ field }: { field: AnyFieldApi }) {
+interface Props {
+  field: AnyFieldApi,
+  isEditing: boolean
+}
+
+export function ProfessionsField({ field, isEditing }: Props) {
   return (
     <div className="flex flex-col gap-2">
       {(field.state.value as string[]).map((_, index) => (
@@ -17,16 +22,18 @@ export function ProfessionsField({ field }: { field: AnyFieldApi }) {
             }}
             className="flex-1 px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-sm text-background-dark outline-none focus:border-primary transition-colors"
           />
-          <button
-            type="button"
-            onClick={() => field.handleChange((field.state.value as string[]).filter((_, i) => i !== index))}
-            className="text-neutral-medium hover:text-red-500 transition-colors cursor-pointer p-1"
-          >
-            ✕
-          </button>
+          {(
+            !isEditing && <button
+              type="button"
+              onClick={() => field.handleChange((field.state.value as string[]).filter((_, i) => i !== index))}
+              className="text-neutral-medium hover:text-red-500 transition-colors cursor-pointer p-1"
+            >
+              ✕
+            </button>
+          )}
         </div>
       ))}
-      {(field.state.value as string[]).length < 5 && (
+      {(field.state.value as string[]).length < 5 && !isEditing && (
         <button
           type="button"
           onClick={() => field.handleChange([...(field.state.value as string[]), ''])}
