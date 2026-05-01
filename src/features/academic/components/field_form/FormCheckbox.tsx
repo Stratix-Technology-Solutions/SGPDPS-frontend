@@ -1,10 +1,9 @@
-import type { FieldApi } from '@tanstack/react-form'
+import type { AnyFieldApi } from '@tanstack/react-form'
 
 interface Props {
   label: string
   description?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  field: FieldApi<any, any, any, any>
+  field: AnyFieldApi
 }
 
 export const FormCheckbox = ({ label, description, field }: Props) => (
