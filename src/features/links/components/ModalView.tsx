@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
-import { useGetLinks } from '../hooks/useGetLinks'
-import type { LinkResponse } from '../interfaces/link.interface'
-import { Modal } from '../../../shared/components/Modal'
+import { useState, type ReactNode } from 'react'
+import { useGetLinks } from '../hooks/useGetLink'
 import { FaGithub, FaLinkedin, FaGitlab } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
+import { BannerMessageError } from '../../../shared/components/BannerMessageError'
+import { Modal } from '../../../shared/components/Modal'
+import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md'
 
 interface Props {
   onClose: () => void
@@ -16,14 +16,6 @@ const ICON_MAP: Record<string, ReactNode> = {
   'gitlab.com': <FaGitlab />
 }
 
-const extractVisibleLinks = (data: LinkResponse | undefined) => {
-  return (
-    data?.data.filter(({ url }) => {
-      return Boolean(url?.trim())
-    }) ?? []
-  )
-}
-
 const getDomain = (url: string): string | undefined => {
   try {
     return new URL(url).hostname
@@ -33,30 +25,38 @@ const getDomain = (url: string): string | undefined => {
 }
 
 export const ModalView = ({ onClose }: Props) => {
-  const { data, isLoading, isError } = useGetLinks()
+  const [page, setPage] = useState<number>(1)
+  const { data, isLoading, isError, isSuccess } = useGetLinks({ page })
 
-  const visibleLinks = extractVisibleLinks(data)
+  if (isLoading) {
+    return (<p className="text-sm text-neutral-medium">Cargando enlaces...</p>)
+  }
+
+  if (isError) {
+    return (
+      <BannerMessageError message={'Ocurrió un error al cargar los enlaces'} />
+    )
+  }
+
 
   return (
     <Modal
       title="Enlaces"
       onClose={onClose}
     >
-      {isError && (
-        <BannerMessageError message={'Ocurrió un error al cargar los enlaces'} />
+      {isSuccess && !data.data.length && (
+        <p className="text-sm text-neutral-medium">No hay elementos que mostrar</p>
       )}
 
-      {isLoading ? (
-        <p className="text-sm text-neutral-medium">Cargando enlaces...</p>
-      ) : visibleLinks.length > 0 ? (
+      {isSuccess && !!data.data.length && (
         <div className="flex flex-col gap-3">
-          {visibleLinks.map(({ slot, url }) => {
+          {data.data.map(({ id, url }) => {
             const domain = getDomain(url)
             {/* console.log('URL:', url, 'Domain:', domain) */ }
             const Icon = domain && ICON_MAP[domain] ? ICON_MAP[domain] : <RiGlobalLine />
             return (
               <a
-                key={slot}
+                key={id}
                 href={url}
                 target="_blank"
                 rel="noreferrer"
@@ -68,9 +68,38 @@ export const ModalView = ({ onClose }: Props) => {
             )
           })}
         </div>
-      ) : (
-        <p className="text-sm text-neutral-medium">No hay enlaces registrados.</p>
       )}
+
+      {isSuccess && data.meta.last_page > 1 && (
+        <div className="flex justify-end items-center flex-wrap gap-2">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white disabled:cursor-not-allowed"
+          >
+            <MdArrowBackIosNew className="w-6 aspect-square" />
+          </button>
+
+          {Array.from({ length: data.meta.last_page }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`w-8 h-8 flex items-center justify-center rounded-md cursor-pointer ${page === i + 1 ? 'bg-primary text-white' : 'bg-white'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            disabled={page === data.meta.last_page}
+            onClick={() => setPage(page + 1)}
+            className="w-8 h-8 flex items-center justify-center rounded-md disabled:opacity-50 cursor-pointer bg-white disabled:cursor-not-allowed"
+          >
+            <MdArrowForwardIos className="w-6 aspect-square" />
+          </button>
+        </div>
+      )
+      }
     </Modal>
   )
 }

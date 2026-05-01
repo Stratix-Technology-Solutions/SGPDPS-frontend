@@ -1,8 +1,11 @@
-export interface LinkData {
-  slot: string
+export interface LinkResponse {
+  id: number
   url: string
 }
 
-export interface LinkResponse {
-  data: LinkData[]
+export interface LinksResponse {
+  data: LinkResponse[]
+  meta: {
+    last_page: number
+  }
 }
