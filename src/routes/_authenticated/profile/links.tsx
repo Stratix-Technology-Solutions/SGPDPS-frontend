@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <div className="py-10 flex flex-col gap-6">
       <SectionTitle
-        title="Enlaces públicos"
+        title="Enlaces Públicos"
         description="Gestiona los enlaces que aparecerán en tu portafolio."
       />
 

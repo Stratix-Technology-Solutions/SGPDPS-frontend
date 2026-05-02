@@ -9,7 +9,7 @@ import { ModalViewAcademic } from '../../../features/academic/components/modals/
 import { SectionTitle } from '../../../shared/components/SectionTitle'
 
 export const Route = createFileRoute(
-  '/_authenticated/profile/AcademicExperience',
+  '/_authenticated/profile/academic-experience',
 )({
   component: RouteComponent,
 })
@@ -24,10 +24,10 @@ function RouteComponent() {
       />
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
-        <ActionButton icon={FiPlusCircle} label="Crear experiencia academica" onClick={() => setModal('add')} />
-        <ActionButton icon={FiEdit2} label="Editar experiencia academica" onClick={() => setModal('edit')} />
-        <ActionButton icon={FiTrash2} label="Eliminar experiencia academica" onClick={() => setModal('delete')} />
-        <ActionButton icon={FiEye} label="Visualizar experiencias academicas" onClick={() => setModal('view')} />
+        <ActionButton icon={FiPlusCircle} label="Crear experiencia academica" onClick={() => setModal("add")} />
+        <ActionButton icon={FiEdit2} label="Editar experiencia academica" onClick={() => setModal("edit")} />
+        <ActionButton icon={FiTrash2} label="Eliminar experiencia academica" onClick={() => setModal("delete")} />
+        <ActionButton icon={FiEye} label="Visualizar experiencias academicas" onClick={() => setModal("view")} />
       </div>
       {modal === 'add' && <ModalAddAcademic onClose={() => setModal(null)} />}
       {modal === 'edit' && <ModalEditAcademic onClose={() => setModal(null)} />}

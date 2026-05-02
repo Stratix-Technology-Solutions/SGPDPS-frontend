@@ -20,13 +20,13 @@ export const sections: Section[] = [
   },
   {
     label: 'Experiencia Laboral',
-    to: '/profile/LaboralExperience',
+    to: '/profile/laboral-experience',
     Icon: MdOutlineWork,
     description: 'Registra y gestiona tu historial de empleos para mostrarlos en tu portafolio.',
   },
   {
     label: 'Experiencia Academica',
-    to: '/profile/AcademicExperience',
+    to: '/profile/academic-experience',
     Icon: GiGraduateCap,
     description: 'Gestiona tu historial de experiencia academica.',
   },
