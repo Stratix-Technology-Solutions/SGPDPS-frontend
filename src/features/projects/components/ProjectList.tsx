@@ -1,125 +1,206 @@
 import { useState } from 'react'
-import { MdAdd, MdEdit, MdDelete } from 'react-icons/md'
+import { FiEdit2, FiEye, FiPlusCircle, FiTrash2 } from 'react-icons/fi'
+import { ActionButton } from '../../../shared/components/ActionButton'
+import { Modal } from '../../../shared/components/Modal'
+import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { useProjects } from '../hooks/useProjects'
 import { ModalAddProject } from './modals/ModalAddProject'
 import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
 import type { Project } from '../dtos/project.interface'
 
+type ModalType = 'add' | 'edit' | 'delete' | 'view' | null
+
 export const ProjectList = () => {
   const { data, isLoading } = useProjects()
-  
-  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [modal, setModal] = useState<ModalType>(null)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+
+  const closeModal = () => {
+    setModal(null)
+    setSelectedProject(null)
+  }
 
   const handleEdit = (project: Project) => {
     setSelectedProject(project)
-    setIsEditOpen(true)
+    setModal('edit')
   }
 
   const handleDelete = (project: Project) => {
     setSelectedProject(project)
-    setIsDeleteOpen(true)
+    setModal('delete')
+  }
+
+  const handleView = (project: Project) => {
+    setSelectedProject(project)
+    setModal('view')
   }
 
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-neutral-light overflow-hidden">
-      <div className="p-4 md:p-6 border-b border-neutral-light">
-        <h2 className="text-xl md:text-2xl font-bold text-background-dark flex items-center gap-3">
-          <div className="w-1.5 h-6 bg-primary rounded-full" />
-          Proyectos de Software
-        </h2>
-        <p className="text-neutral-medium text-sm mt-2">
-          Gestiona los proyectos en los que participaste para mostrarlos en tu portafolio.
-        </p>
+    <section className="py-10 flex flex-col gap-6">
+      <SectionTitle
+        title="Proyectos de Software"
+        description="Gestiona los proyectos en los que participaste para mostrarlos en tu portafolio."
+      />
+
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
+        <ActionButton icon={FiPlusCircle} label="Crear proyecto de software" onClick={() => setModal('add')} />
+        <ActionButton icon={FiEdit2} label="Editar proyecto de software" onClick={() => setModal('edit')} />
+        <ActionButton icon={FiTrash2} label="Eliminar proyecto de software" onClick={() => setModal('delete')} />
+        <ActionButton icon={FiEye} label="Visualizar proyectos de software" onClick={() => setModal('view')} />
       </div>
 
-      <div className="p-4 md:p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          
-          <button
-            onClick={() => setIsAddOpen(true)}
-            className="h-[200px] flex flex-col items-center justify-center bg-[#f8f9fa] border-2 border-dashed border-neutral-300 rounded-2xl hover:border-primary hover:bg-[#ebf0f8] transition-colors cursor-pointer group"
-          >
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:scale-110 group-hover:text-primary transition-all">
-              <MdAdd size={24} className="text-neutral-medium group-hover:text-primary" />
-            </div>
-            <span className="font-semibold text-background-dark group-hover:text-primary">
-              Crear proyecto de software
-            </span>
-          </button>
+      <ModalAddProject isOpen={modal === 'add'} onClose={closeModal} />
 
-          {isLoading ? (
-            <div className="h-[200px] flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          ) : (
-            data?.data.map((project) => (
-              <div key={project.id} className="group relative h-[200px] rounded-2xl border border-neutral-200 bg-white p-5 flex flex-col overflow-hidden hover:border-primary hover:shadow-md transition-all">
-                <div className="mb-auto">
-                  <h3 className="font-semibold text-background-dark text-lg line-clamp-1" title={project.title}>
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-neutral-medium mt-1 line-clamp-2" title={project.description}>
-                    {project.description}
-                  </p>
-                  <p className="text-xs text-primary-soft font-medium mt-2">
-                    {project.role}
-                  </p>
-                  <div className="flex gap-2 flex-wrap mt-2 overflow-hidden max-h-[24px]">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <span key={tech} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-0.5 rounded border border-neutral-200">
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <span className="bg-neutral-100 text-neutral-600 text-xs px-2 py-0.5 rounded border border-neutral-200">
-                        +{project.technologies.length - 3}
-                      </span>
-                    )}
-                  </div>
-                </div>
+      {modal === 'edit' && !selectedProject && (
+        <ProjectSelectionModal
+          title="Selecciona un proyecto para editar"
+          data={data?.data}
+          isLoading={isLoading}
+          onClose={closeModal}
+          onSelect={handleEdit}
+        />
+      )}
 
-                <div className="right-4 bottom-4 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0">
-                  <button
-                    onClick={() => handleEdit(project)}
-                    className="p-2 rounded-full border border-neutral-200 bg-white shadow-sm hover:text-primary hover:border-primary transition-colors tooltip"
-                    title="Editar"
-                  >
-                    <MdEdit size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(project)}
-                    className="p-2 rounded-full border border-neutral-200 bg-white shadow-sm hover:text-red-500 hover:border-red-500 transition-colors tooltip"
-                    title="Eliminar"
-                  >
-                    <MdDelete size={18} />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      {modal === 'delete' && !selectedProject && (
+        <ProjectSelectionModal
+          title="Selecciona un proyecto para eliminar"
+          data={data?.data}
+          isLoading={isLoading}
+          onClose={closeModal}
+          onSelect={handleDelete}
+        />
+      )}
 
-      <ModalAddProject isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
-      
-      {selectedProject && (
-        <>
-          <ModalEditProject
-            isOpen={isEditOpen}
-            onClose={() => setIsEditOpen(false)}
-            project={selectedProject}
-          />
-          <ConfirmDeleteProject
-            isOpen={isDeleteOpen}
-            onClose={() => setIsDeleteOpen(false)}
-            projectId={selectedProject.id}
-          />
-        </>
+      {modal === 'view' && !selectedProject && (
+        <ProjectSelectionModal
+          title="Selecciona un proyecto para ver sus detalles"
+          data={data?.data}
+          isLoading={isLoading}
+          onClose={closeModal}
+          onSelect={handleView}
+        />
+      )}
+
+      {selectedProject && modal === 'edit' && (
+        <ModalEditProject
+          isOpen
+          onClose={closeModal}
+          project={selectedProject}
+        />
+      )}
+
+      {selectedProject && modal === 'delete' && (
+        <ConfirmDeleteProject
+          isOpen
+          onClose={closeModal}
+          projectId={selectedProject.id}
+        />
+      )}
+
+      {selectedProject && modal === 'view' && (
+        <Modal title="Detalle del proyecto" onClose={closeModal}>
+          <ProjectDetail project={selectedProject} />
+        </Modal>
       )}
     </section>
   )
 }
+
+interface ProjectSelectionModalProps {
+  title: string
+  data: Project[] | undefined
+  isLoading: boolean
+  onClose: () => void
+  onSelect: (project: Project) => void
+}
+
+const ProjectSelectionModal = ({
+  title,
+  data,
+  isLoading,
+  onClose,
+  onSelect,
+}: ProjectSelectionModalProps) => {
+  return (
+    <Modal title={title} onClose={onClose}>
+      {isLoading && <p className="text-neutral-medium/70 text-sm">Cargando...</p>}
+
+      {!isLoading && !data?.length && (
+        <p className="text-neutral-medium/70 text-sm">No hay proyectos registrados.</p>
+      )}
+
+      <ul className="flex flex-col gap-2 max-h-80 overflow-y-auto">
+        {data?.map((project) => (
+          <li key={project.id}>
+            <button
+              onClick={() => onSelect(project)}
+              className="w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer hover:border-gray-500 hover:bg-gray-50"
+            >
+              <p className="font-semibold text-background-dark">{project.title}</p>
+              <p className="text-sm text-neutral-medium/70">{project.role} · {project.status}</p>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </Modal>
+  )
+}
+
+interface ProjectDetailProps {
+  project: Project
+}
+
+const ProjectDetail = ({ project }: ProjectDetailProps) => {
+  return (
+    <div className="flex flex-col gap-4 text-sm text-neutral-medium">
+      <div>
+        <h4 className="text-lg font-semibold text-background-dark">{project.title}</h4>
+        <p className="mt-1">{project.description}</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <ProjectDetailItem label="Rol" value={project.role} />
+        <ProjectDetailItem label="Estado" value={project.status} />
+        <ProjectDetailItem label="Fecha de inicio" value={project.start_date} />
+        <ProjectDetailItem label="Fecha de fin" value={project.end_date ?? 'En curso'} />
+      </div>
+
+      {!!project.url && (
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-primary hover:underline"
+        >
+          Abrir enlace del proyecto
+        </a>
+      )}
+
+      {!!project.technologies.length && (
+        <>
+          <p className="font-semibold text-background-dark">Tecnologias</p>
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech) => (
+              <span key={tech} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+interface ProjectDetailItemProps {
+  label: string
+  value: string
+}
+
+const ProjectDetailItem = ({ label, value }: ProjectDetailItemProps) => (
+  <div className="rounded-xl border border-neutral-light p-3">
+    <p className="text-xs text-neutral-medium/70">{label}</p>
+    <p className="font-semibold text-background-dark">{value}</p>
+  </div>
+)

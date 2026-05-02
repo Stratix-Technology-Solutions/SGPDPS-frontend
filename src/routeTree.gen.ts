@@ -18,6 +18,7 @@ import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PublicForgotPasswordRouteImport } from './routes/_public/forgot-password'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedProfileSoftwareProjectsRouteImport } from './routes/_authenticated/profile/software-projects'
 import { Route as AuthenticatedProfileSkillsRouteImport } from './routes/_authenticated/profile/skills'
 import { Route as AuthenticatedProfileRegisterRouteImport } from './routes/_authenticated/profile/register'
 import { Route as AuthenticatedProfileLinksRouteImport } from './routes/_authenticated/profile/links'
@@ -68,6 +69,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedProfileSoftwareProjectsRoute =
+  AuthenticatedProfileSoftwareProjectsRouteImport.update({
+    id: '/profile/software-projects',
+    path: '/profile/software-projects',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedProfileSkillsRoute =
   AuthenticatedProfileSkillsRouteImport.update({
     id: '/profile/skills',
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
   '/profile/skills': typeof AuthenticatedProfileSkillsRoute
+  '/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +142,7 @@ export interface FileRoutesByTo {
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
   '/profile/skills': typeof AuthenticatedProfileSkillsRoute
+  '/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +161,7 @@ export interface FileRoutesById {
   '/_authenticated/profile/links': typeof AuthenticatedProfileLinksRoute
   '/_authenticated/profile/register': typeof AuthenticatedProfileRegisterRoute
   '/_authenticated/profile/skills': typeof AuthenticatedProfileSkillsRoute
+  '/_authenticated/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/profile/links'
     | '/profile/register'
     | '/profile/skills'
+    | '/profile/software-projects'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/profile/links'
     | '/profile/register'
     | '/profile/skills'
+    | '/profile/software-projects'
   id:
     | '__root__'
     | '/'
@@ -201,6 +213,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile/links'
     | '/_authenticated/profile/register'
     | '/_authenticated/profile/skills'
+    | '/_authenticated/profile/software-projects'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/software-projects': {
+      id: '/_authenticated/profile/software-projects'
+      path: '/profile/software-projects'
+      fullPath: '/profile/software-projects'
+      preLoaderRoute: typeof AuthenticatedProfileSoftwareProjectsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/profile/skills': {
       id: '/_authenticated/profile/skills'
       path: '/profile/skills'
@@ -327,6 +347,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedProfileLinksRoute: typeof AuthenticatedProfileLinksRoute
   AuthenticatedProfileRegisterRoute: typeof AuthenticatedProfileRegisterRoute
   AuthenticatedProfileSkillsRoute: typeof AuthenticatedProfileSkillsRoute
+  AuthenticatedProfileSoftwareProjectsRoute: typeof AuthenticatedProfileSoftwareProjectsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -339,6 +360,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileLinksRoute: AuthenticatedProfileLinksRoute,
   AuthenticatedProfileRegisterRoute: AuthenticatedProfileRegisterRoute,
   AuthenticatedProfileSkillsRoute: AuthenticatedProfileSkillsRoute,
+  AuthenticatedProfileSoftwareProjectsRoute:
+    AuthenticatedProfileSoftwareProjectsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
