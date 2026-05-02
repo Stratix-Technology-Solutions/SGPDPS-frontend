@@ -1,16 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { SiHyperskill } from 'react-icons/si'
-import { MdOutlineWork, MdOutlineComputer } from 'react-icons/md'
-import { MdLink } from 'react-icons/md'
-import { GiGraduateCap } from 'react-icons/gi'
-
-const links = [
-  { label: 'Habilidades', to: '/profile/skills', Icon: SiHyperskill },
-  { label: 'Experiencia Laboral', to: '/profile/LaboralExperience', Icon: MdOutlineWork },
-  { label: 'Experiencia Academica', to: '/profile/AcademicExperience', Icon: GiGraduateCap },
-  { label: 'Proyectos de Software', to: '/profile/software-projects', Icon: MdOutlineComputer },
-  { label: 'Enlaces', to: '/profile/links', Icon: MdLink },
-]
+import { sections } from '../constants/sections'
 
 interface Props {
   open: boolean
@@ -38,7 +27,7 @@ export const Aside = ({ open, closeAside }: Props) => {
       </div>
 
       <nav className="flex flex-col gap-2 px-4 pb-4">
-        {links.map(({ label, to, Icon }) => (
+        {sections.map(({ label, to, Icon }) => (
           <Link
             key={label}
             to={to}
