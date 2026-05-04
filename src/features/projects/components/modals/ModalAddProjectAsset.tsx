@@ -78,7 +78,7 @@ export const ModalAddProjectAsset = ({ onClose }: Props) => {
         onClose()
       }}
       title="Subir evidencia digital"
-      description={`Proyecto: ${selectedProject.title}`}
+      description={selectedProject.title}
     >
       <div className="p-4 md:p-6 lg:px-8">
         {isError && (
@@ -139,11 +139,11 @@ export const ModalAddProjectAsset = ({ onClose }: Props) => {
             )}
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-4 pt-3">
             <button
               type="button"
               onClick={() => setSelectedProject(null)}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+              className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
             >
               Atrás
             </button>
@@ -151,7 +151,7 @@ export const ModalAddProjectAsset = ({ onClose }: Props) => {
             <button
               type="submit"
               disabled={isUploading || !selectedFile}
-              className="w-full sm:w-auto bg-primary hover:bg-primary-soft text-white font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white disabled:bg-neutral-medium disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             >
               {isUploading ? <ButtonLoader message="Subiendo..." /> : 'Subir evidencia'}
             </button>

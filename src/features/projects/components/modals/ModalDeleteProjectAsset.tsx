@@ -109,7 +109,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
         <div className="flex justify-start pt-4 mt-4 border-t border-neutral-light">
           <button
             onClick={() => setSelectedProject(null)}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
+            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
           >
             Atrás
           </button>
