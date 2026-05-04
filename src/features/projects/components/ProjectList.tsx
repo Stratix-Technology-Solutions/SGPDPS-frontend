@@ -8,8 +8,10 @@ import { ModalAddProject } from './modals/ModalAddProject'
 import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
 import type { Project } from '../dtos/project.interface'
+import { ModalAddProjectAsset } from './modals/ModalAddProjectAsset'
+import { ModalDeleteProjectAsset } from './modals/ModalDelteProjectAsset'
 
-type ModalType = 'add' | 'edit' | 'delete' | 'view' | null
+type ModalType = 'add' | 'edit' | 'delete' | 'view' | 'add-evidence' | 'delete-evidence' | null
 
 export const ProjectList = () => {
   const { data, isLoading } = useProjects()
@@ -50,6 +52,16 @@ export const ProjectList = () => {
         <ActionButton icon={FiEye} label="Visualizar proyectos de software" onClick={() => setModal('view')} />
       </div>
 
+      <SectionTitle
+        title="Evidencia Digital"
+        description="Gestiona la evidencia de tus proyectos, pueden ser imagenes o pdf."
+      />
+
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
+        <ActionButton icon={FiPlusCircle} label="Subir evidencia digital" onClick={() => setModal('add-evidence')} />
+        <ActionButton icon={FiTrash2} label="Eliminar evidencia digital" onClick={() => setModal('delete-evidence')} />
+      </div>
+
       <ModalAddProject isOpen={modal === 'add'} onClose={closeModal} />
 
       {modal === 'edit' && !selectedProject && (
@@ -81,6 +93,14 @@ export const ProjectList = () => {
           onSelect={handleView}
         />
       )}
+
+      {
+        modal === 'add-evidence' && (<ModalAddProjectAsset onClose={() => setModal(null)} />)
+      }
+
+      {
+        modal === 'delete-evidence' && (<ModalDeleteProjectAsset onClose={() => setModal(null)} />)
+      }
 
       {selectedProject && modal === 'edit' && (
         <ModalEditProject
