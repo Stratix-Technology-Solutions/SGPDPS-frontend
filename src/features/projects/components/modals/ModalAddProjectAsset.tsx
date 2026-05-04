@@ -6,6 +6,7 @@ import { BannerMessageError } from '../../../../shared/components/BannerMessageE
 import { ButtonLoader } from '../../../../shared/components/ButtonLoader'
 import { FiFile, FiImage } from 'react-icons/fi'
 import type { ProjectAssetType } from '../../interfaces/project-asset.interface'
+import { ProjectSelector } from '../ProjectSelector'
 
 interface Props {
   onClose: () => void
@@ -59,24 +60,12 @@ export const ModalAddProjectAsset = ({ onClose }: Props) => {
   if (!selectedProject) {
     return (
       <Modal title="Selecciona un proyecto" onClose={onClose}>
-        {projectsLoading && <p className="text-neutral-medium/70 text-sm">Cargando proyectos...</p>}
-
-        {!projectsLoading && !projects?.data?.length && (
-          <p className="text-neutral-medium/70 text-sm">No hay proyectos registrados.</p>
-        )}
-
-        <ul className="flex flex-col gap-2 max-h-80 overflow-y-auto">
-          {projects?.data?.map((project) => (
-            <li key={project.id}>
-              <button
-                onClick={() => setSelectedProject(project)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer hover:border-primary hover:bg-primary/5"
-              >
-                <p className="font-semibold text-background-dark">{project.title}</p>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <ProjectSelector
+          projects={projects?.data}
+          isLoading={projectsLoading}
+          onSelect={setSelectedProject}
+          hoverColor="primary"
+        />
       </Modal>
     )
   }
