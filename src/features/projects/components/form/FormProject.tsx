@@ -1,25 +1,25 @@
 import { useForm } from '@tanstack/react-form'
 import { FormField } from '../field_form/FormField'
-import { FormSelect } from '../field_form/FormSelect'
 import { FormTextarea } from '../field_form/FormTextarea'
 import { FormTags } from '../field_form/FormTags'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { ProjectSchema, defaultValues as emptyValues } from '../../dtos/project.dto'
-import type { ProjectDto } from '../../dtos/project.dto'
+import { ProjectCreateSchema, projectCreateDefaultValues } from '../../dtos/project.dto'
+import type { ProjectCreateDto } from '../../dtos/project.dto'
+import { ProjectSkillsPicker } from '../field_form/ProjectSkillsPicker'
 
 interface Props {
   onCancel?: () => void
-  onSubmit: (values: ProjectDto) => void
+  onSubmit: (values: ProjectCreateDto) => void
   submitLabel?: string
-  defaultValues?: Partial<ProjectDto>
+  defaultValues?: Partial<ProjectCreateDto>
   isPending?: boolean
   serverError?: string
 }
 
 export const FormProject = ({ onCancel, onSubmit, submitLabel = 'Guardar', defaultValues, isPending, serverError }: Props) => {
   const form = useForm({
-    defaultValues: { ...emptyValues, ...defaultValues },
-    validators: { onSubmit: ProjectSchema },
+    defaultValues: { ...projectCreateDefaultValues, ...defaultValues },
+    validators: { onSubmit: ProjectCreateSchema },
     onSubmit: ({ value }) => { onSubmit(value) },
   })
 
@@ -33,25 +33,16 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel = 'Guardar', defau
         <FormTextarea label="Aportes realizados / Descripción *" field={field} placeholder="Describe tus aportes y el proyecto" />
       )} />
 
-      <form.Field name="role" children={(field) => (
-        <FormSelect
-          label="Rol desempeñado *"
-          field={field}
-          placeholder="Selecciona tu rol"
-          options={[
-            { value: 'Líder', label: 'Líder' },
-            { value: 'Colaborador', label: 'Colaborador' },
-            { value: 'Freelance', label: 'Freelance' },
-          ]}
+      <form.Field name="skill_ids" children={(field) => (
+        <ProjectSkillsPicker
+          label="Habilidades técnicas"
+          value={field.state.value ?? []}
+          onChange={field.handleChange}
         />
       )} />
 
-      <form.Field name="technologies" children={(field) => (
-        <FormTags label="Tecnologías utilizadas *" field={field} placeholder="Ej: React, Node.js, Python" />
-      )} />
-
-      <form.Field name="url" children={(field) => (
-        <FormField label="Link o URL del proyecto (opcional)" field={field} placeholder="https://..." />
+      <form.Field name="links" children={(field) => (
+        <FormTags label="Enlaces del proyecto" field={field} placeholder="https://github.com/..." />
       )} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -64,20 +55,8 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel = 'Guardar', defau
         )} />
       </div>
 
-      <form.Field name="status" children={(field) => (
-        <FormSelect
-          label="Estado del proyecto *"
-          field={field}
-          options={[
-            { value: 'en curso', label: 'En curso' },
-            { value: 'finalizado', label: 'Finalizado' },
-            { value: 'pausado', label: 'Pausado' },
-          ]}
-        />
-      )} />
-
       {serverError && <BannerMessageError message={serverError} />}
-      
+
       <div className="flex justify-end gap-3 pt-4">
         {onCancel && (
           <button

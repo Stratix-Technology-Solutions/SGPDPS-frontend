@@ -1,34 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
 import api from '../../../app/api/axios'
-import type { ProjectDto } from '../dtos/project.dto'
-import type { ProjectsResponse } from '../interfaces/project.interface'
+import type { ProjectCreateDto, ProjectUpdateDto } from '../dtos/project.dto'
+import type { ProjectResponse, ProjectsResponse } from '../interfaces/project.interface'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'projects']
 
-export const useProjects = () => {
-  const [page, setPage] = useState(1)
+export const useCreateProject = () => {
   const queryClient = useQueryClient()
-
-  const { data, isLoading, isError, error, isSuccess } = useQuery<ProjectsResponse, ApiError>({
-    queryKey: [...QUERY_KEY, page],
-    queryFn: async () => {
-      const res = await api.get(`/projects?page=${page}`)
-      return res.data
-    },
-  })
-
-  const create = useMutation<void, ApiError, ProjectDto>({
-    mutationFn: async (dto) => {
-      await api.post('/projects', dto)
+  return useMutation<void, ApiError, ProjectCreateDto>({
+    mutationFn: async (data) => {
+      await api.post('/projects', data)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })
-    },
+    }
   })
+}
 
-  const update = useMutation<void, ApiError, { id: string; dto: Partial<ProjectDto> }>({
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient()
+  return useMutation<void, ApiError, { id: string; dto: ProjectUpdateDto }>({
     mutationFn: async ({ id, dto }) => {
       await api.patch(`/projects/${id}`, dto)
     },
@@ -36,28 +28,38 @@ export const useProjects = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })
     },
   })
+}
 
-  const remove = useMutation<void, ApiError, string>({
+export const useDeleteProject = () => {
+  const queryClient = useQueryClient()
+  return useMutation<void, ApiError, string>({
     mutationFn: async (id) => {
       await api.delete(`/projects/${id}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })
-      const newLastPage = data?.meta.last_page ?? 1
-      if (page > newLastPage) setPage(newLastPage)
     },
   })
-
-  return {
-    data,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    page,
-    setPage,
-    create,
-    update,
-    remove,
-  }
 }
+
+export const useGetProjects = ({ page }: { page: number }) => {
+  return useQuery<ProjectsResponse, ApiError>({
+    queryKey: [...QUERY_KEY, page],
+    queryFn: async () => {
+      const res = await api.get(`/projects?page=${page}`)
+      return res.data
+    }
+  })
+}
+
+export const useGetProject = (id: string) => {
+  return useQuery<ProjectResponse, ApiError>({
+    queryKey: [...QUERY_KEY, id],
+    queryFn: async () => {
+      const res = await api.get(`/projects/${id}`)
+      return res.data
+    }
+  })
+}
+
+

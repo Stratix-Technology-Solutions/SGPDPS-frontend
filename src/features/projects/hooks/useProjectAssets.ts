@@ -6,7 +6,7 @@ import type {
   ProjectAssetType,
   ProjectAssetsResponse,
 } from '../interfaces/project-asset.interface'
-import type { ProjectResponse } from '../interfaces/project.interface'
+import type { ProjectsResponse } from '../interfaces/project.interface'
 
 const QUERY_KEY = ['user', 'projects', 'assets']
 
@@ -16,10 +16,10 @@ interface CreateProjectAssetDto {
 }
 
 export const useGetProject = () => {
-  return useQuery<ProjectResponse, ApiError>({
+  return useQuery<ProjectsResponse, ApiError>({
     queryKey: ['user', 'projects'],
     queryFn: async () => {
-      const res = await api.get('/projects/list')
+      const res = await api.get('/projects?page=1')
       return res.data
     }
   })

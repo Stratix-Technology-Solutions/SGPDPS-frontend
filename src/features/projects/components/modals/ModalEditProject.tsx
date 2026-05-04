@@ -1,7 +1,7 @@
 import { Modal } from '../../../../shared/components/Modal'
-import { FormProject } from '../form/FormProject'
-import { useProjects } from '../../hooks/useProjects'
-import type { ProjectDto } from '../../dtos/project.dto'
+import { FormProjectEdit } from '../form/FormProjectEdit'
+import { useUpdateProject } from '../../hooks/useProjects'
+import type { ProjectUpdateDto } from '../../dtos/project.dto'
 import type { Project } from '../../interfaces/project.interface'
 
 interface Props {
@@ -11,30 +11,30 @@ interface Props {
 }
 
 export const ModalEditProject = ({ isOpen, onClose, project }: Props) => {
-  const { update } = useProjects()
+  const update = useUpdateProject()
 
-  const handleSubmit = (values: ProjectDto) => {
+  const handleSubmit = (values: ProjectUpdateDto) => {
     update.mutate({ id: project.id, dto: values }, {
       onSuccess: () => {
-        onClose();
+        onClose()
       }
     })
   }
 
   const serverError = update.isError && update.error ? update.error.response?.data.message || 'Error al actualizar el proyecto' : undefined
 
-  const initialValues: Partial<ProjectDto> = {
+  const initialValues: Partial<ProjectUpdateDto> = {
     title: project.title,
     description: project.description,
-    role: project.role,
-    technologies: project.technologies,
-    url: project.url || '',
     start_date: project.start_date,
     end_date: project.end_date || '',
-    status: project.status,
+    links: project.links.map((link) => ({
+      id: link.id,
+      url: link.url,
+    })),
   }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <Modal onClose={onClose} title="Editar proyecto de software">
@@ -42,11 +42,12 @@ export const ModalEditProject = ({ isOpen, onClose, project }: Props) => {
         <p className="text-sm text-neutral-medium mb-6">
           Modifica los detalles de tu proyecto para mantener tu portafolio actualizado.
         </p>
-        <FormProject
+        <FormProjectEdit
           onCancel={onClose}
           onSubmit={handleSubmit}
           submitLabel="Guardar cambios"
           defaultValues={initialValues}
+          skills={project.skills}
           isPending={update.isPending}
           serverError={serverError}
         />

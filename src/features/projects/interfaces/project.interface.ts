@@ -1,27 +1,52 @@
+import type { LinkResponse } from '../../links/interfaces/link.interface'
+
+export interface ProjectSkillResponse {
+  id: number
+  name: string
+  domain_level: string | null
+}
+
 export interface Project {
   id: string
   title: string
   description: string
-  role: 'Líder' | 'Colaborador' | 'Freelance'
-  technologies: string[]
-  url?: string
   start_date: string
   end_date?: string
-  status: 'en curso' | 'finalizado' | 'pausado'
-  created_at: string
-  updated_at: string
+  skills: ProjectSkillResponse[]
+  links: LinkResponse[]
+}
+
+export interface ProjectPaginationLinks {
+  first: string | null
+  last: string | null
+  prev: string | null
+  next: string | null
+}
+
+export interface ProjectPaginationMeta {
+  current_page: number
+  from: number | null
+  last_page: number
+  links: Array<{
+    url: string | null
+    label: string
+    active: boolean
+  }>
+  path: string
+  per_page: number
+  to: number | null
+  total: number
 }
 
 export interface ProjectsResponse {
   data: Project[]
-  meta: {
-    last_page: number
-  }
+  links: ProjectPaginationLinks
+  meta: ProjectPaginationMeta
 }
 
 export type ProjectIdTitle = Pick<Project, 'id' | 'title'>
 
 export interface ProjectResponse {
-  data: ProjectIdTitle[]
+  data: Project
 }
 

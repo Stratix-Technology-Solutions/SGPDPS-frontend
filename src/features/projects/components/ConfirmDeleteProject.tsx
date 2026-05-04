@@ -1,5 +1,5 @@
 import { Modal } from '../../../shared/components/Modal'
-import { useProjects } from '../hooks/useProjects'
+import { useDeleteProject } from '../hooks/useProjects'
 
 interface Props {
   isOpen: boolean
@@ -8,10 +8,10 @@ interface Props {
 }
 
 export const ConfirmDeleteProject = ({ isOpen, onClose, projectId }: Props) => {
-  const { remove } = useProjects()
+  const { mutate: remove, isPending } = useDeleteProject()
 
   const handleDelete = () => {
-    remove.mutate(projectId, {
+    remove(projectId, {
       onSuccess: () => {
         onClose()
       },
@@ -29,17 +29,17 @@ export const ConfirmDeleteProject = ({ isOpen, onClose, projectId }: Props) => {
         <div className="flex gap-4 justify-center">
           <button
             onClick={onClose}
-            disabled={remove.isPending}
+            disabled={isPending}
             className="px-6 py-2.5 rounded-xl font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
           >
             Cancelar
           </button>
           <button
             onClick={handleDelete}
-            disabled={remove.isPending}
+            disabled={isPending}
             className="px-6 py-2.5 rounded-xl font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
           >
-            {remove.isPending ? 'Eliminando...' : 'Eliminar'}
+            {isPending ? 'Eliminando...' : 'Eliminar'}
           </button>
         </div>
       </div>

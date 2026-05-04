@@ -1,7 +1,7 @@
 import { Modal } from '../../../../shared/components/Modal'
 import { FormProject } from '../form/FormProject'
-import { useProjects } from '../../hooks/useProjects'
-import type { ProjectDto } from '../../dtos/project.dto'
+import { useCreateProject } from '../../hooks/useProjects'
+import type { ProjectCreateDto } from '../../dtos/project.dto'
 
 interface Props {
   isOpen: boolean
@@ -9,9 +9,9 @@ interface Props {
 }
 
 export const ModalAddProject = ({ isOpen, onClose }: Props) => {
-  const { create } = useProjects()
+  const create = useCreateProject()
 
-  const handleSubmit = (values: ProjectDto) => {
+  const handleSubmit = (values: ProjectCreateDto) => {
     create.mutate(values, {
       onSuccess: () => {
         onClose()

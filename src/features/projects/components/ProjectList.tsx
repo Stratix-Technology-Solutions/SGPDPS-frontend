@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiEdit2, FiEye, FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { ActionButton } from '../../../shared/components/ActionButton'
 import { Modal } from '../../../shared/components/Modal'
 import { SectionTitle } from '../../../shared/components/SectionTitle'
-import { useProjects } from '../hooks/useProjects'
+import { useGetProjects } from '../hooks/useProjects'
 import { ModalAddProject } from './modals/ModalAddProject'
 import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
@@ -14,9 +14,17 @@ import { ModalDeleteProjectAsset } from './modals/ModalDeleteProjectAsset'
 type ModalType = 'add' | 'edit' | 'delete' | 'view' | 'add-evidence' | 'delete-evidence' | null
 
 export const ProjectList = () => {
-  const { data, isLoading } = useProjects()
+  const [page, setPage] = useState(1)
+  const { data, isLoading } = useGetProjects({ page })
   const [modal, setModal] = useState<ModalType>(null)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+
+  useEffect(() => {
+    const lastPage = data?.meta.last_page ?? 1
+    if (page > lastPage) {
+      setPage(lastPage)
+    }
+  }, [data, page, setPage])
 
   const closeModal = () => {
     setModal(null)
@@ -68,6 +76,9 @@ export const ProjectList = () => {
         <ProjectSelectionModal
           title="Selecciona un proyecto para editar"
           data={data?.data}
+          page={page}
+          lastPage={data?.meta.last_page ?? 1}
+          setPage={setPage}
           isLoading={isLoading}
           onClose={closeModal}
           onSelect={handleEdit}
@@ -78,6 +89,9 @@ export const ProjectList = () => {
         <ProjectSelectionModal
           title="Selecciona un proyecto para eliminar"
           data={data?.data}
+          page={page}
+          lastPage={data?.meta.last_page ?? 1}
+          setPage={setPage}
           isLoading={isLoading}
           onClose={closeModal}
           onSelect={handleDelete}
@@ -88,6 +102,9 @@ export const ProjectList = () => {
         <ProjectSelectionModal
           title="Selecciona un proyecto para ver sus detalles"
           data={data?.data}
+          page={page}
+          lastPage={data?.meta.last_page ?? 1}
+          setPage={setPage}
           isLoading={isLoading}
           onClose={closeModal}
           onSelect={handleView}
@@ -130,6 +147,9 @@ export const ProjectList = () => {
 interface ProjectSelectionModalProps {
   title: string
   data: Project[] | undefined
+  page: number
+  lastPage: number
+  setPage: (page: number) => void
   isLoading: boolean
   onClose: () => void
   onSelect: (project: Project) => void
@@ -138,6 +158,9 @@ interface ProjectSelectionModalProps {
 const ProjectSelectionModal = ({
   title,
   data,
+  page,
+  lastPage,
+  setPage,
   isLoading,
   onClose,
   onSelect,
@@ -158,11 +181,48 @@ const ProjectSelectionModal = ({
               className="w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer hover:border-gray-500 hover:bg-gray-50"
             >
               <p className="font-semibold text-background-dark">{project.title}</p>
-              <p className="text-sm text-neutral-medium/70">{project.role} · {project.status}</p>
+              <p className="text-sm text-neutral-medium/70">
+                {project.skills.length} habilidad{project.skills.length === 1 ? '' : 'es'} · {project.links.length} enlace{project.links.length === 1 ? '' : 's'}
+              </p>
             </button>
           </li>
         ))}
       </ul>
+
+      {lastPage > 1 && (
+        <div className="flex items-center justify-between gap-3 pt-4 mt-4 border-t border-neutral-light">
+          <button
+            type="button"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg border border-neutral-light text-sm font-medium text-background-dark hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Anterior
+          </button>
+
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {Array.from({ length: lastPage }, (_, index) => index + 1).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setPage(item)}
+                className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${page === item ? 'bg-primary text-white' : 'bg-white border border-neutral-light text-background-dark hover:bg-neutral-50'}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setPage(page + 1)}
+            disabled={page === lastPage}
+            className="px-4 py-2 rounded-lg border border-neutral-light text-sm font-medium text-background-dark hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
     </Modal>
   )
 }
@@ -180,31 +240,37 @@ const ProjectDetail = ({ project }: ProjectDetailProps) => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <ProjectDetailItem label="Rol" value={project.role} />
-        <ProjectDetailItem label="Estado" value={project.status} />
         <ProjectDetailItem label="Fecha de inicio" value={project.start_date} />
         <ProjectDetailItem label="Fecha de fin" value={project.end_date ?? 'En curso'} />
       </div>
 
-      {!!project.url && (
-        <a
-          href={project.url}
-          target="_blank"
-          rel="noreferrer"
-          className="font-medium text-primary hover:underline"
-        >
-          Abrir enlace del proyecto
-        </a>
+      {!!project.skills.length && (
+        <>
+          <p className="font-semibold text-background-dark">Habilidades técnicas</p>
+          <div className="flex flex-wrap gap-2">
+            {project.skills.map((skill) => (
+              <span key={skill.id} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200 capitalize">
+                {skill.name}
+              </span>
+            ))}
+          </div>
+        </>
       )}
 
-      {!!project.technologies.length && (
+      {!!project.links.length && (
         <>
-          <p className="font-semibold text-background-dark">Tecnologias</p>
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map((tech) => (
-              <span key={tech} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200">
-                {tech}
-              </span>
+          <p className="font-semibold text-background-dark">Enlaces</p>
+          <div className="flex flex-col gap-2">
+            {project.links.map((link) => (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-primary hover:underline break-all"
+              >
+                {link.url}
+              </a>
             ))}
           </div>
         </>
