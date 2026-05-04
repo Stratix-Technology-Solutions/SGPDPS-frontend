@@ -11,7 +11,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function ModalDelete({ onClose }: Props) {
+export const ModalDelete = ({ onClose }: Props) => {
   const [selected, setSelected] = useState<LinkResponse | null>(null)
   const { data, isLoading } = useGetLinks()
   const { mutate: remove, isPending, isError, error } = useDeleteLink({ onClose })

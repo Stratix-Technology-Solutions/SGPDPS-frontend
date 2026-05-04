@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function ModalCreate({ onClose }: Props) {
+export const ModalCreate = ({ onClose }: Props) => {
   const { mutate: create, error, isPending, isError } = useCreateLink({ onClose })
   const form = useForm({
     defaultValues,
