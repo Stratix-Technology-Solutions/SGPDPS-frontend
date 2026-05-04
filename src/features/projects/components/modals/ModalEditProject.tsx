@@ -2,7 +2,7 @@ import { Modal } from '../../../../shared/components/Modal'
 import { FormProject } from '../form/FormProject'
 import { useProjects } from '../../hooks/useProjects'
 import type { ProjectDto } from '../../dtos/project.dto'
-import type { Project } from '../../dtos/project.interface'
+import type { Project } from '../../interfaces/project.interface'
 
 interface Props {
   isOpen: boolean

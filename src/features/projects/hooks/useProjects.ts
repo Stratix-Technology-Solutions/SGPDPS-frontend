@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import api from '../../../app/api/axios'
 import type { ProjectDto } from '../dtos/project.dto'
-import type { ProjectsResponse } from '../dtos/project.interface'
+import type { ProjectsResponse } from '../interfaces/project.interface'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'projects']

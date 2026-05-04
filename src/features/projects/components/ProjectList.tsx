@@ -7,7 +7,7 @@ import { useProjects } from '../hooks/useProjects'
 import { ModalAddProject } from './modals/ModalAddProject'
 import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
-import type { Project } from '../dtos/project.interface'
+import type { Project } from '../interfaces/project.interface'
 import { ModalAddProjectAsset } from './modals/ModalAddProjectAsset'
 import { ModalDeleteProjectAsset } from './modals/ModalDelteProjectAsset'
 

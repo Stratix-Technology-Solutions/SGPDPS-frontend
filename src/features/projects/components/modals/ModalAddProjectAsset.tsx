@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { Modal } from "../../../../shared/components/Modal"
-import type { Project } from '../../dtos/project.interface'
+import type { ProjectIdTitle } from '../../interfaces/project.interface'
 import { useCreateProjectAsset, useGetProject } from '../../hooks/useProjectAssets'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { ButtonLoader } from '../../../../shared/components/ButtonLoader'
 import { FiFile, FiImage } from 'react-icons/fi'
-import type { ProjectAssetType } from '../../dtos/project-asset.interface'
+import type { ProjectAssetType } from '../../interfaces/project-asset.interface'
 
 interface Props {
   onClose: () => void
 }
 
 export const ModalAddProjectAsset = ({ onClose }: Props) => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [selectedProject, setSelectedProject] = useState<ProjectIdTitle | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [selectedType, setSelectedType] = useState<ProjectAssetType>('imagen')
 

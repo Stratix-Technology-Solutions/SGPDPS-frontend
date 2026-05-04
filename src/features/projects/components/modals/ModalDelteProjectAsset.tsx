@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { Modal } from "../../../../shared/components/Modal"
 import { useGetProjectAssets, useDeleteProjectAsset, useGetProject } from '../../hooks/useProjectAssets'
-import type { Project } from '../../dtos/project.interface'
 import { FiTrash2, FiFile, FiImage, FiDownload } from 'react-icons/fi'
+import type { ProjectIdTitle } from '../../interfaces/project.interface'
 
 interface Props {
   onClose: () => void
 }
 
 export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [selectedProject, setSelectedProject] = useState<ProjectIdTitle | null>(null)
 
   const { data: projects, isLoading: projectsLoading } = useGetProject()
   const { data: assets, isLoading: assetsLoading } = useGetProjectAssets(selectedProject?.id)
@@ -77,7 +77,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
                 className="flex items-center justify-between p-4 rounded-xl border border-neutral-light bg-neutral-50 hover:bg-neutral-100 transition-colors"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     {isImage ? (
                       <FiImage className="text-blue-500" size={24} />
                     ) : isPdf ? (
@@ -94,7 +94,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                <div className="flex items-center gap-2 shrink-0 ml-2">
                   <a
                     href={asset.url}
                     target="_blank"

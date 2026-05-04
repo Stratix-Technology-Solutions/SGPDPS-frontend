@@ -18,3 +18,10 @@ export interface ProjectsResponse {
     last_page: number
   }
 }
+
+export type ProjectIdTitle = Pick<Project, 'id' | 'title'>
+
+export interface ProjectResponse {
+  data: ProjectIdTitle[]
+}
+
