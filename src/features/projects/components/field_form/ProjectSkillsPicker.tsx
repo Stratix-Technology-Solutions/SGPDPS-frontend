@@ -18,8 +18,8 @@ export const ProjectSkillsPicker = ({ label, value, onChange }: Props) => {
     const { data, isLoading } = useQuery<SkillOption[], ApiError>({
         queryKey: ['skills', 'list-all'],
         queryFn: async () => {
-            const res = await api.get('/skills/')
-            return res.data.data
+            const res = await api.get('/skills/list-all')
+            return res.data
         },
     })
 
@@ -33,14 +33,14 @@ export const ProjectSkillsPicker = ({ label, value, onChange }: Props) => {
                 <p className="text-sm text-neutral-medium/70">No hay habilidades disponibles.</p>
             )}
 
-            <div className="flex flex-col gap-1 sm:grid-cols-2 lg:grid-cols-3 rounded-xl border border-neutral-light bg-neutral-50 p-3 max-h-64 overflow-y-auto">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 rounded-xl border border-neutral-light bg-neutral-50 p-3 max-h-64 overflow-y-auto">
                 {data?.map((skill) => {
                     const checked = value.includes(skill.id)
 
                     return (
                         <label
                             key={skill.id}
-                            className={`flex  items-center gap-3 rounded-lg border px-3 py-2 cursor-pointer transition-colors ${checked
+                            className={`flex items-center gap-3 rounded-lg border px-3 py-2 cursor-pointer transition-colors ${checked
                                 ? 'border-primary bg-primary/5 text-primary'
                                 : 'border-neutral-light bg-white text-background-dark hover:border-primary'
                                 }`}
