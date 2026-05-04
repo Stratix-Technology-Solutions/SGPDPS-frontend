@@ -4,6 +4,7 @@ import { useGetProjectAssets, useDeleteProjectAsset, useGetProject } from '../..
 import { FiTrash2, FiFile, FiImage, FiEye } from 'react-icons/fi'
 import type { ProjectIdTitle } from '../../interfaces/project.interface'
 import { ProjectSelector } from '../ProjectSelector'
+import { ConfirmDelete } from '../../../../shared/components/ConfirmDelete'
 
 interface Props {
   onClose: () => void
@@ -11,15 +12,14 @@ interface Props {
 
 export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
   const [selectedProject, setSelectedProject] = useState<ProjectIdTitle | null>(null)
-
+  const [selectAssetId, setSelectAssetId] = useState<string | null>(null)
   const { data: projects, isLoading: projectsLoading } = useGetProject()
   const { data: assets, isLoading: assetsLoading } = useGetProjectAssets(selectedProject?.id)
   const { mutate: deleteAsset, isPending: isDeleting } = useDeleteProjectAsset(selectedProject?.id)
 
   const handleDelete = (assetId: string) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta evidencia?')) {
-      deleteAsset(assetId)
-    }
+    deleteAsset(assetId)
+    setSelectAssetId(null)
   }
 
   if (!selectedProject) {
@@ -94,8 +94,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
                     <FiEye size={18} />
                   </a>
                   <button
-                    onClick={() => handleDelete(asset.id)}
-                    disabled={isDeleting}
+                    onClick={() => setSelectAssetId(asset.id)}
                     className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Eliminar"
                   >
@@ -116,6 +115,19 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
           </button>
         </div>
       </div>
+
+      {
+        selectAssetId && (
+          <ConfirmDelete
+            title="Elininar evidencia"
+            description="¿Estás seguro de que deseas eliminar esta evidencia? Esta acción no se puede deshacer."
+            onCancel={() => setSelectAssetId(null)}
+            onConfirm={() => handleDelete(selectAssetId)}
+            isPending={isDeleting}
+          />
+        )
+      }
+
     </Modal>
   )
 }

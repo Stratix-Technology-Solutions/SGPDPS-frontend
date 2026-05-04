@@ -34,7 +34,7 @@ export const sections: Section[] = [
     label: 'Proyectos de Software',
     to: '/profile/software-projects',
     Icon: MdOutlineComputer,
-    description: '',
+    description: 'Gestiona tus proyectos desarrollados, destacando tus contribuciones.',
   },
   {
     label: 'Enlaces',

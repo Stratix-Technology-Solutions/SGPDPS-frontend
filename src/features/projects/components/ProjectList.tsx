@@ -9,7 +9,7 @@ import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
 import type { Project } from '../interfaces/project.interface'
 import { ModalAddProjectAsset } from './modals/ModalAddProjectAsset'
-import { ModalDeleteProjectAsset } from './modals/ModalDelteProjectAsset'
+import { ModalDeleteProjectAsset } from './modals/ModalDeleteProjectAsset'
 
 type ModalType = 'add' | 'edit' | 'delete' | 'view' | 'add-evidence' | 'delete-evidence' | null
 
