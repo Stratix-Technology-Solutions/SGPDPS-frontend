@@ -15,3 +15,8 @@ export interface AcademicExperiencesResponse {
     last_page: number
   }
 }
+
+export interface CheckDuplicateResponse {
+  is_duplicate: boolean
+  is_overlapping: boolean
+}
