@@ -7,13 +7,14 @@ import { ModalAddProject } from './modals/ModalAddProject'
 import { ModalEditProject } from './modals/ModalEditProject'
 import { ConfirmDeleteProject } from './ConfirmDeleteProject'
 import type { ProjectIdTitle } from '../interfaces/project.interface'
+import { ModalAddProjectCategory } from './modals/ModalAddCategory'
 import { ModalAddProjectAsset } from './modals/ModalAddProjectAsset'
 import { ModalDeleteProjectAsset } from './modals/ModalDeleteProjectAsset'
 import { useGetProject } from '../hooks/useProjectAssets'
 import { ProjectSelectionModal } from './ProjectSelectionModal'
 import { ProjectDetail } from './ProjectDetail'
 
-type ModalType = 'add' | 'edit' | 'delete' | 'view' | 'add-evidence' | 'delete-evidence' | null
+type ModalType = 'add' | 'edit' | 'delete' | 'view' | 'add-evidence' | 'delete-evidence' | 'add-category' | null
 
 export const ProjectList = () => {
   const { data: projects, isLoading: projectsLoading } = useGetProject()
@@ -37,6 +38,7 @@ export const ProjectList = () => {
         <ActionButton icon={FiEdit2} label="Editar proyecto de software" onClick={() => setModal('edit')} />
         <ActionButton icon={FiTrash2} label="Eliminar proyecto de software" onClick={() => setModal('delete')} />
         <ActionButton icon={FiEye} label="Visualizar proyectos de software" onClick={() => setModal('view')} />
+        <ActionButton icon={FiPlusCircle} label="Agregar Categorías" onClick={() => setModal('add-category')} />
       </div>
 
       <SectionTitle
@@ -84,13 +86,17 @@ export const ProjectList = () => {
         />
       )}
 
-      {
-        modal === 'add-evidence' && (<ModalAddProjectAsset onClose={() => setModal(null)} />)
-      }
+      {modal === 'add-category' && (
+        <ModalAddProjectCategory onClose={() => setModal(null)} />
+      )}
 
-      {
-        modal === 'delete-evidence' && (<ModalDeleteProjectAsset onClose={() => setModal(null)} />)
-      }
+      {modal === 'add-evidence' && (
+        <ModalAddProjectAsset onClose={() => setModal(null)} />
+      )}
+
+      {modal === 'delete-evidence' && (
+        <ModalDeleteProjectAsset onClose={() => setModal(null)} />
+      )}
 
       {selectedProject && modal === 'edit' && (
         <ModalEditProject
