@@ -43,7 +43,7 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
 
       <form.Field name="skill_ids" children={(field) => (
         <ProjectSkillsPicker
-          label="Habilidades técnicas"
+          label="Tecnologías utilizadas"
           value={field.state.value ?? []}
           onChange={field.handleChange}
         />
