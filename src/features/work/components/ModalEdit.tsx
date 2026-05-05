@@ -37,6 +37,11 @@ export const ModalEdit = ({ onClose }: Props) => {
     isError: isErrorCheck,
   } = useCheckDuplicateWorkExperience()
 
+  const [checkResult, setCheckResult] = useState<{
+    is_duplicate: boolean
+    is_overlapping: boolean
+  } | null>(null)
+
   const checkData = (formData: WorkExperienceFormValues) => {
     if (!selected) return
     setData(formData)
@@ -45,7 +50,8 @@ export const ModalEdit = ({ onClose }: Props) => {
       { ...formData, exclude_id: Number(selected.id) },
       {
         onSuccess: (res) => {
-          if (res.is_duplicate) {
+          if (res.is_duplicate || res.is_overlapping) {
+            setCheckResult(res)
             setPreventModal(true)
           } else {
             update({ id: selected.id, data: formData })
@@ -53,7 +59,6 @@ export const ModalEdit = ({ onClose }: Props) => {
         },
         onError: () => {
           setPreventModal(true)
-          console.log(errorCheck)
         },
       },
     )
@@ -76,7 +81,11 @@ export const ModalEdit = ({ onClose }: Props) => {
       description={
         selected
           ? preventModal
-            ? 'Ya existe una experiencia con estos datos.'
+            ? checkResult?.is_duplicate
+              ? 'Ya existe una experiencia con estos datos exactos.'
+              : checkResult?.is_overlapping
+                ? 'Ya tienes una experiencia con el mismo cargo y empresa.'
+                : 'No se pudo verificar los datos.'
             : 'Modifica los datos de la experiencia seleccionada.'
           : 'Selecciona la experiencia laboral que deseas editar.'
       }
@@ -128,8 +137,12 @@ export const ModalEdit = ({ onClose }: Props) => {
             />
           )}
           <p>
-            Ya existe una experiencia laboral con estos datos. ¿Deseas continuar
-            de todas formas?
+            {checkResult?.is_duplicate
+              ? 'Ya existe una experiencia laboral con estos datos exactos.'
+              : checkResult?.is_overlapping
+                ? 'Ya tienes una experiencia laboral con el mismo cargo y empresa.'
+                : 'No se pudo verificar los datos.'}{' '}
+            ¿Deseas continuar de todas formas?
           </p>
 
           <div className="flex justify-end gap-4 pt-3">
