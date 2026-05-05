@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Modal } from '../../../shared/components/Modal'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'
 import { useUpdateWorkExperience } from '../hooks/useUpdateWorkExperience'
 import { useCheckDuplicateWorkExperience } from '../hooks/useCheckWorkExperience'
@@ -17,157 +16,142 @@ interface Props {
 
 export const ModalEdit = ({ onClose }: Props) => {
   const [selected, setSelected] = useState<WorkExperience | null>(null)
-  const [preventModal, setPreventModal] = useState(false)
-  const [data, setData] = useState<WorkExperienceFormValues | null>(null)
-
-  const { data: list, isLoading } = useWorkExperiences()
-
-  const {
-    mutate: update,
-    error,
-    isPending,
-    isError,
-    reset,
-  } = useUpdateWorkExperience({ onClose })
-
-  const {
-    mutate: check,
-    error: errorCheck,
-    isPending: isPendingCheck,
-    isError: isErrorCheck,
-  } = useCheckDuplicateWorkExperience()
-
+  const [showWarning, setShowWarning] = useState(false)
+  const [pendingValues, setPendingValues] = useState<WorkExperienceFormValues | null>(null)
   const [checkResult, setCheckResult] = useState<{
     is_duplicate: boolean
     is_overlapping: boolean
   } | null>(null)
 
-  const checkData = (formData: WorkExperienceFormValues) => {
+  const { data: list, isLoading } = useWorkExperiences()
+
+  const {
+    mutate: update,
+    isPending,
+  } = useUpdateWorkExperience({ onClose })
+
+  const {
+    mutate: check,
+    isPending: isPendingCheck,
+    isError: isErrorCheck,
+    error: errorCheck,
+    reset: resetCheck,
+  } = useCheckDuplicateWorkExperience()
+
+  const handleSubmit = (formData: WorkExperienceFormValues) => {
     if (!selected) return
-    setData(formData)
+    setPendingValues(formData)
 
     check(
-      { ...formData, exclude_id: Number(selected.id) },
+      ({ ...formData, exclude_id: Number(selected.id) } as WorkExperienceFormValues & {
+        exclude_id: number
+      }),
       {
         onSuccess: (res) => {
           if (res.is_duplicate || res.is_overlapping) {
             setCheckResult(res)
-            setPreventModal(true)
-          } else {
-            update({ id: selected.id, data: formData })
+            setShowWarning(true)
+            return
           }
-        },
-        onError: () => {
-          setPreventModal(true)
+
+          update({ id: selected.id, data: formData })
         },
       },
     )
   }
 
   const handleContinue = () => {
-    if (!selected || !data) return
-    update({ id: selected.id, data })
+    if (!selected || !pendingValues) return
+    update({ id: selected.id, data: pendingValues })
   }
 
+  const handleCloseWarning = () => {
+    resetCheck()
+    setShowWarning(false)
+  }
+
+  const warningMessage = checkResult?.is_duplicate
+    ? 'Ya existe una experiencia laboral con estos datos exactos. Si continúas, se actualizará de todos modos.'
+    : checkResult?.is_overlapping
+      ? 'Ya tienes una experiencia laboral que se solapa con este rango de fechas. Si continúas, se actualizará de todos modos.'
+      : 'No se pudo verificar la experiencia laboral.'
+
+  const title = selected
+    ? 'Editar Experiencia Laboral'
+    : 'Seleccionar Experiencia Laboral'
+
+  const description = selected
+    ? 'Modifica los datos de la experiencia seleccionada.'
+    : 'Selecciona la experiencia laboral que deseas editar.'
+
   return (
-    <Modal
-      title={
-        selected
-          ? preventModal
-            ? 'Confirmar Edición'
-            : 'Editar Experiencia Laboral'
-          : 'Seleccionar Experiencia Laboral'
-      }
-      description={
-        selected
-          ? preventModal
-            ? checkResult?.is_duplicate
-              ? 'Ya existe una experiencia con estos datos exactos.'
-              : checkResult?.is_overlapping
-                ? 'Ya tienes una experiencia con el mismo cargo y empresa.'
-                : 'No se pudo verificar los datos.'
-            : 'Modifica los datos de la experiencia seleccionada.'
-          : 'Selecciona la experiencia laboral que deseas editar.'
-      }
-      onClose={onClose}
-    >
-      {!selected && (
-        <WorkExperienceList
-          data={list}
-          isLoading={isLoading}
-          onSelect={setSelected}
-          itemClassName="hover:border-primary hover:bg-neutral-50"
-        />
-      )}
+    <>
+      <Modal
+        title={title}
+        description={description}
+        onClose={onClose}
+      >
+        {!selected && (
+          <WorkExperienceList
+            data={list}
+            isLoading={isLoading}
+            onSelect={setSelected}
+            itemClassName="hover:border-primary hover:bg-neutral-50"
+          />
+        )}
 
-      {selected && !preventModal && (
-        <WorkExperienceForm
-          initialValues={{
-            company: selected.company,
-            position: selected.position,
-            description: selected.description,
-            start_date: selected.start_date,
-            end_date: selected.end_date,
-            is_visible: selected.is_visible,
-          }}
-          onSubmit={checkData}
-          onCancel={onClose}
-          isPending={isPendingCheck}
-          isError={isError}
-          errorMessage={error?.response?.data?.message}
-        />
-      )}
+        {selected && !showWarning && (
+          <WorkExperienceForm
+            initialValues={{
+              company: selected.company,
+              position: selected.position,
+              description: selected.description,
+              start_date: selected.start_date,
+              end_date: selected.end_date,
+              is_visible: selected.is_visible,
+            }}
+            onSubmit={handleSubmit}
+            onCancel={onClose}
+            isPending={isPendingCheck || isPending}
+            isError={isErrorCheck}
+            errorMessage={errorCheck?.response?.data?.message}
+          />
+        )}
+      </Modal>
 
-      {selected && preventModal && (
-        <div className="space-y-4">
-          {isErrorCheck && (
-            <BannerMessageError
-              message={
-                errorCheck?.response?.data?.message ??
-                'No se pudo verificar duplicados.'
-              }
-            />
-          )}
-          {isError && (
-            <BannerMessageError
-              message={
-                error?.response?.data?.message ??
-                'No se pudo guardar la experiencia.'
-              }
-            />
-          )}
-          <p>
-            {checkResult?.is_duplicate
-              ? 'Ya existe una experiencia laboral con estos datos exactos.'
-              : checkResult?.is_overlapping
-                ? 'Ya tienes una experiencia laboral con el mismo cargo y empresa.'
-                : 'No se pudo verificar los datos.'}{' '}
-            ¿Deseas continuar de todas formas?
-          </p>
+      {showWarning && (
+        <Modal
+          title="Advertencia"
+          description="Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar."
+          onClose={handleCloseWarning}
+        >
+          <div className="flex flex-col gap-4">
+            <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
+              {warningMessage}
+            </div>
 
-          <div className="flex justify-end gap-4 pt-3">
-            <button
-              type="button"
-              onClick={() => {
-                reset()
-                setPreventModal(false)
-              }}
-              className="px-4 py-2 rounded-md border hover:bg-neutral-light"
-            >
-              Volver
-            </button>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleCloseWarning}
+                className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
+              >
+                Cancelar
+              </button>
 
-            <button
-              type="button"
-              disabled={isPending}
-              onClick={handleContinue}
-              className="px-4 py-2 rounded-md bg-primary text-white disabled:opacity-60"
-            >
-              {isPending ? 'Guardando...' : 'Continuar'}
-            </button>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={handleContinue}
+                className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white cursor-pointer disabled:bg-neutral-medium disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isPending ? 'Guardando...' : 'Continuar'}
+              </button>
+            </div>
           </div>
-        </div>
+        </Modal>
       )}
-    </Modal>
+    </>
   )
 }
+

@@ -44,3 +44,8 @@ export const defaultValues: CreateWorkExperience = {
   end_date: null,
   is_visible: true,
 }
+
+export type CheckDuplicateResponse = {
+  is_duplicate: boolean
+  is_overlapping: boolean
+}
