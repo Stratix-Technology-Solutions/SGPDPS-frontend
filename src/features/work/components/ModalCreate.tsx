@@ -30,12 +30,18 @@ export const ModalCreate = ({ onClose }: Props) => {
     isError: isErrorCheck,
   } = useCheckDuplicateWorkExperience()
 
+  const [checkResult, setCheckResult] = useState<{
+    is_duplicate: boolean
+    is_overlapping: boolean
+  } | null>(null)
+
   const checkData = (formData: WorkExperienceFormValues) => {
     setData(formData)
 
     check(formData, {
       onSuccess: (res) => {
-        if (res.is_duplicate) {
+        if (res.is_duplicate || res.is_overlapping) {
+          setCheckResult(res)
           setPreventModal(true)
         } else {
           create(formData)
@@ -76,8 +82,11 @@ export const ModalCreate = ({ onClose }: Props) => {
             />
           )}
           <p>
-            Ya existe una experiencia laboral con estos datos. ¿Deseas continuar
-            de todas formas?
+            {checkResult?.is_duplicate
+              ? 'Ya existe una experiencia laboral con estos datos exactos.'
+              : checkResult?.is_overlapping
+                ? 'Ya tienes una experiencia laboral con el mismo cargo y empresa. ¿Deseas continuar de todas formas?'
+                : 'No se pudo verificar los datos.'}
           </p>
           <div className="flex justify-end gap-4 pt-3">
             <button
