@@ -52,7 +52,7 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
         setSelectedProject(null)
         onClose()
       }}
-      title="Agregar categoría"
+      title="Subir evidencia digital"
       description={selectedProject.title}
     >
       <div className="flex flex-col gap-4">

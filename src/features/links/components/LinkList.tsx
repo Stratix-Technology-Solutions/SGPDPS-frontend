@@ -13,22 +13,20 @@ export const LinkList = ({
     onSelect,
     itemClassName,
 }: Props) => {
-    const visibleLinks = data?.filter((item) => item.url.trim().length > 0) ?? []
-
     return (
         <>
             {isLoading && (
                 <p className="text-neutral-medium/70 text-sm">Cargando...</p>
             )}
 
-            {!isLoading && !visibleLinks.length && (
+            {!isLoading && !data?.length && (
                 <p className="text-neutral-medium/70 text-sm">
                     No hay enlaces registrados.
                 </p>
             )}
 
             <ul className="flex flex-col gap-2 max-h-80 overflow-y-auto">
-                {visibleLinks.map((item) => (
+                {data?.map((item) => (
                     <li key={item.id}>
                         <button
                             onClick={() => onSelect(item)}
