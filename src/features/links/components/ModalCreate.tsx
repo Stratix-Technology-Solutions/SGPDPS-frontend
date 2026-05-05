@@ -47,7 +47,6 @@ export const ModalCreate = ({ onClose }: Props) => {
               <input
                 id="url"
                 name={field.name}
-                type="url"
                 placeholder="https://www.ejemplo.com"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
