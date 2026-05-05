@@ -38,7 +38,7 @@ export const ProjectList = () => {
         <ActionButton icon={FiEdit2} label="Editar proyecto de software" onClick={() => setModal('edit')} />
         <ActionButton icon={FiTrash2} label="Eliminar proyecto de software" onClick={() => setModal('delete')} />
         <ActionButton icon={FiEye} label="Visualizar proyectos de software" onClick={() => setModal('view')} />
-        <ActionButton icon={FiPlusCircle} label="Agregar Categorías" onClick={() => setModal('add-category')} />
+        <ActionButton icon={FiPlusCircle} label="Agregar Categoría(s)" onClick={() => setModal('add-category')} />
       </div>
 
       <SectionTitle

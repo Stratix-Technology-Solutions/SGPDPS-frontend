@@ -36,7 +36,7 @@ export const MenuSection = () => {
         />
         <ActionButton
           icon={FiEye}
-          label="Visualizar Enlaces"
+          label="Visualizar experiencia(s)"
           onClick={() => {
             setModal('view')
           }}

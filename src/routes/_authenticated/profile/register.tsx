@@ -223,7 +223,7 @@ function RouteComponent() {
             <p className="text-xs text-neutral-medium mb-4">Agrega hasta 5 profesiones que te describan.</p>
 
             <form.Field name="professions" children={(field) => (
-              <ProfessionsField field={field} isEditing={false} />
+              <ProfessionsField field={field} />
             )} />
           </section>
 
