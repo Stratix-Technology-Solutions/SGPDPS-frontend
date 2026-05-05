@@ -6,7 +6,7 @@ import { BannerMessageError } from '../../../../shared/components/BannerMessageE
 import { ButtonLoader } from '../../../../shared/components/ButtonLoader'
 import { FiFile, FiImage } from 'react-icons/fi'
 import type { ProjectAssetType } from '../../interfaces/project-asset.interface'
-import { ProjectSelector } from '../ProjectSelector'
+import { ProjectSelectionModal } from '../ProjectSelectionModal'
 
 interface Props {
   onClose: () => void
@@ -59,14 +59,14 @@ export const ModalAddProjectAsset = ({ onClose }: Props) => {
 
   if (!selectedProject) {
     return (
-      <Modal title="Selecciona un proyecto" onClose={onClose}>
-        <ProjectSelector
-          projects={projects?.data}
-          isLoading={projectsLoading}
-          onSelect={setSelectedProject}
-          hoverColor="primary"
-        />
-      </Modal>
+      <ProjectSelectionModal
+        title="Selecciona un proyecto para subir su evidencia"
+        onClose={onClose}
+        projects={projects?.data}
+        isLoading={projectsLoading}
+        onSelect={setSelectedProject}
+        hoverColor="primary"
+      />
     )
   }
 

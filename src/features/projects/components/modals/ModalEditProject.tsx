@@ -1,20 +1,24 @@
 import { Modal } from '../../../../shared/components/Modal'
 import { FormProjectEdit } from '../form/FormProjectEdit'
-import { useUpdateProject } from '../../hooks/useProjects'
+import { useGetProject, useUpdateProject } from '../../hooks/useProjects'
 import type { ProjectUpdateDto } from '../../dtos/project.dto'
 import type { Project } from '../../interfaces/project.interface'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  project: Project
+  idProject: string
 }
 
-export const ModalEditProject = ({ isOpen, onClose, project }: Props) => {
+export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
   const update = useUpdateProject()
 
+  const { data } = useGetProject(idProject)
+
+  const project = data?.data
+
   const handleSubmit = (values: ProjectUpdateDto) => {
-    update.mutate({ id: project.id, dto: values }, {
+    update.mutate({ id: idProject, dto: values }, {
       onSuccess: () => {
         onClose()
       }
@@ -24,11 +28,11 @@ export const ModalEditProject = ({ isOpen, onClose, project }: Props) => {
   const serverError = update.isError && update.error ? update.error.response?.data.message || 'Error al actualizar el proyecto' : undefined
 
   const initialValues: Partial<ProjectUpdateDto> = {
-    title: project.title,
-    description: project.description,
-    start_date: project.start_date,
-    end_date: project.end_date || '',
-    links: project.links.map((link) => ({
+    title: project?.title,
+    description: project?.description,
+    start_date: project?.start_date,
+    end_date: project?.end_date || '',
+    links: project?.links.map((link) => ({
       id: link.id,
       url: link.url,
     })),
@@ -47,7 +51,7 @@ export const ModalEditProject = ({ isOpen, onClose, project }: Props) => {
           onSubmit={handleSubmit}
           submitLabel="Guardar cambios"
           defaultValues={initialValues}
-          skills={project.skills}
+          skills={project?.skills}
           isPending={update.isPending}
           serverError={serverError}
         />

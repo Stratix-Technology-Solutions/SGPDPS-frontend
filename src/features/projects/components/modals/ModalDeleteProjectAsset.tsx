@@ -3,8 +3,8 @@ import { Modal } from "../../../../shared/components/Modal"
 import { useGetProjectAssets, useDeleteProjectAsset, useGetProject } from '../../hooks/useProjectAssets'
 import { FiTrash2, FiFile, FiImage, FiEye } from 'react-icons/fi'
 import type { ProjectIdTitle } from '../../interfaces/project.interface'
-import { ProjectSelector } from '../ProjectSelector'
 import { ConfirmDelete } from '../../../../shared/components/ConfirmDelete'
+import { ProjectSelectionModal } from '../ProjectSelectionModal'
 
 interface Props {
   onClose: () => void
@@ -24,14 +24,14 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
 
   if (!selectedProject) {
     return (
-      <Modal title="Selecciona un proyecto" onClose={onClose}>
-        <ProjectSelector
-          projects={projects?.data}
-          isLoading={projectsLoading}
-          onSelect={setSelectedProject}
-          hoverColor="red"
-        />
-      </Modal>
+      <ProjectSelectionModal
+        title="selecciona un proyecto para eliminar su evidencia"
+        onClose={onClose}
+        projects={projects?.data}
+        isLoading={projectsLoading}
+        onSelect={setSelectedProject}
+        hoverColor="red"
+      />
     )
   }
 

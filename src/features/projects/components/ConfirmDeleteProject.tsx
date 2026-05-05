@@ -1,18 +1,17 @@
 import { ConfirmDelete } from '../../../shared/components/ConfirmDelete'
-import { Modal } from '../../../shared/components/Modal'
 import { useDeleteProject } from '../hooks/useProjects'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  projectId: string
+  idProject: string
 }
 
-export const ConfirmDeleteProject = ({ isOpen, onClose, projectId }: Props) => {
+export const ConfirmDeleteProject = ({ isOpen, onClose, idProject }: Props) => {
   const { mutate: remove, isPending } = useDeleteProject()
 
   const handleDelete = () => {
-    remove(projectId, {
+    remove(idProject, {
       onSuccess: () => {
         onClose()
       },
