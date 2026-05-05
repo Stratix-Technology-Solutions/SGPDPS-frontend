@@ -32,7 +32,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
     setPendingValues(values)
 
     checkDuplicate(
-      { ...values },
+      { data: values, excludeId: selected.id },
       {
         onSuccess: (result) => {
           if (result.is_duplicate || result.is_overlapping) {

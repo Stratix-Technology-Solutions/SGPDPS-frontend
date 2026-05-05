@@ -26,7 +26,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
   const handleSubmit = (values: AcademicDto) => {
     setPendingValues(values)
 
-    checkDuplicate(values, {
+    checkDuplicate({ data: values }, {
       onSuccess: (result) => {
         if (result.is_duplicate || result.is_overlapping) {
           setCheckResult(result)

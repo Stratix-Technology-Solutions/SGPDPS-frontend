@@ -4,7 +4,6 @@ import { useCreateWorkExperience } from '../hooks/useCreateWorkExperience'
 import { useCheckDuplicateWorkExperience } from '../hooks/useCheckWorkExperience'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 import type { WorkExperienceFormValues } from '../dtos/workExperience'
-import { defaultValues } from '../dtos/workExperience'
 
 interface Props {
   onClose: () => void
@@ -34,7 +33,7 @@ export const ModalCreate = ({ onClose }: Props) => {
   const handleSubmit = (formData: WorkExperienceFormValues) => {
     setPendingValues(formData)
 
-    check(formData, {
+    check({ data: formData }, {
       onSuccess: (res) => {
         if (res.is_duplicate || res.is_overlapping) {
           setCheckResult(res)

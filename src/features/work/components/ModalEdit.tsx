@@ -43,9 +43,7 @@ export const ModalEdit = ({ onClose }: Props) => {
     setPendingValues(formData)
 
     check(
-      ({ ...formData, exclude_id: Number(selected.id) } as WorkExperienceFormValues & {
-        exclude_id: number
-      }),
+      { data: formData, excludeId: selected.id },
       {
         onSuccess: (res) => {
           if (res.is_duplicate || res.is_overlapping) {
