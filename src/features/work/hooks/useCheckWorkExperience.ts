@@ -5,6 +5,7 @@ import type { CreateWorkExperience } from '../dtos/workExperience'
 
 type CheckDuplicateResponse = {
   is_duplicate: boolean
+  is_overlapping: boolean
 }
 
 type CheckDuplicatePayload = CreateWorkExperience & {
@@ -14,7 +15,7 @@ type CheckDuplicatePayload = CreateWorkExperience & {
 export const useCheckDuplicateWorkExperience = () => {
   return useMutation<CheckDuplicateResponse, ApiError, CheckDuplicatePayload>({
     mutationFn: async (data) => {
-      const res = await api.post('/work-experiences/check-duplicate', data)
+      const res = await api.post('/work-experiences/check', data)
       return res.data
     },
   })
