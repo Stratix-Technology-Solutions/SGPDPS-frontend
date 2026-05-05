@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { FiEdit2, FiPlusCircle, FiTrash2 } from 'react-icons/fi'
+import { FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { ActionButton } from '../../../shared/components/ActionButton'
 import { ModalDelete } from '../../../features/links/components/ModalDelete'
@@ -23,7 +23,7 @@ function RouteComponent() {
       />
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
-        <ActionButton icon={FiPlusCircle} label="Crear enlace" onClick={() => setModal('create')} />
+        <ActionButton icon={FiPlusCircle} label="Agregar enlace" onClick={() => setModal('create')} />
         <ActionButton icon={FiTrash2} label="Eliminar enlace" onClick={() => setModal('delete')} />
       </div>
 

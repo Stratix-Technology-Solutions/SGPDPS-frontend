@@ -6,7 +6,7 @@ import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'projects']
 
-export const useCreateProject = () => {
+export const useCreateProject = ({ onClose }: { onClose: () => void }) => {
   const queryClient = useQueryClient()
   return useMutation<void, ApiError, ProjectCreateDto>({
     mutationFn: async (data) => {
@@ -14,6 +14,7 @@ export const useCreateProject = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })
+      onClose()
     }
   })
 }

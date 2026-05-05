@@ -1,5 +1,15 @@
 import { z } from 'zod'
 
+const isValidUrl = (value: string) => {
+  try {
+    const url = new URL(value)
+
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 const dateRangeRefinement = (
   data: { start_date?: string | null; end_date?: string | null },
   ctx: z.RefinementCtx,
@@ -10,7 +20,7 @@ const dateRangeRefinement = (
 
     if (end < start) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'La fecha de fin no puede ser anterior a la fecha de inicio',
         path: ['end_date'],
       })
@@ -19,17 +29,26 @@ const dateRangeRefinement = (
 }
 
 export const ProjectCreateSchema = z.object({
-  title: z.string().min(1, 'El título es requerido').max(200, 'Máximo 200 caracteres'),
-  description: z.string().max(2000, 'Máximo 2000 caracteres').optional().or(z.literal('')),
+  title: z.string().min(5, 'Mínimo 5 carácteres').max(200, 'Máximo 200 caracteres'),
+  description: z.string().min(5, 'Mínimo 5 carácteres').max(2000, 'Máximo 2000 caracteres'),
   start_date: z.string().min(1, 'La fecha de inicio es requerida'),
-  end_date: z.string().optional().or(z.literal('')),
+  end_date: z.string().min(1, 'LA fecha de fin es requerida'),
   skill_ids: z.array(z.number().int().positive()).optional(),
-  links: z.array(z.string().url('Debe ser una URL válida').max(512, 'Máximo 512 caracteres')).optional(),
+  links: z.array(z.string().trim().max(512, 'Máximo 512 caracteres')).superRefine((links, ctx) => {
+    const invalidLink = links.find((link) => !isValidUrl(link))
+
+    if (invalidLink) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Debe ser una URL válida',
+      })
+    }
+  }).optional(),
 }).superRefine(dateRangeRefinement)
 
 export type ProjectCreateDto = z.infer<typeof ProjectCreateSchema>
 
-export const projectCreateDefaultValues: ProjectCreateDto = {
+export const defaultValues: ProjectCreateDto = {
   title: '',
   description: '',
   start_date: '',

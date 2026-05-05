@@ -49,7 +49,7 @@ export const ProjectList = () => {
         <ActionButton icon={FiTrash2} label="Eliminar evidencia digital" onClick={() => setModal('delete-evidence')} />
       </div>
 
-      <ModalAddProject isOpen={modal === 'add'} onClose={closeModal} />
+      <ModalAddProject isOpen={modal === 'add'} onClose={() => setModal(null)} />
 
       {modal === 'edit' && !selectedProject && (
         <ProjectSelectionModal

@@ -2,32 +2,40 @@ import { useForm } from '@tanstack/react-form'
 import { FormField } from '../field_form/FormField'
 import { FormTextarea } from '../field_form/FormTextarea'
 import { FormTags } from '../field_form/FormTags'
-import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { ProjectCreateSchema, projectCreateDefaultValues } from '../../dtos/project.dto'
+import { ProjectCreateSchema, defaultValues } from '../../dtos/project.dto'
 import type { ProjectCreateDto } from '../../dtos/project.dto'
 import { ProjectSkillsPicker } from '../field_form/ProjectSkillsPicker'
 
 interface Props {
-  onCancel?: () => void
+  onCancel: () => void
   onSubmit: (values: ProjectCreateDto) => void
-  submitLabel?: string
-  defaultValues?: Partial<ProjectCreateDto>
-  isPending?: boolean
-  serverError?: string
+  submitLabel: string
+  isPending: boolean
 }
 
-export const FormProject = ({ onCancel, onSubmit, submitLabel = 'Guardar', defaultValues, isPending, serverError }: Props) => {
+export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Props) => {
   const form = useForm({
-    defaultValues: { ...projectCreateDefaultValues, ...defaultValues },
+    defaultValues,
     validators: { onSubmit: ProjectCreateSchema },
-    onSubmit: ({ value }) => { onSubmit(value) },
+    onSubmit: ({ value }) => {
+      onSubmit(value)
+    },
   })
 
   return (
-    <form onSubmit={async (e) => { e.preventDefault(); await form.handleSubmit() }} className="flex flex-col gap-4">
-      <form.Field name="title" children={(field) => (
-        <FormField label="Proyecto *" field={field} placeholder="Ingrese el título del proyecto" />
-      )} />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit(e)
+      }}
+      className="flex flex-col gap-4"
+    >
+      <form.Field
+        name="title"
+        children={(field) => (
+          <FormField label="Proyecto *" field={field} placeholder="Ingrese el título del proyecto" />
+        )}
+      />
 
       <form.Field name="description" children={(field) => (
         <FormTextarea label="Aportes realizados / Descripción *" field={field} placeholder="Describe tus aportes y el proyecto" />
@@ -51,11 +59,9 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel = 'Guardar', defau
         )} />
 
         <form.Field name="end_date" children={(field) => (
-          <FormField label="Fecha de finalización" field={field} type="date" />
+          <FormField label="Fecha de finalización *" field={field} type="date" />
         )} />
       </div>
-
-      {serverError && <BannerMessageError message={serverError} />}
 
       <div className="flex justify-end gap-3 pt-4">
         {onCancel && (
