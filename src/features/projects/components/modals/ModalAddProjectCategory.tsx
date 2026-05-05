@@ -7,6 +7,7 @@ import { ButtonLoader } from '../../../../shared/components/ButtonLoader'
 import { ProjectSelectionModal } from '../ProjectSelectionModal'
 import { useProjectCategories } from '../../hooks/useProjectCategories'
 import { useCreateProjectCategory } from '../../hooks/useCreateProjectCategory'
+import { useGetProjectCategories } from '../../hooks/useGetProjectCategories'
 
 interface Props {
   onClose: () => void
@@ -19,6 +20,7 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
   const { data: projects, isLoading: projectsLoading } = useGetProject()
   const { data: categories, isLoading: categoriesLoading } = useProjectCategories()
   const { mutate, isPending, isError, error } = useCreateProjectCategory()
+  const { data, isLoading } = useGetProjectCategories(selectedProject?.id)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,11 +30,7 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
     mutate({
       projectId: selectedProject?.id ?? '',
       categoryId,
-    },{
-        onSuccess: () => {
-          onClose()
-        }
-      })
+    })
   }
 
   if (!selectedProject) {
@@ -76,7 +74,7 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
             >
               <option value="">Selecciona una categoría</option>
 
-              {categories?.data?.map((cat: any) => (
+              {categories?.data.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
@@ -90,7 +88,7 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
               onClick={() => setSelectedProject(null)}
               className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
             >
-              Cancelar
+              Atras
             </button>
 
             <button
@@ -102,6 +100,27 @@ export const ModalAddProjectCategory = ({ onClose }: Props) => {
             </button>
           </div>
         </form>
+      </div>
+
+      <div className="mt-6">
+        <h3 className="font-semibold mb-2">Categorías del proyecto</h3>
+
+        {isLoading && <p>Cargando categorías...</p>}
+
+        {!isLoading && data?.data.length === 0 && (
+          <p className="text-sm text-neutral-medium">No hay categorías asignadas</p>
+        )}
+
+        <ul className="flex flex-col gap-2">
+          {data?.data.map((item) => (
+            <li
+              key={item.id}
+              className="px-2 py-1 rounded-md bg-primary-soft/15"
+            >
+              {item.name}
+            </li>
+          ))}
+        </ul>
       </div>
     </Modal>
   )
