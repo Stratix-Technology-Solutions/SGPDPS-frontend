@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Modal } from "../../../../shared/components/Modal"
 import { useGetProjectAssets, useDeleteProjectAsset, useGetProject } from '../../hooks/useProjectAssets'
-import { FiTrash2, FiFile, FiImage, FiEye } from 'react-icons/fi'
+import { FiFile, FiImage } from 'react-icons/fi'
 import type { ProjectIdTitle } from '../../interfaces/project.interface'
-import { ConfirmDelete } from '../../../../shared/components/ConfirmDelete'
 import { ProjectSelectionModal } from '../ProjectSelectionModal'
 
 interface Props {
@@ -12,20 +11,18 @@ interface Props {
 
 export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
   const [selectedProject, setSelectedProject] = useState<ProjectIdTitle | null>(null)
-  const [selectAssetId, setSelectAssetId] = useState<string | null>(null)
   const { data: projects, isLoading: projectsLoading } = useGetProject()
   const { data: assets, isLoading: assetsLoading } = useGetProjectAssets(selectedProject?.id)
   const { mutate: deleteAsset, isPending: isDeleting } = useDeleteProjectAsset(selectedProject?.id)
 
   const handleDelete = (assetId: string) => {
     deleteAsset(assetId)
-    setSelectAssetId(null)
   }
 
   if (!selectedProject) {
     return (
       <ProjectSelectionModal
-        title="selecciona un proyecto para eliminar su evidencia"
+        title="Selecciona un proyecto para"
         onClose={onClose}
         projects={projects?.data}
         isLoading={projectsLoading}
@@ -42,92 +39,83 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
         onClose()
       }}
       title="Eliminar evidencia digital"
-      description={`${selectedProject.title}`}
+      description="Elimina la evidencia que ya no deseas mantener en este proyecto."
     >
-      <div className="p-4 md:p-6 lg:px-8">
+      <div className="flex flex-col gap-6 p-4 md:p-6 lg:px-8">
         {assetsLoading && (
-          <p className="text-neutral-medium/70 text-sm">Cargando evidencia...</p>
+          <div className="flex justify-center py-12">
+            <p className="text-neutral-medium/70">Cargando evidencia...</p>
+          </div>
         )}
 
         {!assetsLoading && !assets?.data?.length && (
-          <p className="text-neutral-medium/70 text-sm py-8 text-center">
-            No hay evidencia registrada para este proyecto.
-          </p>
+          <div className="flex justify-center py-4 bg-neutral-50 rounded-xl border border-neutral-light">
+            <p className="text-neutral-medium/70">No hay evidencia registrada para este proyecto.</p>
+          </div>
         )}
 
-        <div className="grid gap-4 max-h-96 overflow-y-auto">
-          {assets?.data?.map((asset) => {
-            const isImage = asset.url.includes('image') || asset.path.match(/\.(jpg|jpeg|png|gif|webp)$/i)
-            const isPdf = asset.url.includes('pdf') || asset.path.endsWith('.pdf')
+        {!assetsLoading && assets?.data && assets.data.length > 0 && (
+          <>
+            <div>
+              <h3 className="font-semibold text-background-dark mb-4 text-xs">
+                Evidencia registrada ({assets.data.length})
+              </h3>
+              <div className="space-y-3 max-h-96 overflow-y-auto customized-scrollbar">
+                {assets.data.map((asset) => {
+                  const isImage = asset.url.includes('image') || asset.path.match(/\.(jpg|jpeg|png)$/i)
+                  const isPdf = asset.url.includes('pdf') || asset.path.endsWith('.pdf')
+                  const fileName = asset.path.split('/').pop()
 
-            return (
-              <div
-                key={asset.id}
-                className="flex items-center justify-between p-4 rounded-xl border border-neutral-light bg-neutral-50 hover:bg-neutral-100 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="shrink-0">
-                    {isImage ? (
-                      <FiImage className="text-blue-500" size={24} />
-                    ) : isPdf ? (
-                      <FiFile className="text-red-500" size={24} />
-                    ) : (
-                      <FiFile className="text-gray-500" size={24} />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-background-dark truncate">
-                      {asset.path.split('/').pop()}
-                    </p>
-                    <p className="text-xs text-neutral-medium/60">{asset.id}</p>
-                  </div>
-                </div>
+                  return (
+                    <div
+                      key={asset.id}
+                      className="flex items-center justify-between p-4 rounded-xl border border-neutral-light bg-linear-to-r from-white to-neutral-50 hover:shadow-sm transition-all hover:border-primary/30"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className="shrink-0 w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center">
+                          {isImage ? (
+                            <FiImage className="text-blue-500" size={20} />
+                          ) : isPdf ? (
+                            <FiFile className="text-red-500" size={20} />
+                          ) : (
+                            <FiFile className="text-gray-500" size={20} />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-background-dark truncate hover:text-primary cursor-default" title={fileName}>
+                            {fileName}
+                          </p>
+                          <p className="text-xs text-neutral-medium/60">
+                            {isImage ? 'Imagen' : isPdf ? 'PDF' : 'Archivo'}
+                          </p>
+                        </div>
+                      </div>
 
-                <div className="flex items-center gap-2 shrink-0 ml-2">
-                  <a
-                    href={`http://localhost:8000${asset.url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
-                    title="Ver"
-                  >
-                    <FiEye size={18} />
-                  </a>
-                  <button
-                    onClick={() => setSelectAssetId(asset.id)}
-                    className="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Eliminar"
-                  >
-                    <FiTrash2 size={18} />
-                  </button>
-                </div>
+                      <div className="flex items-center gap-2 shrink-0 ml-4">
+                        <a
+                          href={`http://localhost:8000${asset.url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white hover:bg-primary-soft transition-colors font-medium text-sm"
+                        >
+                          Ver
+                        </a>
+                        <button
+                          onClick={() => handleDelete(asset.id)}
+                          disabled={isDeleting}
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500 text-white hover:bg-red-400 transition-colors font-medium text-sm disabled:cursor-not-allowed"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
-            )
-          })}
-        </div>
-
-        <div className="flex justify-start pt-4 mt-4 border-t border-neutral-light">
-          <button
-            onClick={() => setSelectedProject(null)}
-            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-          >
-            Atrás
-          </button>
-        </div>
+            </div>
+          </>
+        )}
       </div>
-
-      {
-        selectAssetId && (
-          <ConfirmDelete
-            title="Elininar evidencia"
-            description="¿Estás seguro de que deseas eliminar esta evidencia? Esta acción no se puede deshacer."
-            onCancel={() => setSelectAssetId(null)}
-            onConfirm={() => handleDelete(selectAssetId)}
-            isPending={isDeleting}
-          />
-        )
-      }
-
     </Modal>
   )
 }
