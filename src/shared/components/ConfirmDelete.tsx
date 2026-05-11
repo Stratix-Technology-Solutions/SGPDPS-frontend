@@ -36,6 +36,5 @@ export const ConfirmDelete = ({ title, description, onConfirm, onCancel, isPendi
         </div>
       </div>
     </div>
-
   )
 }

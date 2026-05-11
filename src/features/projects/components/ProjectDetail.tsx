@@ -8,10 +8,11 @@ export const ProjectDetail = ({ idProject }: Props) => {
   const { data } = useGetProject(idProject)
   const project = data?.data
   return (
-    <div className="flex flex-col gap-4 text-sm text-neutral-medium">
+    <div className="flex flex-col gap-4 text-neutral-medium">
       <div>
-        <h4 className="text-lg font-semibold text-background-dark">{project?.title}</h4>
-        <p className="mt-1">{project?.description}</p>
+        <h4 className="text-lg font-bold text-background-dark">{project?.title}</h4>
+        <h4 className="text-lg font-semibold text-background-dark">{project?.role}</h4>
+        <p className="mt-1 text-sm">{project?.description}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

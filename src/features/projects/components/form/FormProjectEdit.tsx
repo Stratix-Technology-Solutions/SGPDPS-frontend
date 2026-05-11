@@ -127,13 +127,13 @@ export const FormProjectEdit = ({
 
       {serverError && <BannerMessageError message={serverError} />}
 
-      <div className="flex justify-end gap-3 pt-4">
+      <div className="flex justify-end gap-4 pt-3">
         {onCancel && (
           <button
             type="button"
             onClick={onCancel}
             disabled={isPending}
-            className="px-5 py-2.5 rounded-xl border border-neutral-medium text-background-dark cursor-pointer hover:bg-neutral-light transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
           >
             Cancelar
           </button>
@@ -141,9 +141,9 @@ export const FormProjectEdit = ({
         <button
           type="submit"
           disabled={isPending}
-          className="px-5 py-2.5 rounded-xl bg-primary text-white cursor-pointer hover:bg-primary-soft transition-colors disabled:opacity-50"
+          className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white disabled:bg-neutral-medium disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
         >
-          {isPending ? 'Guardando...' : submitLabel}
+          {submitLabel}
         </button>
       </div>
     </form >

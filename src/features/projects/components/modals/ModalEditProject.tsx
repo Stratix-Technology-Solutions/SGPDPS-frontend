@@ -54,7 +54,7 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
         <FormProjectEdit
           onCancel={onClose}
           onSubmit={handleSubmit}
-          submitLabel="Guardar cambios"
+          submitLabel="Guardar"
           defaultValues={initialValues}
           title={project?.title}
           role={project?.role}
