@@ -37,8 +37,15 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
         )}
       />
 
+      <form.Field
+        name="role"
+        children={(field) => (
+          <FormField label="Rol *" field={field} placeholder="Ingrese el rol que desempeñaste en el proyecto" />
+        )}
+      />
+
       <form.Field name="description" children={(field) => (
-        <FormTextarea label="Aportes realizados / Descripción *" field={field} placeholder="Describe tus aportes y el proyecto" />
+        <FormTextarea label="Descripción * " field={field} placeholder="Agrega una descripción sobre el proyecto realizado" />
       )} />
 
       <form.Field name="skill_ids" children={(field) => (

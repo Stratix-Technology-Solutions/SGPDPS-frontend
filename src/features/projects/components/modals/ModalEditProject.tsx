@@ -17,7 +17,14 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
   const project = data?.data
 
   const handleSubmit = (values: ProjectUpdateDto) => {
-    update.mutate({ id: idProject, dto: values }, {
+    const payload: ProjectUpdateDto = {
+      description: values.description,
+      start_date: values.start_date,
+      end_date: values.end_date,
+      links: values.links,
+    }
+
+    update.mutate({ id: idProject, dto: payload }, {
       onSuccess: () => {
         onClose()
       }
@@ -27,7 +34,6 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
   const serverError = update.isError && update.error ? update.error.response?.data.message || 'Error al actualizar el proyecto' : undefined
 
   const initialValues: Partial<ProjectUpdateDto> = {
-    title: project?.title,
     description: project?.description,
     start_date: project?.start_date,
     end_date: project?.end_date || '',
@@ -50,6 +56,8 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
           onSubmit={handleSubmit}
           submitLabel="Guardar cambios"
           defaultValues={initialValues}
+          title={project?.title}
+          role={project?.role}
           skills={project?.skills}
           isPending={update.isPending}
           serverError={serverError}

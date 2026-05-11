@@ -30,6 +30,7 @@ const dateRangeRefinement = (
 
 export const ProjectCreateSchema = z.object({
   title: z.string().min(5, 'Mínimo 5 carácteres').max(200, 'Máximo 200 caracteres'),
+  role: z.string().min(5, 'Mínimo 5 carácteres').max(50, 'Máximo 50 caracteres'),
   description: z.string().min(5, 'Mínimo 5 carácteres').max(2000, 'Máximo 2000 caracteres'),
   start_date: z.string().min(1, 'La fecha de inicio es requerida'),
   end_date: z.string().min(1, 'LA fecha de fin es requerida'),
@@ -50,6 +51,7 @@ export type ProjectCreateDto = z.infer<typeof ProjectCreateSchema>
 
 export const defaultValues: ProjectCreateDto = {
   title: '',
+  role: '',
   description: '',
   start_date: '',
   end_date: '',
@@ -58,7 +60,6 @@ export const defaultValues: ProjectCreateDto = {
 }
 
 export const ProjectUpdateSchema = z.object({
-  title: z.string().min(1, 'El título es requerido').max(200, 'Máximo 200 caracteres').optional(),
   description: z.string().max(2000, 'Máximo 2000 caracteres').optional().nullable().or(z.literal('')),
   start_date: z.string().optional().nullable(),
   end_date: z.string().optional().nullable().or(z.literal('')),
@@ -71,7 +72,6 @@ export const ProjectUpdateSchema = z.object({
 export type ProjectUpdateDto = z.infer<typeof ProjectUpdateSchema>
 
 export const projectUpdateDefaultValues: ProjectUpdateDto = {
-  title: '',
   description: '',
   start_date: '',
   end_date: '',
