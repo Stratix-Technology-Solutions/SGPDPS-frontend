@@ -31,14 +31,12 @@ export const ModalAddProject = ({ isOpen, onClose }: Props) => {
           }
         />
       )}
-      <div className="p-4 md:p-6 lg:px-8 bg-white max-h-[85vh] overflow-y-auto customized-scrollbar">
-        <FormProject
-          onCancel={onClose}
-          onSubmit={handleSubmit}
-          submitLabel="Guardar"
-          isPending={isPending}
-        />
-      </div>
+      <FormProject
+        onCancel={onClose}
+        onSubmit={handleSubmit}
+        submitLabel="Guardar"
+        isPending={isPending}
+      />
     </Modal>
   )
 }

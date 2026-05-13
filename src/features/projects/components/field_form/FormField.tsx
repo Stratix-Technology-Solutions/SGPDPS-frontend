@@ -13,7 +13,12 @@ interface Props<TValue> {
   placeholder?: string
 }
 
-export const FormField = <TValue,>({ label, field, type = 'text', placeholder }: Props<TValue>) => {
+export const FormField = <TValue,>({
+  label,
+  field,
+  type = 'text',
+  placeholder
+}: Props<TValue>) => {
   const errors = field.state.meta.errors
   const errorMessage = errors.length > 0
     ? errors.map((e: unknown) => typeof e === 'string' ? e : (e as { message?: string })?.message).join(', ')
@@ -21,7 +26,10 @@ export const FormField = <TValue,>({ label, field, type = 'text', placeholder }:
 
   return (
     <div>
-      <label className="block font-semibold text-background-dark mb-1.5">{label}</label>
+      <label
+        className="block font-semibold text-background-dark mb-1.5">
+        {label}
+      </label>
       <input
         type={type}
         value={(field.state.value as string | number) ?? ''}

@@ -37,7 +37,11 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
       <form.Field
         name="title"
         children={(field) => (
-          <FormField label="Proyecto *" field={field} placeholder="Ingrese el título del proyecto" />
+          <FormField
+            label="Proyecto *"
+            field={field}
+            placeholder="Ingrese el título del proyecto"
+          />
         )}
       />
 
