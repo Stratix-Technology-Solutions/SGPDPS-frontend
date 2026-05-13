@@ -3,6 +3,7 @@ import { Modal } from "../../../../shared/components/Modal"
 import { useGetProjectAssets, useDeleteProjectAsset, useGetProject } from '../../hooks/useProjectAssets'
 import { FiFile, FiImage } from 'react-icons/fi'
 import type { ProjectIdTitle } from '../../interfaces/project.interface'
+import type { ProjectAsset } from '../../interfaces/project-asset.interface'
 import { ProjectSelectionModal } from '../ProjectSelectionModal'
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
   const [selectedProject, setSelectedProject] = useState<ProjectIdTitle | null>(null)
+  const [previewAsset, setPreviewAsset] = useState<ProjectAsset | null>(null)
   const { data: projects, isLoading: projectsLoading } = useGetProject()
   const { data: assets, isLoading: assetsLoading } = useGetProjectAssets(selectedProject?.id)
   const { mutate: deleteAsset, isPending: isDeleting } = useDeleteProjectAsset(selectedProject?.id)
@@ -29,6 +31,75 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
         onSelect={setSelectedProject}
         hoverColor="red"
       />
+    )
+  }
+
+  if (previewAsset) {
+    const previewUrl = previewAsset.url.startsWith('http')
+      ? previewAsset.url
+      : `http://localhost:8000${previewAsset.url}`
+    const fileName = previewAsset.path.split('/').pop()
+    const isImage = previewAsset.url.includes('image') || previewAsset.path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)
+    const isPdf = previewAsset.url.includes('pdf') || previewAsset.path.endsWith('.pdf')
+
+    return (
+      <Modal
+        onClose={() => setPreviewAsset(null)}
+        title="Vista previa de evidencia"
+        description="Revisa el archivo sin salir del flujo de eliminación."
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-background-dark truncate" title={fileName}>
+                {fileName}
+              </p>
+              <p className="text-xs text-neutral-medium/70">
+                {isImage ? 'Imagen' : isPdf ? 'PDF' : 'Archivo'}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPreviewAsset(null)}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-neutral-light bg-white text-background-dark hover:bg-neutral-50 transition-colors font-medium text-sm"
+            >
+              Volver atrás
+            </button>
+          </div>
+
+          <div className="rounded-xl border border-neutral-light bg-neutral-50 overflow-hidden min-h-[24rem] flex items-center justify-center">
+            {isImage ? (
+              <img
+                src={previewUrl}
+                alt={fileName}
+                className="max-h-[70vh] w-full object-contain bg-white"
+              />
+            ) : isPdf ? (
+              <iframe
+                src={previewUrl}
+                title={fileName}
+                className="w-full min-h-[70vh] bg-white"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-3 p-8 text-center">
+                <FiFile className="text-gray-500" size={40} />
+                <p className="text-sm text-neutral-medium/80">
+                  Este tipo de archivo no se puede previsualizar directamente.
+                </p>
+                <a
+                  href={previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white hover:bg-primary-soft transition-colors font-medium text-sm"
+                >
+                  Abrir archivo
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </Modal>
     )
   }
 
@@ -92,14 +163,13 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0 ml-4">
-                        <a
-                          href={`http://localhost:8000${asset.url}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={() => setPreviewAsset(asset)}
                           className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white hover:bg-primary-soft transition-colors font-medium text-sm"
                         >
                           Ver
-                        </a>
+                        </button>
                         <button
                           onClick={() => handleDelete(asset.id)}
                           disabled={isDeleting}
