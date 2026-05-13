@@ -6,6 +6,21 @@ export interface ProjectSkillResponse {
   domain_level: string | null
 }
 
+export interface SkillOption {
+  id: number
+  name: string
+  is_system: boolean
+}
+
+export interface ProjectRole {
+  id: number
+  name: string
+}
+
+export interface ProjectRoles {
+  data: ProjectRole[]
+}
+
 export interface Project {
   id: string
   title: string
@@ -15,6 +30,7 @@ export interface Project {
   end_date?: string
   skills: ProjectSkillResponse[]
   links: LinkResponse[]
+  roles: ProjectRole[]
 }
 
 export interface ProjectPaginationLinks {

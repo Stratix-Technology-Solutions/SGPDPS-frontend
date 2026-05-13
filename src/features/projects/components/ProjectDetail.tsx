@@ -15,10 +15,6 @@ export const ProjectDetail = ({ idProject }: Props) => {
         <p className="mt-1 text-sm">{project?.description}</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <ProjectDetailItem label="Fecha de inicio" value={project?.start_date} />
-        <ProjectDetailItem label="Fecha de fin" value={project?.end_date} />
-      </div>
 
       {!!project?.skills.length && (
         <>
@@ -32,6 +28,24 @@ export const ProjectDetail = ({ idProject }: Props) => {
           </div>
         </>
       )}
+
+      {!!project?.roles.length && (
+        <>
+          <p className="font-semibold text-background-dark">Roles en el proyecto</p>
+          <div className="flex flex-wrap gap-2">
+            {project.roles.map((role) => (
+              <span key={role.id} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200 capitalize">
+                {role.name}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <ProjectDetailItem label="Fecha de inicio" value={project?.start_date} />
+        <ProjectDetailItem label="Fecha de fin" value={project?.end_date} />
+      </div>
 
       {!!project?.links.length && (
         <>

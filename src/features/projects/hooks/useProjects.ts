@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
 import type { ProjectCreateDto, ProjectUpdateDto } from '../dtos/project.dto'
-import type { ProjectResponse, ProjectsResponse } from '../interfaces/project.interface'
+import type { ProjectResponse, ProjectRole, ProjectsResponse, SkillOption } from '../interfaces/project.interface'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'projects']
@@ -58,6 +58,26 @@ export const useGetProject = (id: string) => {
     queryKey: [...QUERY_KEY, id],
     queryFn: async () => {
       const res = await api.get(`/projects/${id}`)
+      return res.data
+    }
+  })
+}
+
+export const useGetProjectsRole = () => {
+  return useQuery<ProjectRole[], ApiError>({
+    queryKey: [...QUERY_KEY, 'roles'],
+    queryFn: async () => {
+      const res = await api.get('/projects/roles')
+      return res.data.data
+    },
+  })
+}
+
+export const useGetProjectSkill = () => {
+  return useQuery<SkillOption[], ApiError>({
+    queryKey: ['skills', 'list-all'],
+    queryFn: async () => {
+      const res = await api.get('/skills/list-all')
       return res.data
     }
   })

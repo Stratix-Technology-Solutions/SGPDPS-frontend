@@ -4,7 +4,8 @@ import { FormTextarea } from '../field_form/FormTextarea'
 import { FormTags } from '../field_form/FormTags'
 import { ProjectCreateSchema, defaultValues } from '../../dtos/project.dto'
 import type { ProjectCreateDto } from '../../dtos/project.dto'
-import { ProjectSkillsPicker } from '../field_form/ProjectSkillsPicker'
+import { Picker } from '../field_form/Picker'
+import { useGetProjectsRole, useGetProjectSkill } from '../../hooks/useProjects'
 
 interface Props {
   onCancel: () => void
@@ -22,14 +23,17 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
     },
   })
 
+  const { data: roles, isLoading: loadingRole } = useGetProjectsRole()
+
+  const { data: skills, isLoading: loadingSkill } = useGetProjectSkill()
+
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit(e)
-      }}
-      className="flex flex-col gap-4"
-    >
+      }} className="flex flex-col gap-4" >
       <form.Field
         name="title"
         children={(field) => (
@@ -38,29 +42,32 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
       />
 
       <form.Field
-        name="role"
-        children={(field) => (
-          <FormField label="Rol *" field={field} placeholder="Ingrese el rol que desempeñaste en el proyecto" />
+        name="roles_ids" children={(field) => (
+          <Picker
+            label="Roles"
+            value={field.state.value ?? []}
+            options={roles ?? []}
+            isLoading={loadingRole}
+            onChange={field.handleChange}
+          />
         )}
       />
 
-      <form.Field name="description" children={(field) => (
-        <FormTextarea label="Descripción * " field={field} placeholder="Agrega una descripción sobre el proyecto realizado" />
-      )} />
-
-      <form.Field name="skill_ids" children={(field) => (
-        <ProjectSkillsPicker
+      < form.Field name="skill_ids" children={(field) => (
+        <Picker
           label="Tecnologías utilizadas"
           value={field.state.value ?? []}
+          options={skills ?? []}
+          isLoading={loadingSkill}
           onChange={field.handleChange}
         />
       )} />
 
-      <form.Field name="links" children={(field) => (
+      < form.Field name="links" children={(field) => (
         <FormTags label="Enlaces del proyecto" field={field} placeholder="https://github.com/..." />
       )} />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      < div className="grid grid-cols-1 sm:grid-cols-2 gap-4" >
         <form.Field name="start_date" children={(field) => (
           <FormField label="Fecha de inicio *" field={field} type="date" />
         )} />
@@ -68,7 +75,11 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
         <form.Field name="end_date" children={(field) => (
           <FormField label="Fecha de finalización *" field={field} type="date" />
         )} />
-      </div>
+      </div >
+
+      < form.Field name="description" children={(field) => (
+        <FormTextarea label="Descripción" field={field} placeholder="Agrega una descripción sobre el proyecto realizado" />
+      )} />
 
       <div className="flex justify-end gap-3 pt-4">
         {onCancel && (
@@ -89,6 +100,6 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
           {submitLabel}
         </button>
       </div>
-    </form>
+    </form >
   )
 }
