@@ -23,7 +23,7 @@ export const ConfirmDeleteProject = ({ isOpen, onClose, idProject }: Props) => {
   return (
 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
+      <div className="bg-white rounded-2xl p-6 shadow-xl max-w-xl w-full animate-in fade-in zoom-in duration-200">
         <h3 className="text-xl font-bold text-background-dark mb-2">
           Eliminar proyecto
         </h3>

@@ -6,65 +6,126 @@ interface Props {
 
 export const ProjectDetail = ({ idProject }: Props) => {
   const { data } = useGetProject(idProject)
+
   const project = data?.data
+
   return (
-    <div className="flex flex-col gap-4 text-neutral-medium">
-      <div>
-        <h4 className="text-lg font-bold text-background-dark">{project?.title}</h4>
-        <h4 className="text-lg font-semibold text-background-dark">{project?.role}</h4>
-        <p className="mt-1 text-sm">{project?.description}</p>
+    <div className="rounded-2xl bg-white p-6">
+      <div className="flex flex-col gap-6 text-neutral-medium">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="text-xl font-semibold tracking-tight text-background-dark">
+              {project?.title}
+            </h2>
+          </div>
+
+          <p className="max-w-3xl text-sm leading-relaxed text-neutral-medium">
+            {project?.description}
+          </p>
+        </div>
+
+        {!!project?.skills.length && (
+          <section className="flex flex-col gap-3">
+            <p className="text-sm font-semibold tracking-wide text-background-dark">
+              Habilidades técnicas
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {project.skills.map((skill) => (
+                <span
+                  key={skill.id}
+                  className="
+                    rounded-full
+                    border border-neutral-200
+                    bg-neutral-100
+                    px-3 py-1
+                    text-xs font-medium
+                    text-neutral-700
+                    capitalize
+                  "
+                >
+                  {skill.name}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {!!project?.roles.length && (
+          <section className="flex flex-col gap-3">
+            <p className="text-sm font-semibold tracking-wide text-background-dark">
+              Roles en el proyecto
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {project.roles.map((role) => (
+                <span
+                  key={role.id}
+                  className="
+                    rounded-full
+                    border border-primary/20
+                    bg-primary/10
+                    px-3 py-1
+                    text-xs font-semibold
+                    text-primary
+                    capitalize
+                  "
+                >
+                  {role.name}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="flex flex-col gap-3">
+          <p className="text-sm font-semibold tracking-wide text-background-dark">
+            Duración del proyecto
+          </p>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <ProjectDetailItem
+              label="Fecha de inicio"
+              value={project?.start_date}
+            />
+
+            <ProjectDetailItem
+              label="Fecha de fin"
+              value={project?.end_date}
+            />
+          </div>
+        </section>
+
+        {!!project?.links.length && (
+          <section className="flex flex-col gap-3">
+            <p className="text-sm font-semibold tracking-wide text-background-dark">
+              Enlaces relacionados
+            </p>
+
+            <div className="flex flex-col gap-2">
+              {project.links.map((link) => (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="
+                    group flex items-center gap-2
+                    rounded-xl border border-neutral-200
+                    bg-neutral-50 px-3 py-2
+                    text-sm text-primary
+                    transition-colors
+                    hover:bg-primary/5
+                    break-all
+                  "
+                >
+                  {link.url}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
-
-
-      {!!project?.skills.length && (
-        <>
-          <p className="font-semibold text-background-dark">Habilidades técnicas</p>
-          <div className="flex flex-wrap gap-2">
-            {project.skills.map((skill) => (
-              <span key={skill.id} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200 capitalize">
-                {skill.name}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
-
-      {!!project?.roles.length && (
-        <>
-          <p className="font-semibold text-background-dark">Roles en el proyecto</p>
-          <div className="flex flex-wrap gap-2">
-            {project.roles.map((role) => (
-              <span key={role.id} className="bg-neutral-100 text-neutral-600 text-xs px-2 py-1 rounded border border-neutral-200 capitalize">
-                {role.name}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <ProjectDetailItem label="Fecha de inicio" value={project?.start_date} />
-        <ProjectDetailItem label="Fecha de fin" value={project?.end_date} />
-      </div>
-
-      {!!project?.links.length && (
-        <>
-          <p className="font-semibold text-background-dark">Enlaces</p>
-          <div className="flex flex-col gap-2">
-            {project.links.map((link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-primary hover:underline break-all"
-              >
-                {link.url}
-              </a>
-            ))}
-          </div>
-        </>
-      )}
     </div>
   )
 }
@@ -74,9 +135,17 @@ interface ProjectDetailItemProps {
   value: string | undefined
 }
 
-const ProjectDetailItem = ({ label, value }: ProjectDetailItemProps) => (
-  <div className="rounded-xl border border-neutral-light p-3">
-    <p className="text-xs text-neutral-medium/70">{label}</p>
-    <p className="font-semibold text-background-dark">{value}</p>
+const ProjectDetailItem = ({
+  label,
+  value,
+}: ProjectDetailItemProps) => (
+  <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+    <p className="text-xs font-medium uppercase tracking-wide text-neutral-medium/70">
+      {label}
+    </p>
+
+    <p className="mt-1 font-semibold text-background-dark">
+      {value || "No definido"}
+    </p>
   </div>
 )
