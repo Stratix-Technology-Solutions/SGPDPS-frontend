@@ -12,9 +12,10 @@ interface Props<T extends BaseOption> {
   options: T[]
   isLoading: boolean
   onChange: (value: number[]) => void
+  isEditing: boolean
 }
 
-export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange }: Props<T>) => {
+export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange, isEditing }: Props<T>) => {
 
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -128,9 +129,12 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
               return (
                 <span key={id} className="flex items-center gap-2 px-3 py-1 bg-primary-soft/10 text-primary rounded-full text-sm">
                   <span className="capitalize">{opt.name}</span>
-                  <button type="button" onClick={() => remove(id)} className="p-0.5 rounded-full hover:bg-primary-soft/20">
-                    <MdClose size={14} />
-                  </button>
+                  {!isEditing && (
+                    <button type="button" onClick={() => remove(id)} className="p-0.5 rounded-full hover:bg-primary-soft/20">
+                      <MdClose size={14} />
+                    </button>
+                  )
+                  }
                 </span>
               )
             })}

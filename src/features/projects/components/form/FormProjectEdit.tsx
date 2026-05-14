@@ -75,6 +75,7 @@ export const FormProjectEdit = ({
               value={field.state.value ?? []}
               options={rolesOptions ?? []}
               isLoading={loadingRole}
+              isEditing={true}
               onChange={field.handleChange}
             />
           )}
@@ -88,6 +89,7 @@ export const FormProjectEdit = ({
               value={field.state.value ?? []}
               options={skillsOptions ?? []}
               isLoading={loadingSkill}
+              isEditing={true}
               onChange={field.handleChange}
             />
           )}

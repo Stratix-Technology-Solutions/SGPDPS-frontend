@@ -52,6 +52,7 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
             value={field.state.value ?? []}
             options={roles ?? []}
             isLoading={loadingRole}
+            isEditing={false}
             onChange={field.handleChange}
           />
         )}
@@ -63,6 +64,7 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
           value={field.state.value ?? []}
           options={skills ?? []}
           isLoading={loadingSkill}
+          isEditing={false}
           onChange={field.handleChange}
         />
       )} />
