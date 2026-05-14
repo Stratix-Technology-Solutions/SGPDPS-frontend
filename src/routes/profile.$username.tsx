@@ -7,6 +7,7 @@ import { WorkExperiences } from '../features/view/components/WorkExperiences'
 import { Projects } from '../features/view/components/Projects'
 import { AcademicExperiences } from '../features/view/components/AcademicExperiences'
 import { Footer } from '../features/view/components/Footer'
+import { UserNotFound } from '../features/view/components/UserNotFound'
 
 export const Route = createFileRoute('/profile/$username')({
   component: RouteComponent,
@@ -18,10 +19,13 @@ export const Route = createFileRoute('/profile/$username')({
       throw notFound()
     }
   },
+  notFoundComponent: () => {
+    const { username } = Route.useParams()
+    return <UserNotFound username={username} />
+  }
 })
 
 function RouteComponent() {
-
   return (
     <div className="min-h-screen bg-[#f7f8fc]">
       <Navbar />
