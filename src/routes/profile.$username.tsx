@@ -1,11 +1,17 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import api from '../app/api/axios'
+import { Navbar } from '../features/view/components/Navbar'
+import { Hero } from '../features/view/components/Hero'
+import { Skills } from '../features/view/components/Skills'
+import { WorkExperiences } from '../features/view/components/WorkExperiences'
+import { Projects } from '../features/view/components/Projects'
+import { AcademicExperiences } from '../features/view/components/AcademicExperiences'
+import { Footer } from '../features/view/components/Footer'
 
 export const Route = createFileRoute('/profile/$username')({
   component: RouteComponent,
   loader: async ({ params }) => {
     try {
-      console.log(params.username)
       const response = await api.get(`/profile/u/${params.username}`)
       return response.data
     } catch (error) {
@@ -15,35 +21,20 @@ export const Route = createFileRoute('/profile/$username')({
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-
-  const {
-    profile: {
-      first_name,
-      last_name,
-      biography,
-      country,
-      professions,
-    },
-    username,
-  } = data
 
   return (
-    <div>
-      <h1>{first_name} {last_name}</h1>
-
-      <div>
-        <span>{username}</span>
-        <span>{country}</span>
-      </div>
-
-      <p>{biography}</p>
-
-      <ul>
-        {professions.map(p => (
-          <li key={p}>{p}</li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-[#f7f8fc]">
+      <Navbar />
+      <Hero />
+      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
+      <Skills />
+      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
+      <WorkExperiences />
+      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
+      <Projects />
+      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
+      <AcademicExperiences />
+      <Footer />
     </div>
   )
 }
