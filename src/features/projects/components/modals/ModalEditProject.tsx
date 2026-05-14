@@ -22,6 +22,8 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
       start_date: values.start_date,
       end_date: values.end_date,
       links: values.links,
+      skill_ids: values.skill_ids,
+      roles_ids: values.roles_ids,
     }
 
     update.mutate({ id: idProject, dto: payload }, {
@@ -41,6 +43,8 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
       id: link.id,
       url: link.url,
     })),
+    skill_ids: project?.skills.map((skill) => skill.id),
+    roles_ids: project?.roles.map((role) => role.id),
   }
 
   if (!isOpen) return null
@@ -57,8 +61,6 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
           submitLabel="Guardar"
           defaultValues={initialValues}
           title={project?.title}
-          role={project?.role}
-          skills={project?.skills}
           isPending={update.isPending}
           serverError={serverError}
         />

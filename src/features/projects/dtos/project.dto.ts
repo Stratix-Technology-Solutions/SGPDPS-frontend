@@ -69,6 +69,8 @@ export const ProjectUpdateSchema = z.object({
     id: z.number().int().positive(),
     url: z.string().url('Debe ser una URL válida').max(512, 'Máximo 512 caracteres'),
   })).optional(),
+  skill_ids: z.array(z.number().int().positive()).optional(),
+  roles_ids: z.array(z.number().int().positive()).min(1, 'Selecciona al menos un rol'),
 }).superRefine(dateRangeRefinement)
 
 export type ProjectUpdateDto = z.infer<typeof ProjectUpdateSchema>
@@ -78,4 +80,6 @@ export const projectUpdateDefaultValues: ProjectUpdateDto = {
   start_date: '',
   end_date: '',
   links: [],
+  skill_ids: [],
+  roles_ids: [],
 }

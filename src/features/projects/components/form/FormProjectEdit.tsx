@@ -5,7 +5,8 @@ import { FormTextarea } from '../field_form/FormTextarea'
 import { ProjectLinksEditor, type ProjectLinkInput } from '../field_form/ProjectLinksEditor'
 import { ProjectUpdateSchema, projectUpdateDefaultValues } from '../../dtos/project.dto'
 import type { ProjectUpdateDto } from '../../dtos/project.dto'
-import type { ProjectSkillResponse } from '../../interfaces/project.interface'
+import { Picker } from '../field_form/Picker'
+import { useGetProjectSkill, useGetProjectsRole } from '../../hooks/useProjects'
 
 interface Props {
   onCancel?: () => void
@@ -13,8 +14,6 @@ interface Props {
   submitLabel?: string
   defaultValues?: Partial<ProjectUpdateDto>
   title?: string
-  role?: string
-  skills?: ProjectSkillResponse[]
   isPending?: boolean
   serverError?: string
 }
@@ -32,8 +31,6 @@ export const FormProjectEdit = ({
   submitLabel = 'Guardar cambios',
   defaultValues,
   title,
-  role,
-  skills = [],
   isPending,
   serverError,
 }: Props) => {
@@ -45,6 +42,9 @@ export const FormProjectEdit = ({
     },
   })
 
+  const { data: rolesOptions, isLoading: loadingRole } = useGetProjectsRole()
+  const { data: skillsOptions, isLoading: loadingSkill } = useGetProjectSkill()
+
   return (
     <form
       onSubmit={async (event) => {
@@ -53,7 +53,7 @@ export const FormProjectEdit = ({
       }}
       className="flex flex-col gap-4"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-2">
         <div>
           <label className="block font-semibold text-background-dark mb-1.5">Proyecto</label>
           <input
@@ -64,17 +64,34 @@ export const FormProjectEdit = ({
             className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-gray-100 text-background-dark outline-none cursor-not-allowed"
           />
         </div>
+      </div>
 
-        <div>
-          <label className="block font-semibold text-background-dark mb-1.5">Rol</label>
-          <input
-            type="text"
-            value={role ?? ''}
-            disabled
-            readOnly
-            className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-gray-100 text-background-dark outline-none cursor-not-allowed"
-          />
-        </div>
+      <div className="grid grid-cols-1 gap-4">
+        <form.Field
+          name="roles_ids"
+          children={(field) => (
+            <Picker
+              label="Roles del proyecto"
+              value={field.state.value ?? []}
+              options={rolesOptions ?? []}
+              isLoading={loadingRole}
+              onChange={field.handleChange}
+            />
+          )}
+        />
+
+        <form.Field
+          name="skill_ids"
+          children={(field) => (
+            <Picker
+              label="Tecnologías utilizadas"
+              value={field.state.value ?? []}
+              options={skillsOptions ?? []}
+              isLoading={loadingSkill}
+              onChange={field.handleChange}
+            />
+          )}
+        />
       </div>
 
       <form.Field
@@ -94,24 +111,6 @@ export const FormProjectEdit = ({
           name="end_date"
           children={(field) => <FormField label="Fecha de finalización" field={field} type="date" />}
         />
-      </div>
-
-      <div>
-        <label className="block font-semibold text-background-dark mb-1.5">Habilidades seleccionadas</label>
-        <div className="flex flex-wrap gap-2 rounded-xl border border-neutral-light bg-neutral-50 p-3 min-h-11.5">
-          {skills.length ? (
-            skills.map((skill) => (
-              <span
-                key={skill.id}
-                className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary capitalize"
-              >
-                {skill.name}
-              </span>
-            ))
-          ) : (
-            <p className="text-sm text-neutral-medium/70">No hay habilidades asociadas a este proyecto.</p>
-          )}
-        </div>
       </div>
 
       <form.Field
