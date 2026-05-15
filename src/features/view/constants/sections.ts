@@ -8,6 +8,7 @@ import {
 import { GiSkills } from 'react-icons/gi'
 import { PiStudentFill } from 'react-icons/pi'
 import { Links } from '../components/display/Links'
+import { Projects } from '../components/display/Projects'
 
 export const sections = [
   {
@@ -50,7 +51,7 @@ export const sections = [
     title: 'Proyectos',
     description: 'Proyectos personales y profesionales',
     icon: FiFolder,
-    content: '',
+    content: Projects,
   },
   {
     id: 'link',

@@ -1,20 +1,20 @@
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { useGetLinks } from '../../../links/hooks/useGetLink'
+import { useGetProjects } from '../../../projects/hooks/useProjects'
 import { useToggleShow } from '../../hooks/useToggleShow'
 
-export const Links = () => {
-  const { data, isLoading, isError, error, isSuccess } = useGetLinks()
+export const Projects = () => {
+  const { data, isLoading, isError, error, isSuccess } = useGetProjects()
 
   const { mutate, isPending } = useToggleShow({
-    url: '/links',
-    queryKey: ['user', 'links']
+    url: '/projects',
+    queryKey: ['user', 'projects']
   })
 
   if (isLoading) {
     return (
       <div className="py-8 text-center">
         <p className="text-sm text-neutral-medium animate-pulse">
-          Cargando enlaces...
+          Cargando proyectos...
         </p>
       </div>
     )
@@ -40,17 +40,17 @@ export const Links = () => {
       {!data.data.length ? (
         <div className="rounded-2xl border border-dashed border-neutral-light bg-white/60 px-6 py-10 text-center">
           <p className="text-sm text-neutral-medium">
-            No hay enlaces registrados.
+            No hay proyectos registrados.
           </p>
         </div>
       ) : (
-        data.data.map(({ id, url, is_visible }) => (
+        data.data.map(({ id, title, is_visible }) => (
           <div
             key={id}
             className="flex items-center justify-between gap-4 rounded-2xl border border-primary/10 bg-white px-4 py-3 transition-colors hover:border-primary-soft"
           >
             <p className="truncate text-sm text-background-dark">
-              {url}
+              {title}
             </p>
 
             <div className="flex gap-2 items-center">

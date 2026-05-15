@@ -5,7 +5,7 @@ export const useToggleShow = ({ url, queryKey }: { url: string, queryKey: string
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ id, is_visible }: { id: number, is_visible: boolean }) => {
+    mutationFn: async ({ id, is_visible }: { id: number | string, is_visible: boolean }) => {
       await api.patch(`${url}/${id}`, { is_visible })
     },
     onSuccess: () => {

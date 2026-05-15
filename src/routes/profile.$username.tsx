@@ -37,6 +37,7 @@ function RouteComponent() {
     projects,
   } = Route.useLoaderData()
 
+  const projects_parsed = Object.values(projects)
   const social_links_parsed = Object.values(social_links)
 
   return (
@@ -62,8 +63,8 @@ function RouteComponent() {
           <WorkExperiences work_experiences={work_experiences} />
         )}
 
-        {!!projects.length && (
-          <Projects projects={projects} />
+        {!!projects_parsed.length && (
+          <Projects projects={projects_parsed} />
         )}
       </div>
 

@@ -31,6 +31,7 @@ export interface Project {
   skills: ProjectSkillResponse[]
   links: LinkResponse[]
   roles: ProjectRole[]
+  is_visible: boolean
 }
 
 export interface ProjectPaginationLinks {
