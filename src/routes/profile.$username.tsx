@@ -37,6 +37,8 @@ function RouteComponent() {
     projects,
   } = Route.useLoaderData()
 
+  const skills_parsed = Object.values(skills)
+  const soft_skills_parsed = Object.values(soft_skills)
   const academic_experiences_parsed = Object.values(academic_experiences)
   const work_experiences_parsed = Object.values(work_experiences)
   const projects_parsed = Object.values(projects)
@@ -53,8 +55,8 @@ function RouteComponent() {
           )}
         </div>
 
-        {(!!skills.length || !!soft_skills.length) && (
-          <Skills skills={skills} soft_skills={soft_skills} />
+        {(!!skills_parsed.length || !!soft_skills_parsed.length) && (
+          <Skills skills={skills_parsed} soft_skills={soft_skills_parsed} />
         )}
 
         {!!academic_experiences_parsed.length && (

@@ -11,6 +11,8 @@ import { Links } from '../components/display/Links'
 import { Projects } from '../components/display/Projects'
 import { Work } from '../components/display/Work'
 import { Academic } from '../components/display/Academic'
+import { Skills } from '../components/display/Skills'
+import { SoftSkills } from '../components/display/SoftSkills'
 
 export const sections = [
   {
@@ -18,14 +20,14 @@ export const sections = [
     title: 'Habilidades técnicas',
     description: 'Tecnologías, herramientas y competencias',
     icon: FiCode,
-    content: '',
+    content: Skills,
   },
   {
     id: 'soft_skills',
     title: 'Habilidades blandas',
     description: 'Habilidades Sociales',
     icon: GiSkills,
-    content: '',
+    content: SoftSkills,
   },
   {
     id: 'experience',
