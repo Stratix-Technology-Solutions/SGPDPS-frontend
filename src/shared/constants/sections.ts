@@ -1,6 +1,6 @@
 import type { IconType } from 'react-icons'
 import { SiHyperskill } from 'react-icons/si'
-import { MdOutlineWork, MdOutlineComputer } from 'react-icons/md'
+import { MdOutlineWork, MdOutlineComputer, MdSchool } from 'react-icons/md'
 import { MdLink } from 'react-icons/md'
 import { GiGraduateCap } from 'react-icons/gi'
 
@@ -28,7 +28,13 @@ export const sections: Section[] = [
     label: 'Experiencia Academica',
     to: '/profile/academic-experience',
     Icon: GiGraduateCap,
-    description: 'Gestiona tu historial de experiencia academica.',
+    description: 'Registra cursos, talleres, capacitaciones y certificaciones complementarias.',
+  },
+  {
+    label: 'Formacion Academica',
+    to: '/profile/academic-formation',
+    Icon: MdSchool,
+    description: 'Registra tus estudios formales, grados academicos y titulos obtenidos.',
   },
   {
     label: 'Proyectos de Software',
