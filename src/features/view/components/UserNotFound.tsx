@@ -1,5 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { LuCircleAlert, LuHouse, LuUserRound } from 'react-icons/lu'
+import { LuCircleAlert, LuUserRound } from 'react-icons/lu'
 
 interface Props {
   username?: string
@@ -41,14 +40,6 @@ export const UserNotFound = ({ username }: Props) => {
           ? `No encontramos ningún usuario con el nombre "@${username}". Verifica que esté bien escrito.`
           : 'El perfil que buscas no existe o fue eliminado.'}
       </p>
-
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-soft active:scale-95 rounded-full px-7 py-3 transition-all duration-200"
-      >
-        <LuHouse className="w-5 h-5" />
-        Volver al inicio
-      </Link>
     </div>
   )
 }
