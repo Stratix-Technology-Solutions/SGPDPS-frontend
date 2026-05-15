@@ -1,6 +1,5 @@
 import { FiCalendar, FiMapPin, FiPhone, FiUser } from 'react-icons/fi'
 import { formatDate } from '../utils/formatDate'
-import { formatGender } from '../utils/formatGender'
 import type { Profile } from '../interfaces/profile'
 
 export const Hero = ({
@@ -30,7 +29,7 @@ export const Hero = ({
     },
     {
       icon: <FiUser className="shrink-0" />,
-      label: formatGender(gender ?? ''),
+      label: gender?.charAt(0).toUpperCase().concat(gender.slice(1)),
     },
   ].filter((item) => item.label)
 
