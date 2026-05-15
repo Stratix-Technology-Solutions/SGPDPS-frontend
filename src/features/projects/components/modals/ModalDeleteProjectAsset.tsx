@@ -35,11 +35,9 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
   }
 
   if (previewAsset) {
-    const previewUrl = previewAsset.url.startsWith('http')
-      ? previewAsset.url
-      : `http://localhost:8000${previewAsset.url}`
+    const previewUrl = previewAsset.url
     const fileName = previewAsset.path.split('/').pop()
-    const isImage = previewAsset.url.includes('image') || previewAsset.path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)
+    const isImage = previewAsset.url.includes('image') || previewAsset.path.match(/\.(jpg|jpeg|png)$/i)
     const isPdf = previewAsset.url.includes('pdf') || previewAsset.path.endsWith('.pdf')
 
     return (
@@ -68,7 +66,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
             </button>
           </div>
 
-          <div className="rounded-xl border border-neutral-light bg-neutral-50 overflow-hidden min-h-[24rem] flex items-center justify-center">
+          <div className="rounded-xl border border-neutral-light bg-neutral-50 overflow-hidden min-h-96 items-center justify-center">
             {isImage ? (
               <img
                 src={previewUrl}
