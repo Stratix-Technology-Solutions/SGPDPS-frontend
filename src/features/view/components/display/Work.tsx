@@ -1,8 +1,8 @@
 import { VisibilityList } from './VisibilityList'
 import { useWorkExperiences } from '../../../work/hooks/useWorkExperiences'
 
-export const Work = () => {
-  const query = useWorkExperiences()
+export const Work = ({ enabled }: { enabled: boolean }) => {
+  const query = useWorkExperiences({ enabled })
 
   return (
     <VisibilityList

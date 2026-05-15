@@ -1,8 +1,8 @@
 import { VisibilityList } from './VisibilityList'
 import { useGetProjects } from '../../../projects/hooks/useProjects'
 
-export const Projects = () => {
-  const query = useGetProjects()
+export const Projects = ({ enabled }: { enabled: boolean }) => {
+  const query = useGetProjects({ enabled })
 
   return (
     <VisibilityList

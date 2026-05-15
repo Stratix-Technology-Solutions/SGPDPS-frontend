@@ -1,8 +1,8 @@
 import { VisibilityList } from './VisibilityList'
 import { useGetTechnicalSkills } from '../../../skills/hooks/useGetTechnicalSkills'
 
-export const Skills = () => {
-  const query = useGetTechnicalSkills()
+export const Skills = ({ enabled }: { enabled: boolean }) => {
+  const query = useGetTechnicalSkills({ enabled })
 
   return (
     <VisibilityList

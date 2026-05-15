@@ -1,8 +1,8 @@
 import { VisibilityList } from './VisibilityList'
 import { useGetSoftSkills } from '../../../skills/hooks/useGetSoftSkills'
 
-export const SoftSkills = () => {
-  const query = useGetSoftSkills()
+export const SoftSkills = ({ enabled }: { enabled: boolean }) => {
+  const query = useGetSoftSkills({ enabled })
 
   return (
     <VisibilityList

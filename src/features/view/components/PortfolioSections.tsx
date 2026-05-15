@@ -61,7 +61,7 @@ export const PortfolioSections = () => {
 
                 <div className="overflow-hidden">
                   <div className="bg-primary/5 px-5 py-4">
-                    {Content && <Content />}
+                    {Content && <Content enabled={section.id === active} />}
                   </div>
                 </div>
               </div>

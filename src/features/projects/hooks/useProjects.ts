@@ -43,13 +43,14 @@ export const useDeleteProject = () => {
   })
 }
 
-export const useGetProjects = ({ page = 1 }: { page?: number } = {}) => {
+export const useGetProjects = ({ page = 1, enabled = true }: { page?: number, enabled?: boolean } = {}) => {
   return useQuery<ProjectsResponse, ApiError>({
     queryKey: [...QUERY_KEY, page],
     queryFn: async () => {
       const res = await api.get(`/projects?page=${page}`)
       return res.data
-    }
+    },
+    enabled,
   })
 }
 

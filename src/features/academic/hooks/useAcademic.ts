@@ -7,7 +7,7 @@ import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'academic-experiences']
 
-export const useAcademic = () => {
+export const useAcademic = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const [page, setPage] = useState(1)
   const queryClient = useQueryClient()
 
@@ -17,6 +17,7 @@ export const useAcademic = () => {
       const res = await api.get(`/academic-experiences?page=${page}`)
       return res.data
     },
+    enabled,
   })
 
   const create = useMutation<void, ApiError, AcademicDto>({

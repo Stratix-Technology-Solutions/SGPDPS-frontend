@@ -1,8 +1,8 @@
 import { VisibilityList } from './VisibilityList'
 import { useAcademic } from '../../../academic/hooks/useAcademic'
 
-export const Academic = () => {
-  const query = useAcademic()
+export const Academic = ({ enabled }: { enabled: boolean }) => {
+  const query = useAcademic({ enabled })
 
   return (
     <VisibilityList
