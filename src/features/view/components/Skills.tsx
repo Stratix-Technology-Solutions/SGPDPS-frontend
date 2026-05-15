@@ -34,10 +34,11 @@ export const Skills = ({ skills, soft_skills }: Props) => {
               return (
                 <div
                   key={skill.id}
-                  className="rounded-xl border border-primary/10 bg-white p-4 transition-all duration-200 hover:-translate-y-1 hover:border-primary-soft">
+                  className="rounded-xl border border-primary/10 bg-white p-4 transition-all duration-200 hover:-translate-y-1 hover:border-primary-soft"
+                >
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <p className="text-sm font-medium text-background-dark">
-                      {skill.name}
+                      {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
                     </p>
 
                     <span className="rounded-full bg-primary/5 px-2.5 py-1 font-mono text-[10px] text-primary-soft">
@@ -68,8 +69,9 @@ export const Skills = ({ skills, soft_skills }: Props) => {
             {soft_skills.map((skill) => (
               <span
                 key={skill.id}
-                className="rounded-lg border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
-                {skill.name}
+                className="rounded-lg border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary"
+              >
+                {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
               </span>
             ))}
           </div>
