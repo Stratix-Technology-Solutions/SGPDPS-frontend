@@ -3,6 +3,7 @@ import { SiHyperskill } from 'react-icons/si'
 import { MdOutlineWork, MdOutlineComputer, MdSchool } from 'react-icons/md'
 import { MdLink } from 'react-icons/md'
 import { GiGraduateCap } from 'react-icons/gi'
+import { IoSettings } from 'react-icons/io5'
 
 interface Section {
   label: string
@@ -47,5 +48,11 @@ export const sections: Section[] = [
     to: '/profile/links',
     Icon: MdLink,
     description: 'Gestiona los enlaces que aparecerán en tu portafolio.',
+  },
+  {
+    label: 'Configuración de visibilidad',
+    to: '/profile/visibility-settings',
+    Icon: IoSettings,
+    description: 'Elige que secciones de tu portafolio seran visibles para los visitantes.',
   },
 ]
