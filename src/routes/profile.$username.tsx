@@ -37,6 +37,7 @@ function RouteComponent() {
     projects,
   } = Route.useLoaderData()
 
+  const work_experiences_parsed = Object.values(work_experiences)
   const projects_parsed = Object.values(projects)
   const social_links_parsed = Object.values(social_links)
 
@@ -59,8 +60,8 @@ function RouteComponent() {
           <AcademicExperiences academic_experiences={academic_experiences} />
         )}
 
-        {!!work_experiences.length && (
-          <WorkExperiences work_experiences={work_experiences} />
+        {!!work_experiences_parsed.length && (
+          <WorkExperiences work_experiences={work_experiences_parsed} />
         )}
 
         {!!projects_parsed.length && (

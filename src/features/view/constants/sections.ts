@@ -9,6 +9,7 @@ import { GiSkills } from 'react-icons/gi'
 import { PiStudentFill } from 'react-icons/pi'
 import { Links } from '../components/display/Links'
 import { Projects } from '../components/display/Projects'
+import { Work } from '../components/display/Work'
 
 export const sections = [
   {
@@ -30,7 +31,7 @@ export const sections = [
     title: 'Experiencia laboral',
     description: 'Historial de trabajos y roles profesionales',
     icon: FiBriefcase,
-    content: '',
+    content: Work,
   },
   {
     id: 'education',
