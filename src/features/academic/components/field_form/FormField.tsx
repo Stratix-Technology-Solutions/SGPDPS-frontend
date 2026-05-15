@@ -6,9 +6,10 @@ interface Props {
   field: AnyFieldApi
   type?: React.HTMLInputTypeAttribute
   placeholder?: string
+  disabled?: boolean
 }
 
-export const FormField = ({ label, field, type = 'text', placeholder }: Props) => {
+export const FormField = ({ label, field, type = 'text', placeholder, disabled }: Props) => {
   const errors = field.state.meta.errors
   const errorMessage = errors.length > 0
     ? errors.map((e: unknown) => typeof e === 'string' ? e : (e as { message?: string })?.message).join(', ')
@@ -22,7 +23,8 @@ export const FormField = ({ label, field, type = 'text', placeholder }: Props) =
         value={field.state.value ?? ''}
         onChange={(e) => field.handleChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+        disabled={disabled}
+        className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors disabled:bg-neutral-100 disabled:text-neutral-medium disabled:cursor-not-allowed"
       />
       {errorMessage && <InputMessageError message={errorMessage} />}
     </div>
