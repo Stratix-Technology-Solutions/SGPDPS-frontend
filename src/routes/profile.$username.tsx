@@ -1,6 +1,5 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import api from '../app/api/axios'
-import { Navbar } from '../features/view/components/Navbar'
 import { Hero } from '../features/view/components/Hero'
 import { Skills } from '../features/view/components/Skills'
 import { WorkExperiences } from '../features/view/components/WorkExperiences'
@@ -38,18 +37,16 @@ function RouteComponent() {
     projects,
   } = Route.useLoaderData()
 
+  const social_links_parsed = Object.values(social_links)
+
   return (
     <div className="min-h-screen bg-[#f7f8fc]">
-      {!social_links && !skills && !soft_skills && !academic_experiences && !work_experiences && !projects && (
-        <Navbar />
-      )}
-
       <div className="flex flex-col gap-10">
         <div className="bg-background-dark flex flex-col gap-8 py-8">
           <Hero {...profile} />
 
-          {!!social_links.length && (
-            <SocialLinks social_links={social_links} />
+          {!!social_links_parsed.length && (
+            <SocialLinks social_links={social_links_parsed} />
           )}
         </div>
 
@@ -74,7 +71,7 @@ function RouteComponent() {
         first_name={profile.first_name}
         last_name={profile.last_name}
         professions={profile.professions}
-        social_links={social_links}
+        social_links={social_links_parsed}
       />
     </div>
   )
