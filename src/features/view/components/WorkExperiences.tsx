@@ -1,15 +1,18 @@
-import { user } from '../constants/user'
+import type { WorkExperience } from '../interfaces/work-experience'
+import { formatYear } from '../utils/formatYear'
 
-export const WorkExperiences = () => {
-  const visible = user.work_experiences.filter((e) => e.is_visible)
- 
+interface Props {
+  work_experiences: WorkExperience[]
+}
+
+export const WorkExperiences = ({ work_experiences }: Props) => {
   return (
-    <section id="experience" className="max-w-5xl mx-auto px-6 py-12">
-      <p className="font-mono text-[11px] tracking-widest uppercase text-primary-soft mb-1">Trayectoria</p>
+    <section id="experience" className="w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <p className="font-mono text-sm tracking-widest uppercase text-primary-soft mb-1">Trayectoria</p>
       <h2 className="font-serif text-3xl text-[#0d1b3e] mb-8">Experiencia laboral</h2>
  
       <div className="relative pl-8 border-l border-primary/15">
-        {visible.map((exp) => (
+        {work_experiences.map((exp) => (
           <div key={exp.id} className="relative mb-10 last:mb-0 group">
             <span className="absolute -left-[2.15rem] top-[6px] w-3 h-3 rounded-full bg-white border-2 border-primary group-hover:bg-primary transition-colors" />
  
@@ -28,9 +31,4 @@ export const WorkExperiences = () => {
       </div>
     </section>
   )
-}
-
-function formatYear(dateStr: string | null) {
-  if (!dateStr) return "Present"
-  return new Date(dateStr).getFullYear()
 }

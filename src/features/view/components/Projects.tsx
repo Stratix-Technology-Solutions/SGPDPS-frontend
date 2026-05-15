@@ -1,84 +1,129 @@
-import { user } from '../constants/user'
+import type { Project } from '../interfaces/project'
+import { formatYear } from '../utils/formatYear'
+import { SocialIcon } from './SocialIcon'
 
-export const Projects = () => {
+interface Props {
+  projects: Project[]
+}
+
+export const Projects = ({ projects }: Props) => {
   return (
-    <section id="projects" className="max-w-5xl mx-auto px-6 py-12">
-      <p className="font-mono text-[11px] tracking-widest uppercase text-primary-soft mb-1">Trabajo</p>
-      <h2 className="font-serif text-3xl text-[#0d1b3e] mb-8">Proyectos destacados</h2>
- 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {user.projects.map((project) => (
-          <div
-            key={project.id}
-            className="bg-white border border-primary/10 rounded-2xl overflow-hidden flex flex-col hover:border-primary-soft hover:-translate-y-1 transition-all duration-200"
-          >
-            <div className="h-32 bg-linear-to-br from-primary to-primary-soft flex items-center justify-center relative overflow-hidden">
-              {project.assets.find((a) => a.type === "image") ? (
-                <img
-                  src={project.assets.find((a) => a.type === "image").file_path}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => { e.currentTarget.style.display = "none" }}
-                />
-              ) : null}
-              <span className="absolute font-serif text-white/20 text-6xl select-none">
-                {project.title[0]}
-              </span>
+    <section
+      id="projects"
+      className="mx-auto w-full max-w-7xl px-4 sm:px-6"
+    >
+      <p className="mb-1 font-mono text-sm uppercase tracking-widest text-primary-soft">
+        Trabajo
+      </p>
 
-              {project.assets.find((a) => a.type === "video") && (
-                <span className="absolute top-2 right-2 font-mono text-[10px] bg-black/40 text-white rounded px-2 py-0.5">
-                  VIDEO
+      <h2 className="mb-4 font-serif text-3xl text-background-dark">
+        Proyectos destacados
+      </h2>
+
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {projects.map((project) => {
+          const image = project.assets.find(
+            (asset) => asset.type === 'imagen'
+          )
+
+          return (
+            <article
+              key={project.id}
+              className="flex flex-col overflow-hidden rounded-2xl border border-primary/10 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-primary-soft"
+            >
+              <div className="relative flex h-40 items-center justify-center overflow-hidden bg-linear-to-br from-primary to-primary-soft">
+                {image && (
+                  <img
+                    src={image.url}
+                    alt={project.title}
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                )}
+
+                <span className="absolute select-none font-serif text-6xl text-white/20">
+                  {project.title[0]}
                 </span>
-              )}
-            </div>
- 
-            <div className="p-5 flex flex-col flex-1">
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {project.categories.map((c) => (
-                  <span key={c.id} className="font-mono text-[10px] text-primary bg-[#EBF0FB] border border-primary/15 rounded px-2 py-0.5">
-                    {c.name}
-                  </span>
-                ))}
+
               </div>
- 
-              <h3 className="font-semibold text-[#0d1b3e] text-base mb-0.5">{project.title}</h3>
- 
-              <p className="font-mono text-[11px] text-neutral-medium mb-2">
-                {project.roles.map((r) => r.name).join(", ")} · {formatYear(project.start_date)}–{formatYear(project.end_date)}
-              </p>
- 
-              <p className="text-sm text-neutral-medium leading-relaxed flex-1 mb-3">{project.description}</p>
- 
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {project.skills.map((s) => (
-                  <span key={s.id} className="font-mono text-[11px] text-neutral-medium bg-[#f1f4ff] rounded px-2 py-0.5">
-                    {s.name}
-                  </span>
-                ))}
+
+              <div className="flex flex-1 flex-col p-5">
+                {!!project.categories?.length && (
+                  <div className="mb-3 flex flex-wrap gap-1.5">
+                    {project.categories.map((category) => (
+                      <span
+                        key={category.id}
+                        className="rounded border border-primary/15 bg-primary/5 px-2 py-0.5 font-mono text-[10px] text-primary"
+                      >
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <h3 className="mb-1 text-base font-semibold text-background-dark">
+                  {project.title}
+                </h3>
+
+                <p className="mb-3 font-mono text-[11px] text-neutral-medium">
+                  {project.roles.map((role) => role.name).join(', ')}
+                  {' · '}
+
+                  {formatYear(project.start_date)}
+                  {' — '}
+
+                  {project.end_date
+                    ? formatYear(project.end_date)
+                    : 'Actualidad'}
+                </p>
+
+                {project.description && (
+                  <p className="mb-4 flex-1 text-sm leading-relaxed text-neutral-medium">
+                    {project.description}
+                  </p>
+                )}
+
+                {!!project.skills?.length && (
+                  <div className="mb-4 flex flex-wrap gap-1.5">
+                    {project.skills.map((skill) => (
+                      <span
+                        key={skill.id}
+                        className="rounded bg-[#f1f4ff] px-2 py-0.5 font-mono text-[11px] text-neutral-medium"
+                      >
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {!!project.links?.length && (
+                  <div className="mt-auto flex flex-wrap gap-2">
+                    {project.links.map((link) => (
+                      <a
+                        key={link.id}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-white px-4 py-2 text-xs font-medium text-primary transition-all hover:border-primary hover:bg-primary/5"
+                      >
+                        <SocialIcon
+                          url={link.url}
+                          className="text-sm"
+                        />
+                        {link.url.includes('github')
+                          ? 'GitHub'
+                          : 'Visitar'}
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
- 
-              <div className="flex gap-2 mt-auto">
-                {project.links.map((link) => (
-                  <a
-                    key={link.id}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex-1 text-center text-xs font-medium py-2 rounded-lg border border-primary/20 text-primary bg-white hover:bg-[#EBF0FB] hover:border-primary transition-all"
-                  >
-                    {link.url.includes("github") ? "GitHub" : "Demo →"}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
+            </article>
+          )
+        })}
       </div>
     </section>
   )
-}
-
-function formatYear(dateStr: string | null) {
-  if (!dateStr) return "Present"
-  return new Date(dateStr).getFullYear()
 }

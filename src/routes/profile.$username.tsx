@@ -8,6 +8,8 @@ import { Projects } from '../features/view/components/Projects'
 import { AcademicExperiences } from '../features/view/components/AcademicExperiences'
 import { Footer } from '../features/view/components/Footer'
 import { UserNotFound } from '../features/view/components/UserNotFound'
+import { SocialLinks } from '../features/view/components/SocialLinks'
+import { user } from '../features/view/constants/user'
 
 export const Route = createFileRoute('/profile/$username')({
   component: RouteComponent,
@@ -26,19 +28,41 @@ export const Route = createFileRoute('/profile/$username')({
 })
 
 function RouteComponent() {
+  const {
+    profile,
+    social_links,
+    skills,
+    soft_skills,
+    academic_experiences,
+    work_experiences,
+    projects,
+  } = user
+
   return (
     <div className="min-h-screen bg-[#f7f8fc]">
       <Navbar />
-      <Hero />
-      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
-      <Skills />
-      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
-      <WorkExperiences />
-      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
-      <Projects />
-      <hr className="border-[#1B3D87]/08 max-w-5xl mx-auto px-6" />
-      <AcademicExperiences />
-      <Footer />
+
+      <div className="flex flex-col gap-10">
+        <div className="bg-background-dark flex flex-col gap-8 py-8">
+          <Hero {...profile} />
+          <SocialLinks social_links={social_links} />
+        </div>
+
+        <Skills skills={skills} soft_skills={soft_skills} />
+
+        <AcademicExperiences academic_experiences={academic_experiences} />
+
+        <WorkExperiences work_experiences={work_experiences} />
+
+        <Projects projects={projects} />
+      </div>
+
+      <Footer
+        first_name={profile.first_name}
+        last_name={profile.last_name}
+        professions={profile.professions}
+        social_links={social_links}
+      />
     </div>
   )
 }

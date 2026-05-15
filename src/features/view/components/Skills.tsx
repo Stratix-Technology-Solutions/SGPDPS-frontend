@@ -1,50 +1,80 @@
-import { user } from '../constants/user'
+import type { Skill, SoftSkill } from '../interfaces/skills'
 
-export const Skills = () => {
-  const visible = user.skills.filter((s) => s.is_visible)
-  const visibleSoft = user.soft_skills.filter((s) => s.is_visible)
- 
+const DOMAIN_LEVELS = {
+  Básico: { percentage: 30 },
+  Intermedio: { percentage: 60 },
+  Avanzado: { percentage: 90 },
+} as const
+
+interface Props {
+  skills: Skill[]
+  soft_skills: SoftSkill[]
+}
+
+export const Skills = ({ skills, soft_skills }: Props) => {
   return (
-    <section id="skills" className="max-w-5xl mx-auto px-6 py-12">
-      <p className="font-mono text-[11px] tracking-widest uppercase text-primary-soft mb-1">Habilidades</p>
-      <h2 className="font-serif text-3xl text-[#0d1b3e] mb-8">Stack técnico</h2>
- 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {visible.map((skill) => {
-          const pct = (skill.domain_level / 5) * 100
-          return (
-            <div
-              key={skill.id}
-              className="bg-white border border-primary/10 rounded-xl p-4 hover:border-primary-soft hover:-translate-y-1 transition-all duration-200"
-            >
-              <p className="font-medium text-sm text-[#0d1b3e] mb-3">{skill.name}</p>
-              <div className="h-1 bg-primary/08 rounded-full overflow-hidden mb-2" style={{ background: "rgba(27,61,135,0.08)" }}>
+    <section
+      id="skills"
+      className="mx-auto w-full max-w-7xl px-4 sm:px-6"
+    >
+      <p className="mb-1 font-mono text-sm uppercase tracking-widest text-primary-soft">
+        Habilidades
+      </p>
+
+      <div className="grid grid-cols-1 gap-4 lg:gap-10 lg:grid-cols-[1.4fr_0.8fr]">
+        <div>
+          <h2 className="mb-4 font-serif text-3xl text-background-dark">
+            Habilidades técnicas
+          </h2>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {skills.map((skill) => {
+              const level = DOMAIN_LEVELS[skill.domain_level]
+
+              return (
                 <div
-                  className="h-full rounded-full bg-linear-to-r from-primary to-primary-soft transition-all duration-700"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <p className="font-mono text-[10px] text-neutral-medium">
-                {DOMAIN_LABELS[skill.domain_level]} · {skill.domain_level}/5
-              </p>
-            </div>
-          )
-        })}
-      </div>
- 
-      <p className="font-mono text-[11px] tracking-widest uppercase text-primary-soft mb-3">Soft skills</p>
-      <div className="flex flex-wrap gap-2">
-        {visibleSoft.map((s) => (
-          <span
-            key={s.id}
-            className="text-sm font-medium text-primary bg-[#EBF0FB] border border-primary/15 rounded-lg px-4 py-2"
-          >
-            {s.name}
-          </span>
-        ))}
+                  key={skill.id}
+                  className="rounded-xl border border-primary/10 bg-white p-4 transition-all duration-200 hover:-translate-y-1 hover:border-primary-soft">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <p className="text-sm font-medium text-background-dark">
+                      {skill.name}
+                    </p>
+
+                    <span className="rounded-full bg-primary/5 px-2.5 py-1 font-mono text-[10px] text-primary-soft">
+                      {skill.domain_level}
+                    </span>
+                  </div>
+
+                  <div className="h-1 overflow-hidden rounded-full bg-primary/10">
+                    <div
+                      className="h-full rounded-full bg-linear-to-r from-primary to-primary-soft transition-all duration-700"
+                      style={{
+                        width: `${level.percentage}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div>
+          <h2 className="mb-4 font-serif text-3xl text-background-dark">
+            Habilidades blandas
+          </h2>
+
+          <div className="flex flex-wrap gap-2">
+            {soft_skills.map((skill) => (
+              <span
+                key={skill.id}
+                className="rounded-lg border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
+                {skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
 }
-
-const DOMAIN_LABELS = ["", "Básico", "Básico", "Intermedio", "Avanzado", "Experto"]

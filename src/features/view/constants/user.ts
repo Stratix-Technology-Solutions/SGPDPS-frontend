@@ -1,14 +1,14 @@
-export const user = {
+import type { UserProfileResponse } from '../interfaces/user'
+
+export const user: UserProfileResponse = {
   id: "4db3f5a8-1fd2-4e49-b9dc-2ddbd6ef82c1",
   username: "johndoe",
-  email_verified: true,
   profile: {
     first_name: "John",
     last_name: "Doe",
     date_of_birth: "1999-05-10",
     gender: "male",
-    biography:
-    "Backend developer focused on Laravel, distributed systems and developer experience.",
+    biography: "Backend developer focused on Laravel, distributed systems and developer experience.",
     country: "Bolivia",
     phone: "+59170000000",
     professions: [
@@ -17,20 +17,21 @@ export const user = {
     ],
   },
   social_links: [
-    { id: "1", url: "https://github.com/johndoe" },
-    { id: "2", url: "https://linkedin.com/in/johndoe" },
-    { id: "3", url: "https://x.com/johndoe" },
+    { id: 1, url: "https://github.com/johndoe" },
+    { id: 2, url: "https://linkedin.com/in/johndoe" },
+    { id: 3, url: "https://x.com/johndoe" },
+    { id: 4, url: "http://random.com/johndoe" },
   ],
   skills: [
-    { id: "1", name: "Laravel", domain_level: 5, is_visible: true },
-    { id: "2", name: "Docker", domain_level: 4, is_visible: true },
-    { id: "3", name: "PostgreSQL", domain_level: 4, is_visible: true },
-    { id: "4", name: "Redis", domain_level: 3, is_visible: true },
+    { id: 1, name: "Laravel", domain_level: 'Básico' },
+    { id: 2, name: "Docker", domain_level: 'Básico' },
+    { id: 3, name: "PostgreSQL", domain_level: 'Intermedio' },
+    { id: 4, name: "Redis", domain_level: 'Avanzado' },
   ],
   soft_skills: [
-    { id: "1", name: "Leadership", is_visible: true },
-    { id: "2", name: "Communication", is_visible: true },
-    { id: "3", name: "Problem Solving", is_visible: true },
+    { id: 1, name: "Leadership" },
+    { id: 2, name: "Communication" },
+    { id: 3, name: "Problem Solving" },
   ],
   work_experiences: [
     {
@@ -40,7 +41,6 @@ export const user = {
       description: "Worked on scalable APIs, queues and distributed services.",
       start_date: "2022-01-01",
       end_date: null,
-      is_visible: true,
     },
     {
       id: "2",
@@ -49,7 +49,6 @@ export const user = {
       description: "Maintained monolith applications and internal APIs.",
       start_date: "2020-01-01",
       end_date: "2021-12-01",
-      is_visible: true,
     },
   ],
   academic_experiences: [
@@ -57,69 +56,61 @@ export const user = {
       id: "1",
       institution: "Universidad Mayor de San Simón",
       title: "Computer Science",
-      type: "degree",
       description: "Focused on software engineering and distributed systems.",
       start_date: "2017-01-01",
       end_date: "2021-12-01",
-      is_visible: true,
     },
   ],
   projects: [
     {
       id: "1",
       title: "Dev Portfolio",
-      role: "Backend Developer",
       description: "A portfolio platform for developers.",
       start_date: "2024-01-01",
       end_date: null,
-      roles: [{ id: "1", name: "Backend Developer" }],
+      roles: [{ id: 1, name: "Backend Developer" }],
       categories: [
-        { id: "1", name: "Web App" },
-        { id: "2", name: "Portfolio" },
+        { id: 1, name: "Web App" },
+        { id: 2, name: "Portfolio" },
       ],
       skills: [
-        { id: "1", name: "Laravel" },
-        { id: "2", name: "React" },
-        { id: "3", name: "PostgreSQL" },
+        { id: 1, name: "Laravel" },
+        { id: 2, name: "React" },
+        { id: 3, name: "PostgreSQL" },
       ],
       assets: [
         {
           id: "1",
-          type: "image",
-          file_path: "/storage/projects/dev-portfolio/preview.png",
+          type: "imagen",
+          url: "/storage/projects/dev-portfolio/preview.png",
           original_name: "preview.png",
-          mime_type: "image/png",
-          size: 523441,
         },
         {
           id: "2",
-          type: "video",
-          file_path: "/storage/projects/dev-portfolio/demo.mp4",
+          type: "pdf",
+          url: "/storage/projects/dev-portfolio/demo.mp4",
           original_name: "demo.mp4",
-          mime_type: "video/mp4",
-          size: 8245234,
         },
       ],
       links: [
-        { id: "1", url: "https://github.com/johndoe/dev-portfolio" },
-        { id: "2", url: "https://devportfolio.com" },
+        { id: 1, url: "https://github.com/johndoe/dev-portfolio" },
+        { id: 2, url: "https://devportfolio.com" },
       ],
     },
     {
       id: "2",
       title: "Realtime Chat",
-      role: "Fullstack Developer",
       description: "Realtime messaging platform using websockets.",
       start_date: "2023-01-01",
       end_date: "2023-08-01",
-      roles: [{ id: "2", name: "Fullstack Developer" }],
-      categories: [{ id: "3", name: "Realtime" }],
+      roles: [{ id: 2, name: "Fullstack Developer" }],
+      categories: [{ id: 3, name: "Realtime" }],
       skills: [
-        { id: "2", name: "React" },
-        { id: "4", name: "Redis" },
+        { id: 2, name: "React" },
+        { id: 4, name: "Redis" },
       ],
       assets: [],
-      links: [{ id: "3", url: "https://github.com/johndoe/realtime-chat" }],
+      links: [{ id: 3, url: "https://github.com/johndoe/realtime-chat" }],
     },
   ],
 };
