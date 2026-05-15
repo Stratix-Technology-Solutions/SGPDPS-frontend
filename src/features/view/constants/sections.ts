@@ -10,6 +10,7 @@ import { PiStudentFill } from 'react-icons/pi'
 import { Links } from '../components/display/Links'
 import { Projects } from '../components/display/Projects'
 import { Work } from '../components/display/Work'
+import { Academic } from '../components/display/Academic'
 
 export const sections = [
   {
@@ -38,7 +39,7 @@ export const sections = [
     title: 'Experiencia académica',
     description: 'Estudios formales, certificados y logros',
     icon: FiBookOpen,
-    content: '',
+    content: Academic,
   },
   {
     id: 'formation',
