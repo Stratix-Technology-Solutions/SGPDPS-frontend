@@ -25,7 +25,7 @@ export const Hero = ({
     },
     {
       icon: <FiCalendar className="shrink-0" />,
-      label: formatDate(date_of_birth ?? ''),
+      label: !!date_of_birth ? formatDate(date_of_birth) : null,
     },
     {
       icon: <FiUser className="shrink-0" />,
