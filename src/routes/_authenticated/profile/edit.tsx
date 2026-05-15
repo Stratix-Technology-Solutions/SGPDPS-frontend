@@ -100,12 +100,6 @@ function RouteComponent() {
   }, [error])
 
   useEffect(() => {
-    if (isProfileMissing) {
-      navigate({ to: '/profile/register' })
-    }
-  }, [isProfileMissing, navigate])
-
-  useEffect(() => {
     const selectedCountry = String(form.state.values.country || '').trim()
     if (!selectedCountry) {
       return

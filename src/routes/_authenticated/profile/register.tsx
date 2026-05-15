@@ -78,12 +78,6 @@ function RouteComponent() {
   }, [error])
 
   useEffect(() => {
-    if (hasProfile) {
-      navigate({ to: '/profile/edit' })
-    }
-  }, [hasProfile, navigate])
-
-  useEffect(() => {
     const selectedCountry = String(form.state.values.country || '').trim()
     if (!selectedCountry) {
       return
