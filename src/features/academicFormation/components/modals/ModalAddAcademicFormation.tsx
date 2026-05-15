@@ -8,14 +8,14 @@ interface Props {
 
 export const ModalAddAcademicFormation = ({ onClose }: Props) => {
   const handleSubmit = (values: AcademicFormationDto) => {
-    console.log('Formacion academica registrada', values)
+    console.log('Formación académica registrada', values)
     onClose()
   }
 
   return (
     <Modal
-      title="Agregar formacion academica"
-      description="Registra estudios formales como primaria, secundaria, bachillerato, tecnico, universidad o posgrado."
+      title="Agregar formación académica"
+      description="Registra estudios formales como bachillerato, técnico, universidad o posgrado."
       onClose={onClose}
     >
       <FormAcademicFormation

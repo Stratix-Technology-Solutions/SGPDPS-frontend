@@ -26,65 +26,71 @@ export const FormAcademicFormation = ({
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
     validators: { onSubmit: AcademicFormationSchema },
-    onSubmit: ({ value }) => { onSubmit(value) },
+    onSubmit: ({ value }) => {
+      onSubmit({
+        ...value,
+        field_of_study: value.education_level === 'bachillerato' ? '' : value.field_of_study,
+        start_date: value.status === 'completado' ? value.start_date : '',
+        end_date: '',
+      })
+    },
   })
 
   return (
     <form onSubmit={async (e) => { e.preventDefault(); await form.handleSubmit() }} className="flex flex-col gap-4">
       <form.Field name="education_level" children={(field) => (
         <FormSelect
-          label="Nivel academico *"
+          label="Grado académico *"
           field={field}
           options={[
-            { value: 'primaria', label: 'Primaria' },
-            { value: 'secundaria', label: 'Secundaria' },
             { value: 'bachillerato', label: 'Bachillerato' },
-            { value: 'tecnico_medio', label: 'Tecnico medio' },
-            { value: 'tecnico_superior', label: 'Tecnico superior' },
+            { value: 'tecnico_medio', label: 'Técnico medio' },
+            { value: 'tecnico_superior', label: 'Técnico superior' },
             { value: 'licenciatura', label: 'Licenciatura' },
-            { value: 'maestria', label: 'Maestria' },
+            { value: 'maestria', label: 'Maestría' },
             { value: 'doctorado', label: 'Doctorado / PhD' },
           ]}
         />
       )} />
 
       <form.Field name="institution" children={(field) => (
-        <FormField label="Institucion *" field={field} placeholder="Ingrese colegio, instituto o universidad" />
+        <FormField label="Institución *" field={field} placeholder="Ingrese colegio, instituto o universidad" />
       )} />
 
-      <form.Field name="degree_title" children={(field) => (
-        <FormField label="Titulo o grado obtenido" field={field} placeholder="Ej. Bachiller, Licenciado, Tecnico Superior" />
-      )} />
-
-      <form.Field name="field_of_study" children={(field) => (
-        <FormField label="Area de estudio" field={field} placeholder="Ej. Sistemas, Contabilidad, Enfermeria" />
-      )} />
-
-      <div className="grid grid-cols-2 gap-4">
-        <form.Field name="start_date" children={(field) => (
-          <FormField label="Inicio *" field={field} type="date" />
+      <form.Field name="education_level" children={(levelField) => (
+        <form.Field name="field_of_study" children={(field) => (
+          <FormField
+            label={levelField.state.value === 'bachillerato' ? 'Carrera o especialidad' : 'Carrera o especialidad *'}
+            field={field}
+            placeholder={levelField.state.value === 'bachillerato' ? 'No aplica' : 'Ej. Ingeniería de Sistemas, Medicina, Gestión de Proyectos'}
+            disabled={levelField.state.value === 'bachillerato'}
+          />
         )} />
-
-        <form.Field name="end_date" children={(field) => (
-          <FormField label="Fin" field={field} type="date" />
-        )} />
-      </div>
+      )} />
 
       <form.Field name="status" children={(field) => (
-        <FormSelect
-          label="Estado"
-          field={field}
-          options={[
-            { value: 'completado', label: 'Completado' },
-            { value: 'en_curso', label: 'En curso' },
-            { value: 'abandonado', label: 'Abandonado' },
-            { value: 'pausado', label: 'Pausado' },
-          ]}
-        />
+        <>
+          <FormSelect
+            label="Estado *"
+            field={field}
+            options={[
+              { value: 'completado', label: 'Completado' },
+              { value: 'en_curso', label: 'En curso' },
+            ]}
+          />
+
+          {field.state.value === 'completado' && (
+            <div className="mt-2">
+              <form.Field name="start_date" children={(dateField) => (
+                <FormField label="Fecha de emisión del título *" field={dateField} type="date" />
+              )} />
+            </div>
+          )}
+        </>
       )} />
 
       <form.Field name="description" children={(field) => (
-        <FormTextarea label="Descripcion" field={field} placeholder="Ingrese una descripcion" />
+        <FormTextarea label="Descripción" field={field} placeholder="Ingrese una descripción" />
       )} />
 
       <div className="flex justify-end gap-3 pt-1">
