@@ -9,24 +9,12 @@ import { ProfessionsField } from '../../../features/profile/components/Professio
 import { RegisterAccountSchema, defaultValues } from '../../../features/profile/dtos/user.dto'
 import { useGetProfile } from '../../../features/profile/hooks/useGetProfile'
 import { useCreateProfile } from '../../../features/profile/hooks/useCreateProfile'
-import countriesRaw from '../../../shared/assets/data/countries.json'
 import { ButtonLoader } from '../../../shared/components/ButtonLoader'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { SuccessModal } from '../../../shared/components/SuccessModal'
-
-type CountryCodeRow = { country: string; code: string }
-
-const COUNTRY_DIAL_CODE_MAP = new Map(
-  (countriesRaw as CountryCodeRow[]).map(({ country, code }) => [country, code]),
-)
-
-const normalizeDialCode = (code: string) => `+${code.replace(/\D/g, '')}`
-const DIAL_CODES = new Set((countriesRaw as CountryCodeRow[]).map(({ code }) => normalizeDialCode(code)))
-const normalizePhoneValue = (value: string) => {
-  const digits = value.replace(/\D/g, '')
-  return digits ? `+${digits}` : ''
-}
+import { normalizeDialCode, normalizePhoneValue } from '../../../features/profile/utils/normalize.ts'
+import { COUNTRY_DIAL_CODE_MAP, DIAL_CODES } from '../../../features/profile/constants/dial_codes.ts'
 
 export const Route = createFileRoute('/_authenticated/profile/register')({
   component: RouteComponent,
