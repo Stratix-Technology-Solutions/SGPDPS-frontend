@@ -15,6 +15,7 @@ import { COUNTRY_DIAL_CODE_MAP, DIAL_CODES } from '../constants/dial_codes'
 import { normalizeDialCode, normalizePhoneValue } from '../utils/normalize'
 import type { RegisterAccountDto } from '../dtos/user.dto'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
+import { AvatarField } from './AvatarField'
 
 interface ProfileFormProps {
   mode: 'register' | 'edit'
@@ -28,6 +29,8 @@ interface ProfileFormProps {
   pendingLabel: string
   title: string
   subtitle: string
+  avatarUrl?: string
+  onAvatarChange?: (file: File | null) => void
 }
 
 export function ProfileForm({
@@ -42,6 +45,8 @@ export function ProfileForm({
   pendingLabel,
   title,
   subtitle,
+  avatarUrl,
+  onAvatarChange,
 }: ProfileFormProps) {
   const navigate = useNavigate()
   const errorRef = useRef<HTMLDivElement>(null)
@@ -150,6 +155,13 @@ export function ProfileForm({
             <BannerMessageError message={(error as ApiError).response?.data?.message || 'Ocurrió un error al guardar el perfil'} />
           </div>
         )}
+
+        <div className="mb-6">
+          <AvatarField
+            currentUrl={avatarUrl}
+            onChange={onAvatarChange ?? (() => {})}
+          />
+        </div>
 
         <form
           onSubmit={(e) => { e.preventDefault(); form.handleSubmit() }}
