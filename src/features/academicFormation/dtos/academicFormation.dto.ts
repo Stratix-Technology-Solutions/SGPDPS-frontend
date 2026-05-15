@@ -11,18 +11,17 @@ export const AcademicFormationSchema = z.object({
   ]),
   institution: z.string().nonempty('La institución es requerida'),
   field_of_study: z.string().nullish(),
-  start_date: z.string().nullish(),
-  end_date: z.string().nullish(),
+  emission_date: z.string().nullish(),
   status: z.enum(['completado', 'en_curso'], {
     message: 'El estado es requerido',
   }),
   description: z.string().nullish(),
   is_visible: z.boolean().optional(),
 }).superRefine((data, ctx) => {
-  if (data.status === 'completado' && !data.start_date) {
+  if (data.status === 'completado' && !data.emission_date) {
     ctx.addIssue({
       code: 'custom',
-      path: ['start_date'],
+      path: ['emission_date'],
       message: 'La fecha de emisión del título es requerida',
     })
   }
@@ -41,9 +40,8 @@ export type AcademicFormationDto = z.infer<typeof AcademicFormationSchema>
 export const defaultValues: AcademicFormationDto = {
   education_level: 'bachillerato',
   institution: '',
-  field_of_study: '',
-  start_date: '',
-  end_date: '',
+  field_of_study: null,
+  emission_date: null,
   status: 'completado',
   description: '',
   is_visible: true,

@@ -29,9 +29,8 @@ export const FormAcademicFormation = ({
     onSubmit: ({ value }) => {
       onSubmit({
         ...value,
-        field_of_study: value.education_level === 'bachillerato' ? '' : value.field_of_study,
-        start_date: value.status === 'completado' ? value.start_date : '',
-        end_date: '',
+        field_of_study: value.education_level === 'bachillerato' ? null : value.field_of_study,
+        emission_date: value.status === 'completado' ? value.emission_date : null,
       })
     },
   })
@@ -81,7 +80,7 @@ export const FormAcademicFormation = ({
 
           {field.state.value === 'completado' && (
             <div className="mt-2">
-              <form.Field name="start_date" children={(dateField) => (
+              <form.Field name="emission_date" children={(dateField) => (
                 <FormField label="Fecha de emisión del título *" field={dateField} type="date" />
               )} />
             </div>
