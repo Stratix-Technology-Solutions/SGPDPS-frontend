@@ -26,11 +26,11 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
   return (
     <form onSubmit={async (e) => { e.preventDefault();await form.handleSubmit() }} className="flex flex-col gap-4">
       <form.Field name="title" children={(field) => (
-        <FormField label="Título / Programa *" field={field} placeholder="Ingrese el título o programa" />
+        <FormField label="Curso, taller o capacitación *" field={field} placeholder="Ingrese el nombre de la actividad" />
       )} />
 
       <form.Field name="institution" children={(field) => (
-        <FormField label="Institución *" field={field} placeholder="Ingrese la institución" />
+        <FormField label="Institución u organización *" field={field} placeholder="Ingrese quien la dictó" />
       )} />
 
       <div className="grid grid-cols-2 gap-4">
@@ -45,10 +45,10 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
 
       <form.Field name="type" children={(field) => (
         <FormSelect
-          label="Tipo"
+          label="Tipo de experiencia"
           field={field}
           options={[
-            { value: 'educación', label: 'Educación' },
+            { value: 'educación', label: 'Curso o capacitación' },
             { value: 'certificado', label: 'Certificado' },
           ]}
         />

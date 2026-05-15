@@ -20,11 +20,11 @@ function RouteComponent() {
     <div className="py-10 flex flex-col gap-6">
       <SectionTitle
         title="Experiencia Academica"
-        description="Gestiona tu historial de experiencia academica."
+        description="Registra cursos, talleres, capacitaciones y certificaciones complementarias."
       />
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
-        <ActionButton icon={FiPlusCircle} label="Crear experiencia academica" onClick={() => setModal("add")} />
+        <ActionButton icon={FiPlusCircle} label="Registrar experiencia academica" onClick={() => setModal("add")} />
         <ActionButton icon={FiEdit2} label="Editar experiencia academica" onClick={() => setModal("edit")} />
         <ActionButton icon={FiTrash2} label="Eliminar experiencia academica" onClick={() => setModal("delete")} />
         <ActionButton icon={FiEye} label="Visualizar experiencias academicas" onClick={() => setModal("view")} />
