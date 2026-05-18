@@ -1,4 +1,5 @@
 import type { AcademicExperienceResponse } from '../dtos/academic.interface'
+import { getAcademicTypeLabel } from '../utils/academicLabels'
 
 interface Props {
   item: AcademicExperienceResponse
@@ -11,7 +12,7 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Título / Programa</p>
+            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Actividad</p>
             <p className="text-background-dark font-semibold mt-0.5">{item.title}</p>
           </div>
           <div>
@@ -19,23 +20,17 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
             <p className="text-background-dark font-semibold mt-0.5">{item.institution}</p>
           </div>
           <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Inicio</p>
+            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Inicio / emisión</p>
             <p className="text-background-dark font-semibold mt-0.5">{item.start_date}</p>
           </div>
           <div>
             <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Fin</p>
-            <p className="text-background-dark font-semibold mt-0.5">{item.end_date ?? '—'}</p>
+            <p className="text-background-dark font-semibold mt-0.5">{item.end_date ?? 'No aplica'}</p>
           </div>
           <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Tipo</p>
-            <p className="text-background-dark font-semibold mt-0.5 capitalize">{item.type}</p>
+            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Categoría</p>
+            <p className="text-background-dark font-semibold mt-0.5">{getAcademicTypeLabel(item.type)}</p>
           </div>
-          {/*
-          <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Visible</p>
-            <p className="text-background-dark font-semibold mt-0.5">{item.is_visible ? 'Sí' : 'No'}</p>
-          </div>
-          */}
         </div>
 
         {item.description && (
