@@ -29,7 +29,7 @@ export const ProjectList = () => {
   return (
     <section className="py-10 flex flex-col gap-6">
       <SectionTitle
-        title="Proyectos de Software"
+        title="Proyectos Personales"
         description="Gestiona los proyectos en los que participaste para mostrarlos en tu portafolio."
       />
 

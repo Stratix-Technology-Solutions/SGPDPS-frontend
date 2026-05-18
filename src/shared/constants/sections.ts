@@ -38,7 +38,7 @@ export const sections: Section[] = [
     description: 'Registra tus estudios formales, grados academicos y titulos obtenidos.',
   },
   {
-    label: 'Proyectos de Software',
+    label: 'Proyectos Personales',
     to: '/profile/software-projects',
     Icon: MdOutlineComputer,
     description: 'Gestiona tus proyectos desarrollados, destacando tus contribuciones.',
