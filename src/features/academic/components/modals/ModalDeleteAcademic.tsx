@@ -17,7 +17,7 @@ export const ModalDeleteAcademic = ({ onClose }: Props) => {
     <>
       {selected ? (
         <Modal
-          title="¿Eliminar experiencia?"
+          title="¿Eliminar experiencia académica?"
           onClose={onClose}
         >
           <ConfirmDeleteAcademic

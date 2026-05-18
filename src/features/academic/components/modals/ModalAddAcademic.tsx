@@ -60,7 +60,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
     <>
       <Modal
         title="Registrar experiencia académica"
-        description="Registra cursos, talleres, capacitaciones o certificaciones que no correspondan a un grado academico formal."
+        description="Agrega cursos, talleres, seminarios, capacitaciones o certificados fuera de tu formación académica formal."
         onClose={onClose}
       >
         <FormAcademic

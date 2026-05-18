@@ -17,7 +17,7 @@ export const ModalViewAcademic = ({ onClose }: Props) => {
     <>
       {selected ? (
         <Modal
-          title="Detalle de experiencia"
+          title="Detalle de experiencia académica"
           onClose={onClose}
         >
           <AcademicDetail
