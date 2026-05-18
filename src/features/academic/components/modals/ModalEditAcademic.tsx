@@ -16,7 +16,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
   const { data, isLoading, update } = useAcademic()
   const [selected, setSelected] = useState<AcademicExperienceResponse | null>(null)
   const [showWarning, setShowWarning] = useState(false)
-  const [pendingValues, setPendingValues] = useState<AcademicDto | null>(null)
+  const [pendingValues, setPendingValues] = useState<Partial<AcademicDto> | null>(null)
   const [checkResult, setCheckResult] = useState<CheckDuplicateResponse | null>(null)
   const {
     mutate: checkDuplicate,
@@ -29,7 +29,15 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
   const handleSubmit = (values: AcademicDto) => {
     if (!selected) return
 
-    setPendingValues(values)
+    const editableValues: Partial<AcademicDto> = {
+      start_date: values.start_date,
+      end_date: values.end_date,
+      type: values.type,
+      description: values.description,
+      is_visible: values.is_visible,
+    }
+
+    setPendingValues(editableValues)
 
     checkDuplicate(
       { data: values, excludeId: selected.id },
@@ -42,7 +50,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
           }
 
           update.mutate(
-            { id: selected.id, dto: values },
+            { id: selected.id, dto: editableValues },
             { onSuccess: onClose },
           )
         },
@@ -83,6 +91,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
               onSubmit={handleSubmit}
               isPending={isChecking || update.isPending}
               submitLabel="Actualizar"
+              lockIdentityFields
               serverError={update.isError
                 ? (update.error?.response?.data?.message ?? 'Ocurrió un error al actualizar')
                 : isCheckError

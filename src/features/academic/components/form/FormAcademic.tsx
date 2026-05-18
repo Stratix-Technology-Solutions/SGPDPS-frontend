@@ -1,8 +1,8 @@
+import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { FormField } from '../field_form/FormField'
 import { FormSelect } from '../field_form/FormSelect'
 import { FormTextarea } from '../field_form/FormTextarea'
-// import { FormCheckbox } from '../field_form/FormCheckbox'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { AcademicSchema, defaultValues as emptyValues } from '../../dtos/academic.dto'
 import type { AcademicDto } from '../../dtos/academic.dto'
@@ -14,16 +14,19 @@ interface Props {
   defaultValues?: Partial<AcademicDto>
   isPending?: boolean
   serverError?: string
+  lockIdentityFields?: boolean
 }
 
-export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, isPending, serverError }: Props) => {
+export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, isPending, serverError, lockIdentityFields }: Props) => {
+  const [singleDay, setSingleDay] = useState(Boolean(defaultValues?.start_date && !defaultValues?.end_date))
+
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
     validators: { onSubmit: AcademicSchema },
     onSubmit: ({ value }) => {
       onSubmit({
         ...value,
-        end_date: !value.end_date || value.end_date === value.start_date ? null : value.end_date,
+        end_date: singleDay || !value.end_date || value.end_date === value.start_date ? null : value.end_date,
       })
     },
   })
@@ -31,26 +34,26 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
   return (
     <form onSubmit={async (e) => { e.preventDefault(); await form.handleSubmit() }} className="flex flex-col gap-4">
       <form.Field name="title" children={(field) => (
-        <FormField label="Nombre de la actividad *" field={field} placeholder="Ej. Curso de programación web" />
+        <FormField
+          label="Nombre de la actividad *"
+          field={field}
+          placeholder="Ej. Curso de programación web"
+          disabled={lockIdentityFields}
+        />
       )} />
 
       <form.Field name="institution" children={(field) => (
-        <FormField label="Institución u organización *" field={field} placeholder="Ej. Instituto, universidad u organización" />
+        <FormField
+          label="Institución u organización *"
+          field={field}
+          placeholder="Ej. Instituto, universidad u organización"
+          disabled={lockIdentityFields}
+        />
       )} />
-
-      <div className="grid grid-cols-2 gap-4">
-        <form.Field name="start_date" children={(field) => (
-          <FormField label="Fecha de inicio *" field={field} type="date" />
-        )} />
-
-        <form.Field name="end_date" children={(field) => (
-          <FormField label="Fecha de fin" field={field} type="date" />
-        )} />
-      </div>
 
       <form.Field name="type" children={(field) => (
         <FormSelect
-          label="Categoría"
+          label="Tipo de actividad *"
           field={field}
           options={[
             { value: 'educación', label: 'Curso, taller o capacitación' },
@@ -58,6 +61,38 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
           ]}
         />
       )} />
+
+      <div className="grid grid-cols-2 gap-4">
+        <form.Field name="start_date" children={(field) => (
+          <FormField label="Fecha de inicio *" field={field} type="date" />
+        )} />
+
+        {singleDay ? (
+          <div>
+            <label className="block font-semibold text-background-dark mb-1.5">Fecha de fin</label>
+            <div className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-100 text-neutral-medium">
+              Mismo día
+            </div>
+          </div>
+        ) : (
+          <form.Field name="end_date" children={(field) => (
+            <FormField label="Fecha de fin" field={field} type="date" />
+          )} />
+        )}
+      </div>
+
+      <label className="flex items-start gap-3 rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={singleDay}
+          onChange={(e) => setSingleDay(e.target.checked)}
+          className="mt-1 accent-primary cursor-pointer"
+        />
+        <span className="text-sm text-background-dark">
+          <span className="font-semibold">Duró un solo día</span>
+          <span className="block text-neutral-medium/70">Usa solo la fecha de inicio para charlas, eventos o certificados de un día.</span>
+        </span>
+      </label>
 
       <form.Field name="description" children={(field) => (
         <FormTextarea label="Descripción o logro obtenido" field={field} placeholder="Ej. Participación, horas cursadas, tema aprendido o certificado obtenido" />

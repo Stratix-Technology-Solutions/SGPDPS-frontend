@@ -20,7 +20,7 @@ function RouteComponent() {
     <div className="py-10 flex flex-col gap-6">
       <SectionTitle
         title="Experiencia académica"
-        description="Registra cursos, talleres, capacitaciones, seminarios y certificados."
+        description="Registra formaciones complementarias como cursos, talleres, capacitaciones, seminarios y certificados."
       />
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">

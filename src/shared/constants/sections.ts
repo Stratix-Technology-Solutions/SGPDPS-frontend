@@ -29,7 +29,7 @@ export const sections: Section[] = [
     label: 'Experiencia Academica',
     to: '/profile/academic-experience',
     Icon: GiGraduateCap,
-    description: 'Registra cursos, talleres, capacitaciones y certificaciones complementarias.',
+    description: 'Registra formaciones complementarias como cursos, talleres y certificados.',
   },
   {
     label: 'Formacion Academica',

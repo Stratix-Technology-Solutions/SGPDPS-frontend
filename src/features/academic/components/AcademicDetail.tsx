@@ -20,7 +20,7 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
             <p className="text-background-dark font-semibold mt-0.5">{item.institution}</p>
           </div>
           <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Inicio / emisión</p>
+            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Inicio</p>
             <p className="text-background-dark font-semibold mt-0.5">{item.start_date}</p>
           </div>
           <div>
@@ -28,7 +28,7 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
             <p className="text-background-dark font-semibold mt-0.5">{item.end_date ?? 'No aplica'}</p>
           </div>
           <div>
-            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Categoría</p>
+            <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Tipo de actividad</p>
             <p className="text-background-dark font-semibold mt-0.5">{getAcademicTypeLabel(item.type)}</p>
           </div>
         </div>
