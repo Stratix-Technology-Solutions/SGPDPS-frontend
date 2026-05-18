@@ -100,29 +100,6 @@ export const WorkExperienceForm = ({
         )}
       />
 
-      <form.Field
-        name="is_visible"
-        children={(field) => (
-          <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-light">
-            <input
-              type="checkbox"
-              checked={field.state.value}
-              onChange={(e) => field.handleChange(e.target.checked)}
-              className="mt-1 accent-primary cursor-pointer"
-            />
-            <div>
-              <span className="font-semibold text-background-dark">
-                Visible
-              </span>
-              <p className="text-sm text-neutral-medium/70">
-                Elige si esta experiencia laboral será visible para quienes
-                revisen tu portafolio.
-              </p>
-            </div>
-          </div>
-        )}
-      />
-
       {isError && (
         <BannerMessageError
           message={

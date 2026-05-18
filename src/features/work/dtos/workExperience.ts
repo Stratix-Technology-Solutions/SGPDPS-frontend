@@ -15,7 +15,6 @@ export const WorkExperienceSchema = z.object({
     .nullable(),
   start_date: z.string().min(1, 'La fecha de inicio es obligatoria.'),
   end_date: z.string().nullable(),
-  is_visible: z.boolean(),
 })
 
 export const updateSchema = WorkExperienceSchema.partial()
@@ -27,7 +26,6 @@ export interface WorkExperience {
   description: string | null
   start_date: string
   end_date: string | null
-  is_visible: boolean
   created_at: string
   updated_at: string
 }
@@ -42,7 +40,6 @@ export const defaultValues: CreateWorkExperience = {
   description: '',
   start_date: '',
   end_date: null,
-  is_visible: true,
 }
 
 export type CheckDuplicateResponse = {
