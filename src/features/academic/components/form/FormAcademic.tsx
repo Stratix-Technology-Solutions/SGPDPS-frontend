@@ -19,43 +19,48 @@ interface Props {
 export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, isPending, serverError }: Props) => {
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
-    validators: { onSubmit: AcademicSchema},
-    onSubmit: ({ value }) => {onSubmit(value)},
+    validators: { onSubmit: AcademicSchema },
+    onSubmit: ({ value }) => {
+      onSubmit({
+        ...value,
+        end_date: !value.end_date || value.end_date === value.start_date ? null : value.end_date,
+      })
+    },
   })
 
   return (
-    <form onSubmit={async (e) => { e.preventDefault();await form.handleSubmit() }} className="flex flex-col gap-4">
+    <form onSubmit={async (e) => { e.preventDefault(); await form.handleSubmit() }} className="flex flex-col gap-4">
       <form.Field name="title" children={(field) => (
-        <FormField label="Curso, taller o capacitación *" field={field} placeholder="Ingrese el nombre de la actividad" />
+        <FormField label="Nombre de la actividad *" field={field} placeholder="Ej. Curso de programación web" />
       )} />
 
       <form.Field name="institution" children={(field) => (
-        <FormField label="Institución u organización *" field={field} placeholder="Ingrese quien la dictó" />
+        <FormField label="Institución u organización *" field={field} placeholder="Ej. Instituto, universidad u organización" />
       )} />
 
       <div className="grid grid-cols-2 gap-4">
         <form.Field name="start_date" children={(field) => (
-          <FormField label="Inicio *" field={field} type="date" />
+          <FormField label="Fecha de inicio *" field={field} type="date" />
         )} />
 
         <form.Field name="end_date" children={(field) => (
-          <FormField label="Fin" field={field} type="date" />
+          <FormField label="Fecha de fin" field={field} type="date" />
         )} />
       </div>
 
       <form.Field name="type" children={(field) => (
         <FormSelect
-          label="Tipo de experiencia"
+          label="Categoría"
           field={field}
           options={[
-            { value: 'educación', label: 'Curso o capacitación' },
-            { value: 'certificado', label: 'Certificado' },
+            { value: 'educación', label: 'Curso, taller o capacitación' },
+            { value: 'certificado', label: 'Certificado o charla certificada' },
           ]}
         />
       )} />
 
       <form.Field name="description" children={(field) => (
-        <FormTextarea label="Descripción" field={field} placeholder="Ingrese una descripción" />
+        <FormTextarea label="Descripción o logro obtenido" field={field} placeholder="Ej. Participación, horas cursadas, tema aprendido o certificado obtenido" />
       )} />
 
       {/*
