@@ -42,14 +42,10 @@ export const AcademicFormationList = ({ data, isLoading, onSelect, itemClassName
                   </span>
                 </div>
 
-                <div className="grid gap-2 text-xs text-neutral-medium/80 sm:grid-cols-2">
+                <div className="text-xs text-neutral-medium/80">
                   <span>
                     <span className="font-semibold text-background-dark">Emisión: </span>
                     {item.emission_date ?? 'No aplica'}
-                  </span>
-                  <span>
-                    <span className="font-semibold text-background-dark">Visibilidad: </span>
-                    {item.is_visible ? 'Visible' : 'Oculta'}
                   </span>
                 </div>
 
