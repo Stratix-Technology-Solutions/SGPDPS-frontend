@@ -32,7 +32,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
     const editableValues: Partial<AcademicDto> = {
       start_date: values.start_date,
       end_date: values.end_date,
-      type: values.type,
+      // type: values.type,
       description: values.description,
       is_visible: values.is_visible,
     }

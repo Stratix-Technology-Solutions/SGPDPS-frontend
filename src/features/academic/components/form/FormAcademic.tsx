@@ -56,6 +56,7 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
             { value: 'educación', label: 'Curso, taller o capacitación' },
             { value: 'certificado', label: 'Certificado o charla certificada' },
           ]}
+          disabled={lockIdentityFields}
         />
       )} />
 
