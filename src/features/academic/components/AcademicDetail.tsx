@@ -7,6 +7,9 @@ interface Props {
 }
 
 export const AcademicDetail = ({ item, onBack }: Props) => {
+  const isSingleDay = Boolean(item.start_date) && (!item.end_date || item.end_date === item.start_date)
+  const endDateLabel = isSingleDay ? 'Mismo día' : item.end_date
+
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -25,7 +28,7 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
           </div>
           <div>
             <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Fin</p>
-            <p className="text-background-dark font-semibold mt-0.5">{item.end_date ?? 'No aplica'}</p>
+            <p className="text-background-dark font-semibold mt-0.5">{endDateLabel ?? 'No aplica'}</p>
           </div>
           <div>
             <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Tipo de actividad</p>
