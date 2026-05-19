@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import api from '../../../app/api/axios'
 import type { AcademicDto } from '../dtos/academic.dto'
-import type { AcademicExperiencesResponse } from '../dtos/academic.interface'
+import type { AcademicExperienceResponse, AcademicExperiencesResponse } from '../dtos/academic.interface'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
 const QUERY_KEY = ['user', 'academic-experiences']
@@ -20,9 +20,10 @@ export const useAcademic = ({ enabled = true }: { enabled?: boolean } = {}) => {
     enabled,
   })
 
-  const create = useMutation<void, ApiError, AcademicDto>({
+  const create = useMutation<{ data: AcademicExperienceResponse }, ApiError, AcademicDto>({
     mutationFn: async (dto) => {
-      await api.post('/academic-experiences', dto)
+      const res = await api.post('/academic-experiences', dto)
+      return res.data
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY })

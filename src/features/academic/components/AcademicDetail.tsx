@@ -1,5 +1,6 @@
 import type { AcademicExperienceResponse } from '../dtos/academic.interface'
 import { getAcademicTypeLabel } from '../utils/academicLabels'
+import { getAcademicExperienceEndMode } from '../utils/academicExperienceEndMode'
 
 interface Props {
   item: AcademicExperienceResponse
@@ -7,8 +8,12 @@ interface Props {
 }
 
 export const AcademicDetail = ({ item, onBack }: Props) => {
-  const isSingleDay = Boolean(item.start_date) && (!item.end_date || item.end_date === item.start_date)
-  const endDateLabel = isSingleDay ? 'Mismo día' : item.end_date
+  const endMode = getAcademicExperienceEndMode(item)
+  const endDateLabel = endMode === 'single_day'
+    ? 'Mismo día'
+    : endMode === 'in_progress'
+      ? 'En curso'
+      : item.end_date
 
   return (
     <>

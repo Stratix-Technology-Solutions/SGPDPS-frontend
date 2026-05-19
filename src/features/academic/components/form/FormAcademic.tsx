@@ -6,19 +6,23 @@ import { FormTextarea } from '../field_form/FormTextarea'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { AcademicSchema, defaultValues as emptyValues } from '../../dtos/academic.dto'
 import type { AcademicDto } from '../../dtos/academic.dto'
+import type { AcademicExperienceEndMode } from '../../utils/academicExperienceEndMode'
 
 interface Props {
   onCancel?: () => void
-  onSubmit: (values: AcademicDto) => void
   submitLabel?: string
   defaultValues?: Partial<AcademicDto>
   isPending?: boolean
   serverError?: string
   lockIdentityFields?: boolean
+  initialEndMode?: AcademicExperienceEndMode
+  onSubmit: (values: AcademicDto, endMode: AcademicExperienceEndMode) => void
 }
 
-export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, isPending, serverError, lockIdentityFields }: Props) => {
-  const [singleDay, setSingleDay] = useState(Boolean(defaultValues?.start_date && !defaultValues?.end_date))
+export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, isPending, serverError, lockIdentityFields, initialEndMode }: Props) => {
+  const [endMode, setEndMode] = useState<AcademicExperienceEndMode>(
+    initialEndMode ?? (defaultValues?.start_date && !defaultValues?.end_date ? 'single_day' : 'date_range'),
+  )
 
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
@@ -26,8 +30,8 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
     onSubmit: ({ value }) => {
       onSubmit({
         ...value,
-        end_date: singleDay || !value.end_date || value.end_date === value.start_date ? null : value.end_date,
-      })
+        end_date: endMode === 'date_range' && value.end_date !== value.start_date ? value.end_date : null,
+      }, endMode)
     },
   })
 
@@ -67,11 +71,11 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
           <FormField label="Fecha de inicio *" field={field} type="date" />
         )} />
 
-        {singleDay ? (
+        {endMode !== 'date_range' ? (
           <div>
             <label className="block font-semibold text-background-dark mb-1.5">Fecha de fin</label>
             <div className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-100 text-neutral-medium">
-              Mismo día
+              {endMode === 'single_day' ? 'Mismo día' : 'En curso'}
             </div>
           </div>
         ) : (
@@ -84,13 +88,26 @@ export const FormAcademic = ({ onCancel, onSubmit, submitLabel, defaultValues, i
       <label className="flex items-start gap-3 rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 cursor-pointer">
         <input
           type="checkbox"
-          checked={singleDay}
-          onChange={(e) => setSingleDay(e.target.checked)}
+          checked={endMode === 'single_day'}
+          onChange={(e) => setEndMode(e.target.checked ? 'single_day' : 'date_range')}
           className="mt-1 accent-primary cursor-pointer"
         />
         <span className="text-sm text-background-dark">
           <span className="font-semibold">Duró un solo día</span>
           <span className="block text-neutral-medium/70">Usa solo la fecha de inicio para charlas, eventos o certificados de un día.</span>
+        </span>
+      </label>
+
+      <label className="flex items-start gap-3 rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={endMode === 'in_progress'}
+          onChange={(e) => setEndMode(e.target.checked ? 'in_progress' : 'date_range')}
+          className="mt-1 accent-primary cursor-pointer"
+        />
+        <span className="text-sm text-background-dark">
+          <span className="font-semibold">Sigue en curso</span>
+          <span className="block text-neutral-medium/70">Usa solo la fecha de inicio cuando la experiencia todavía no terminó.</span>
         </span>
       </label>
 
