@@ -52,6 +52,7 @@ export const ModalEditAcademicFormation = ({ onClose }: Props) => {
         isPending={update.isPending}
         submitLabel="Actualizar"
         lockIdentityFields
+        lockCompletedStatus={selected.status === 'completado'}
         serverError={update.error?.response?.data?.message ?? (update.isError ? 'Ocurrió un error al actualizar la formación académica' : undefined)}
         defaultValues={{
           education_level: selected.education_level,

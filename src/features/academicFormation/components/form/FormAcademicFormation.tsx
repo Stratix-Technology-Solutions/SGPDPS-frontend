@@ -17,6 +17,7 @@ interface Props {
   isPending?: boolean
   serverError?: string
   lockIdentityFields?: boolean
+  lockCompletedStatus?: boolean
 }
 
 export const FormAcademicFormation = ({
@@ -27,6 +28,7 @@ export const FormAcademicFormation = ({
   isPending,
   serverError,
   lockIdentityFields,
+  lockCompletedStatus,
 }: Props) => {
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
@@ -84,9 +86,10 @@ export const FormAcademicFormation = ({
             label="Estado *"
             field={field}
             options={[
-              { value: 'completado', label: 'Completado' },
               { value: 'en_curso', label: 'En curso' },
+              { value: 'completado', label: 'Completado' },
             ]}
+            disabled={lockCompletedStatus}
           />
 
           {field.state.value === 'completado' && (
