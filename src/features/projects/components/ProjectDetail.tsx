@@ -80,20 +80,13 @@ export const ProjectDetail = ({ idProject }: Props) => {
 
         <section className="flex flex-col gap-3">
           <p className="text-sm font-semibold tracking-wide text-background-dark">
-            Duración del proyecto
+            Estado del proyecto
           </p>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <ProjectDetailItem
-              label="Fecha de inicio"
-              value={project?.start_date}
-            />
-
-            <ProjectDetailItem
-              label="Fecha de fin"
-              value={project?.end_date}
-            />
-          </div>
+          <ProjectDetailItem
+            label="Estado"
+            value={project?.end_date ? 'Completado' : 'En curso'}
+          />
         </section>
 
         {!!project?.links.length && (

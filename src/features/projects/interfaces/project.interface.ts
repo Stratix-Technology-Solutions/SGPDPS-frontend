@@ -27,8 +27,8 @@ export interface Project {
   role: string
   description: string
   contributions: string | null
-  start_date: string
-  end_date?: string
+  start_date: string | null
+  end_date?: string | null
   skills: ProjectSkillResponse[]
   links: LinkResponse[]
   roles: ProjectRole[]
@@ -63,7 +63,7 @@ export interface ProjectsResponse {
   meta: ProjectPaginationMeta
 }
 
-export type ProjectIdTitle = Pick<Project, 'id' | 'title'>
+export type ProjectIdTitle = Pick<Project, 'id' | 'title'> & Partial<Pick<Project, 'description' | 'roles' | 'skills'>>
 
 export interface ProjectResponse {
   data: Project
