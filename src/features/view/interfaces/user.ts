@@ -1,3 +1,4 @@
+import type { AcademicFormation } from './academic-formation'
 import type { AcademicExperience } from './academic-experience'
 import type { Profile } from './profile'
 import type { Project } from './project'
@@ -19,6 +20,8 @@ export interface UserProfileResponse {
   work_experiences: WorkExperience[]
 
   academic_experiences: AcademicExperience[]
+
+  academic_formations?: AcademicFormation[]
 
   projects: Project[]
 }

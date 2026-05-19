@@ -5,6 +5,7 @@ import { Skills } from '../features/view/components/Skills'
 import { WorkExperiences } from '../features/view/components/WorkExperiences'
 import { Projects } from '../features/view/components/Projects'
 import { AcademicExperiences } from '../features/view/components/AcademicExperiences'
+import { AcademicFormations } from '../features/view/components/AcademicFormations'
 import { Footer } from '../features/view/components/Footer'
 import { UserNotFound } from '../features/view/components/UserNotFound'
 import { SocialLinks } from '../features/view/components/SocialLinks'
@@ -32,6 +33,7 @@ function RouteComponent() {
     social_links,
     skills,
     soft_skills,
+    academic_formations = [],
     academic_experiences,
     work_experiences,
     projects,
@@ -39,6 +41,7 @@ function RouteComponent() {
 
   const skills_parsed = Object.values(skills)
   const soft_skills_parsed = Object.values(soft_skills)
+  const academic_formations_parsed = Object.values(academic_formations)
   const academic_experiences_parsed = Object.values(academic_experiences)
   const work_experiences_parsed = Object.values(work_experiences)
   const projects_parsed = Object.values(projects)
@@ -57,6 +60,10 @@ function RouteComponent() {
 
         {(!!skills_parsed.length || !!soft_skills_parsed.length) && (
           <Skills skills={skills_parsed} soft_skills={soft_skills_parsed} />
+        )}
+
+        {!!academic_formations_parsed.length && (
+          <AcademicFormations academic_formations={academic_formations_parsed} />
         )}
 
         {!!academic_experiences_parsed.length && (
