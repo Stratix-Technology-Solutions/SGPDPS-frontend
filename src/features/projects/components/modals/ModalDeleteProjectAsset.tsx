@@ -46,25 +46,7 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
         title="Vista previa de evidencia"
         description="Revisa el archivo sin salir del flujo de eliminación."
       >
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3">
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-background-dark truncate" title={fileName}>
-                {fileName}
-              </p>
-              <p className="text-xs text-neutral-medium/70">
-                {isImage ? 'Imagen' : isPdf ? 'PDF' : 'Archivo'}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setPreviewAsset(null)}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-neutral-light bg-white text-background-dark hover:bg-neutral-50 transition-colors font-medium text-sm"
-            >
-              Volver atrás
-            </button>
-          </div>
+        <div className="flex flex-col gap-4 pt-4">
 
           <div className="rounded-xl border border-neutral-light bg-neutral-50 overflow-hidden min-h-96 items-center justify-center">
             {isImage ? (
@@ -95,6 +77,16 @@ export const ModalDeleteProjectAsset = ({ onClose }: Props) => {
                 </a>
               </div>
             )}
+          </div>
+          <div className="flex items-center justify-between gap-3 rounded-xl  px-4 py-3">
+
+            <button
+              type="button"
+              onClick={() => setPreviewAsset(null)}
+              className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
+            >
+              Volver atrás
+            </button>
           </div>
         </div>
       </Modal>
