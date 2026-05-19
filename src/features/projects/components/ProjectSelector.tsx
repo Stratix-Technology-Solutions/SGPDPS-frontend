@@ -33,6 +33,12 @@ export const ProjectSelector = ({
               className={`w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer ${hoverClasses}`}
             >
               <p className="font-semibold text-background-dark">{project.title}</p>
+              <p className="mt-1 text-sm text-neutral-medium/70">
+                {[
+                  project.roles?.map((role) => role.name).join(', '),
+                  project.skills?.map((skill) => skill.name).join(', '),
+                ].filter(Boolean).join(' · ') || 'Sin roles ni tecnologías registradas'}
+              </p>
             </button>
           </li>
         ))}

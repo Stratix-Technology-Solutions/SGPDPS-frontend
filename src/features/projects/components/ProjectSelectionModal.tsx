@@ -32,6 +32,14 @@ export const ProjectSelectionModal = ({ title, onClose, projects, isLoading, onS
               className={`w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer ${hoverClasses}`}
             >
               <p className="font-semibold text-background-dark">{project.title}</p>
+              <p className="mt-1 text-sm text-neutral-medium/70">
+                <span className="font-medium text-neutral-medium">Roles:</span>{' '}
+                {project.roles?.map((role) => role.name).join(', ') || 'Sin roles'}
+              </p>
+              <p className="text-sm text-neutral-medium/70">
+                <span className="font-medium text-neutral-medium">Tecnologías:</span>{' '}
+                {project.skills?.map((skill) => skill.name).join(', ') || 'Sin tecnologías'}
+              </p>
             </button>
           </li>
         ))}
