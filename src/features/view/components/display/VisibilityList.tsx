@@ -32,7 +32,7 @@ export const VisibilityList = <T extends Item>({
   url,
   getLabel,
 }: Props<T>) => {
-  const { mutate, isPending } = useToggleShow({ url, queryKey })
+  const { mutate } = useToggleShow({ url, queryKey })
 
   if (isLoading) {
     return (
@@ -83,7 +83,6 @@ export const VisibilityList = <T extends Item>({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              disabled={isPending}
               onClick={() =>
                 mutate({
                   id: item.id,
