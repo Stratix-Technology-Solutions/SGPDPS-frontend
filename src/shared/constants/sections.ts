@@ -1,6 +1,7 @@
 import type { IconType } from 'react-icons'
+import { FaUniversity } from 'react-icons/fa'
 import { SiHyperskill } from 'react-icons/si'
-import { MdOutlineWork, MdOutlineComputer, MdSchool } from 'react-icons/md'
+import { MdOutlineWork, MdOutlineComputer } from 'react-icons/md'
 import { MdLink } from 'react-icons/md'
 import { GiGraduateCap } from 'react-icons/gi'
 import { IoSettings } from 'react-icons/io5'
@@ -34,7 +35,7 @@ export const sections: Section[] = [
   {
     label: 'Formacion Academica',
     to: '/profile/academic-formation',
-    Icon: MdSchool,
+    Icon: FaUniversity,
     description: 'Registra tus estudios formales, grados academicos y titulos obtenidos.',
   },
   {
