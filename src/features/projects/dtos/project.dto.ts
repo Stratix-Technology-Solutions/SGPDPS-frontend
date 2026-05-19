@@ -31,10 +31,11 @@ const dateRangeRefinement = (
 export const ProjectCreateSchema = z.object({
   title: z.string().min(5, 'Mínimo 5 carácteres').max(200, 'Máximo 200 caracteres'),
   role: z.string().max(50, 'Máximo 50 caracteres').optional().or(z.literal('')),
-  description: z.string().min(5, 'Mínimo 5 carácteres').max(2000, 'Máximo 2000 caracteres'),
-  start_date: z.string().min(1, 'La fecha de inicio es requerida'),
-  end_date: z.string().min(1, 'LA fecha de fin es requerida'),
-  skill_ids: z.array(z.number().int().positive()).optional(),
+  description: z.string().max(2000, 'Máximo 2000 caracteres').optional().nullable().or(z.literal('')),
+  contributions: z.string().max(2000, 'Máximo 2000 caracteres').optional().nullable().or(z.literal('')),
+  start_date: z.string().optional().nullable().or(z.literal('')),
+  end_date: z.string().optional().nullable().or(z.literal('')),
+  skill_ids: z.array(z.number().int().positive()).min(1, 'Selecciona al menos una tecnología'),
   roles_ids: z.array(z.number().int().positive()).min(1, 'Selecciona al menos un rol'),
   links: z.array(z.string().trim().max(512, 'Máximo 512 caracteres')).superRefine((links, ctx) => {
     const invalidLink = links.find((link) => !isValidUrl(link))
@@ -54,8 +55,9 @@ export const defaultValues: ProjectCreateDto = {
   title: '',
   role: '',
   description: '',
+  contributions: '',
   start_date: '',
-  end_date: '',
+  end_date: null,
   skill_ids: [],
   roles_ids: [],
   links: [],
@@ -63,13 +65,14 @@ export const defaultValues: ProjectCreateDto = {
 
 export const ProjectUpdateSchema = z.object({
   description: z.string().max(2000, 'Máximo 2000 caracteres').optional().nullable().or(z.literal('')),
+  contributions: z.string().max(2000, 'Máximo 2000 caracteres').optional().nullable().or(z.literal('')),
   start_date: z.string().optional().nullable(),
   end_date: z.string().optional().nullable().or(z.literal('')),
   links: z.array(z.object({
     id: z.number().int().positive(),
     url: z.string().url('Debe ser una URL válida').max(512, 'Máximo 512 caracteres'),
   })).optional(),
-  skill_ids: z.array(z.number().int().positive()).optional(),
+  skill_ids: z.array(z.number().int().positive()).min(1, 'Selecciona al menos una tecnología'),
   roles_ids: z.array(z.number().int().positive()).min(1, 'Selecciona al menos un rol'),
 }).superRefine(dateRangeRefinement)
 
@@ -77,6 +80,7 @@ export type ProjectUpdateDto = z.infer<typeof ProjectUpdateSchema>
 
 export const projectUpdateDefaultValues: ProjectUpdateDto = {
   description: '',
+  contributions: '',
   start_date: '',
   end_date: '',
   links: [],

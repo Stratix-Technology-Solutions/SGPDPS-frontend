@@ -1,6 +1,5 @@
 import { useForm } from '@tanstack/react-form'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { FormField } from '../field_form/FormField'
 import { FormTextarea } from '../field_form/FormTextarea'
 import { ProjectLinksEditor, type ProjectLinkInput } from '../field_form/ProjectLinksEditor'
 import { ProjectUpdateSchema, projectUpdateDefaultValues } from '../../dtos/project.dto'
@@ -71,11 +70,12 @@ export const FormProjectEdit = ({
           name="roles_ids"
           children={(field) => (
             <Picker
-              label="Roles del proyecto"
+              label="Roles en el proyecto *"
               value={field.state.value ?? []}
               options={rolesOptions ?? []}
               isLoading={loadingRole}
               isEditing={true}
+              placeholder="Buscar rol en el proyecto..."
               onChange={field.handleChange}
             />
           )}
@@ -85,11 +85,12 @@ export const FormProjectEdit = ({
           name="skill_ids"
           children={(field) => (
             <Picker
-              label="Tecnologías utilizadas"
+              label="Tecnologías utilizadas *"
               value={field.state.value ?? []}
               options={skillsOptions ?? []}
               isLoading={loadingSkill}
               isEditing={true}
+              placeholder="Buscar tecnología utilizada..."
               onChange={field.handleChange}
             />
           )}
@@ -99,21 +100,9 @@ export const FormProjectEdit = ({
       <form.Field
         name="description"
         children={(field) => (
-          <FormTextarea label="Descripción *" field={field} placeholder="Describe el proyecto" />
+          <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
         )}
       />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <form.Field
-          name="start_date"
-          children={(field) => <FormField label="Fecha de inicio" field={field} type="date" />}
-        />
-
-        <form.Field
-          name="end_date"
-          children={(field) => <FormField label="Fecha de finalización" field={field} type="date" />}
-        />
-      </div>
 
       <form.Field
         name="links"
@@ -128,7 +117,7 @@ export const FormProjectEdit = ({
 
       {serverError && <BannerMessageError message={serverError} />}
 
-      <div className="flex justify-end gap-4 pt-3">
+      <div className="sticky bottom-0 -mx-6 flex justify-end gap-3 border-t border-neutral-light bg-white px-6 py-4">
         {onCancel && (
           <button
             type="button"
@@ -147,6 +136,6 @@ export const FormProjectEdit = ({
           {submitLabel}
         </button>
       </div>
-    </form >
+    </form>
   )
 }

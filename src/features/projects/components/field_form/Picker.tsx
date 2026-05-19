@@ -13,9 +13,10 @@ interface Props<T extends BaseOption> {
   isLoading: boolean
   onChange: (value: number[]) => void
   isEditing: boolean
+  placeholder?: string
 }
 
-export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange, isEditing }: Props<T>) => {
+export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange, isEditing, placeholder = 'Buscar opciones...' }: Props<T>) => {
 
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -76,10 +77,10 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
     <div ref={containerRef} className="relative">
       <label className="block font-semibold text-background-dark mb-1.5">{label}</label>
 
-      {isLoading && <p className="text-sm text-neutral-medium/70">Cargando tecnologías...</p>}
+      {isLoading && <p className="text-sm text-neutral-medium/70">Cargando opciones...</p>}
 
       {!isLoading && !options.length && (
-        <p className="text-sm text-neutral-medium/70">No hay tecnologías disponibles.</p>
+        <p className="text-sm text-neutral-medium/70">No hay opciones disponibles.</p>
       )}
 
       {!isLoading && options.length > 0 && (
@@ -91,7 +92,7 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
                 onChange={(e) => { setQuery(e.target.value); setIsOpen(true) }}
                 onFocus={() => setIsOpen(true)}
                 onKeyDown={onKeyDown}
-                placeholder="Buscar habilidades..."
+                placeholder={placeholder}
                 className="w-full outline-none text-sm bg-transparent"
               />
             </div>

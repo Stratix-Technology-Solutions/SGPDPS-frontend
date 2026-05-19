@@ -21,13 +21,13 @@ export const ModalAddProject = ({ isOpen, onClose }: Props) => {
   return (
     <Modal
       onClose={onClose}
-      title="Agregar proyecto de software"
-      description="Registra los datos principales de tu participacion para mostrar tu experiencia y aportes en el portafolio."
+      title="Registrar proyecto personal"
+      description="Registra los datos principales, roles y tecnologías para mostrar el proyecto en tu portafolio."
     >
       {isError && (
         <BannerMessageError
           message={error.response?.data?.message
-            || 'Surgió un error durante el registro de la habilidad blanda'
+            || 'Surgió un error durante el registro del proyecto'
           }
         />
       )}

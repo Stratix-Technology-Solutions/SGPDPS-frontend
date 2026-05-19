@@ -19,7 +19,11 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
     defaultValues,
     validators: { onSubmit: ProjectCreateSchema },
     onSubmit: ({ value }) => {
-      onSubmit(value)
+      onSubmit({
+        ...value,
+        start_date: null,
+        end_date: null,
+      })
     },
   })
 
@@ -38,9 +42,9 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
         name="title"
         children={(field) => (
           <FormField
-            label="Proyecto *"
+            label="Nombre del proyecto *"
             field={field}
-            placeholder="Ingrese el título del proyecto"
+            placeholder="Ingrese el nombre del proyecto"
           />
         )}
       />
@@ -48,46 +52,38 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
       <form.Field
         name="roles_ids" children={(field) => (
           <Picker
-            label="Roles"
+            label="Roles en el proyecto *"
             value={field.state.value ?? []}
             options={roles ?? []}
             isLoading={loadingRole}
             isEditing={false}
+            placeholder="Buscar rol en el proyecto..."
             onChange={field.handleChange}
           />
         )}
       />
 
-      < form.Field name="skill_ids" children={(field) => (
+      <form.Field name="skill_ids" children={(field) => (
         <Picker
-          label="Tecnologías utilizadas"
+          label="Tecnologías utilizadas *"
           value={field.state.value ?? []}
           options={skills ?? []}
           isLoading={loadingSkill}
           isEditing={false}
+          placeholder="Buscar tecnología utilizada..."
           onChange={field.handleChange}
         />
       )} />
 
-      < form.Field name="links" children={(field) => (
+      <form.Field name="links" children={(field) => (
         <FormTags label="Enlaces del proyecto" field={field} placeholder="https://github.com/..." />
       )} />
 
-      < div className="grid grid-cols-1 sm:grid-cols-2 gap-4" >
-        <form.Field name="start_date" children={(field) => (
-          <FormField label="Fecha de inicio *" field={field} type="date" />
-        )} />
-
-        <form.Field name="end_date" children={(field) => (
-          <FormField label="Fecha de finalización *" field={field} type="date" />
-        )} />
-      </div >
-
-      < form.Field name="description" children={(field) => (
-        <FormTextarea label="Descripción" field={field} placeholder="Agrega una descripción sobre el proyecto realizado" />
+      <form.Field name="description" children={(field) => (
+        <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
       )} />
 
-      <div className="flex justify-end gap-3 pt-4">
+      <div className="sticky bottom-0 -mx-6 flex justify-end gap-3 border-t border-neutral-light bg-white px-6 py-4">
         {onCancel && (
           <button
             type="button"
@@ -106,6 +102,6 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
           {submitLabel}
         </button>
       </div>
-    </form >
+    </form>
   )
 }

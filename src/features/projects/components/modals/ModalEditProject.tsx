@@ -19,8 +19,6 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
   const handleSubmit = (values: ProjectUpdateDto) => {
     const payload: ProjectUpdateDto = {
       description: values.description,
-      start_date: values.start_date,
-      end_date: values.end_date,
       links: values.links,
       skill_ids: values.skill_ids,
       roles_ids: values.roles_ids,
@@ -37,8 +35,6 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
 
   const initialValues: Partial<ProjectUpdateDto> = {
     description: project?.description,
-    start_date: project?.start_date,
-    end_date: project?.end_date || '',
     links: project?.links.map((link) => ({
       id: link.id,
       url: link.url,
@@ -50,10 +46,10 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
   if (!isOpen) return null
 
   return (
-    <Modal onClose={onClose} title="Editar proyecto de software">
-      <div className="p-4 md:p-6 lg:px-8 bg-white max-h-[85vh] overflow-y-auto customized-scrollbar">
+    <Modal onClose={onClose} title="Editar proyecto personal">
+      <div>
         <p className="text-sm text-neutral-medium mb-6">
-          Modifica los detalles de tu proyecto para mantener tu portafolio actualizado.
+          Actualiza roles, tecnologías, enlaces y descripción del proyecto.
         </p>
         <FormProjectEdit
           onCancel={onClose}

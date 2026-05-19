@@ -30,15 +30,15 @@ export const ProjectList = () => {
     <section className="py-10 flex flex-col gap-6">
       <SectionTitle
         title="Proyectos Personales"
-        description="Gestiona los proyectos en los que participaste para mostrarlos en tu portafolio."
+        description="Gestiona tus proyectos personales, roles y tecnologías para mostrarlos en tu portafolio."
       />
 
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-light p-8 flex gap-6 justify-center flex-wrap">
-        <ActionButton icon={FiPlusCircle} label="Crear proyecto de software" onClick={() => setModal('add')} />
-        <ActionButton icon={FiEdit2} label="Editar proyecto de software" onClick={() => setModal('edit')} />
-        <ActionButton icon={FiTrash2} label="Eliminar proyecto de software" onClick={() => setModal('delete')} />
-        <ActionButton icon={FiEye} label="Visualizar proyectos de software" onClick={() => setModal('view')} />
-        <ActionButton icon={FiPlusCircle} label="Agregar Categorías" onClick={() => setModal('add-category')} />
+        <ActionButton icon={FiPlusCircle} label="Registrar proyecto personal" onClick={() => setModal('add')} />
+        <ActionButton icon={FiEdit2} label="Editar proyecto personal" onClick={() => setModal('edit')} />
+        <ActionButton icon={FiTrash2} label="Eliminar proyecto personal" onClick={() => setModal('delete')} />
+        <ActionButton icon={FiEye} label="Visualizar proyectos personales" onClick={() => setModal('view')} />
+        <ActionButton icon={FiPlusCircle} label="Agregar categorías" onClick={() => setModal('add-category')} />
       </div>
 
       <SectionTitle
