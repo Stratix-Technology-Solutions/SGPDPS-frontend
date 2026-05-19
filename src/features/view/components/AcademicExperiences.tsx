@@ -8,7 +8,7 @@ interface Props {
 export const AcademicExperiences = ({ academic_experiences }: Props) => {
   return (
     <section id="education" className="w-full max-w-7xl mx-auto px-4 sm:px-6">
-      <p className="font-mono text-sm tracking-widest uppercase text-primary-soft mb-1">Formación</p>
+      <p className="font-mono text-sm tracking-widest uppercase text-primary-soft mb-1">Formación Complementaria</p>
       <h2 className="font-serif text-3xl text-[#0d1b3e] mb-4">Educación</h2>
  
       <div className="flex flex-col gap-4">

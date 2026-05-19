@@ -44,7 +44,7 @@ export const AcademicFormations = ({ academic_formations }: Props) => {
             key={formation.id}
             className="overflow-hidden rounded-2xl border border-primary/10 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-primary-soft"
           >
-            <div className="flex items-start gap-4 border-b border-primary/10 bg-primary/5 px-5 py-4">
+            <div className="flex min-h-28 items-start gap-4 border-b border-primary/10 bg-primary/5 px-5 py-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/15 bg-white text-primary">
                 <FaUniversity className="text-xl" />
               </div>
@@ -63,11 +63,9 @@ export const AcademicFormations = ({ academic_formations }: Props) => {
                   {formation.institution}
                 </h3>
 
-                {formation.field_of_study && (
-                  <p className="mt-1 text-sm font-medium text-primary">
-                    {formation.field_of_study}
-                  </p>
-                )}
+                <p className={`mt-1 min-h-5 text-sm font-medium ${formation.field_of_study ? 'text-primary' : 'text-transparent'}`}>
+                  {formation.field_of_study ?? 'Sin area'}
+                </p>
               </div>
             </div>
 

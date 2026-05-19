@@ -5,7 +5,6 @@ import { useCheckDuplicateAcademicExperience } from '../../hooks/useCheckAcademi
 import type { CheckDuplicateResponse } from '../../dtos/academic.interface'
 import { Modal } from '../../../../shared/components/Modal'
 import type { AcademicDto } from '../../dtos/academic.dto'
-import { saveAcademicExperienceEndMode, type AcademicExperienceEndMode } from '../../utils/academicExperienceEndMode'
 
 interface Props {
   onClose: () => void
@@ -15,7 +14,6 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
   const { create } = useAcademic()
   const [showWarning, setShowWarning] = useState(false)
   const [pendingValues, setPendingValues] = useState<AcademicDto | null>(null)
-  const [pendingEndMode, setPendingEndMode] = useState<AcademicExperienceEndMode>('date_range')
   const [checkResult, setCheckResult] = useState<CheckDuplicateResponse | null>(null)
   const {
     mutate: checkDuplicate,
@@ -25,14 +23,8 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
     reset: resetCheck,
   } = useCheckDuplicateAcademicExperience()
 
-  const saveEndModeAndClose = (endMode: AcademicExperienceEndMode) => (response: { data?: { id?: string } }) => {
-    if (response.data?.id) saveAcademicExperienceEndMode(response.data.id, endMode)
-    onClose()
-  }
-
-  const handleSubmit = (values: AcademicDto, endMode: AcademicExperienceEndMode) => {
+  const handleSubmit = (values: AcademicDto) => {
     setPendingValues(values)
-    setPendingEndMode(endMode)
 
     checkDuplicate({ data: values }, {
       onSuccess: (result) => {
@@ -42,7 +34,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
           return
         }
 
-        create.mutate(values, { onSuccess: saveEndModeAndClose(endMode) })
+        create.mutate(values, { onSuccess: onClose })
       },
     })
   }
@@ -50,7 +42,7 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
   const handleContinue = () => {
     if (!pendingValues) return
 
-    create.mutate(pendingValues, { onSuccess: saveEndModeAndClose(pendingEndMode) })
+    create.mutate(pendingValues, { onSuccess: onClose })
   }
 
   const handleCloseWarning = () => {

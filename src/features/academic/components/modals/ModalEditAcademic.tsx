@@ -7,11 +7,6 @@ import { Modal } from '../../../../shared/components/Modal'
 import { useCheckDuplicateAcademicExperience } from '../../hooks/useCheckAcademicExperience'
 
 import type { AcademicDto } from '../../dtos/academic.dto'
-import {
-  getAcademicExperienceEndMode,
-  saveAcademicExperienceEndMode,
-  type AcademicExperienceEndMode,
-} from '../../utils/academicExperienceEndMode'
 
 interface Props {
   onClose: () => void
@@ -22,7 +17,6 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
   const [selected, setSelected] = useState<AcademicExperienceResponse | null>(null)
   const [showWarning, setShowWarning] = useState(false)
   const [pendingValues, setPendingValues] = useState<Partial<AcademicDto> | null>(null)
-  const [pendingEndMode, setPendingEndMode] = useState<AcademicExperienceEndMode>('date_range')
   const [checkResult, setCheckResult] = useState<CheckDuplicateResponse | null>(null)
   const {
     mutate: checkDuplicate,
@@ -32,7 +26,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
     reset: resetCheck,
   } = useCheckDuplicateAcademicExperience()
 
-  const handleSubmit = (values: AcademicDto, endMode: AcademicExperienceEndMode) => {
+  const handleSubmit = (values: AcademicDto) => {
     if (!selected) return
 
     const editableValues: Partial<AcademicDto> = {
@@ -44,7 +38,6 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
     }
 
     setPendingValues(editableValues)
-    setPendingEndMode(endMode)
 
     checkDuplicate(
       { data: values, excludeId: selected.id },
@@ -58,10 +51,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
 
           update.mutate(
             { id: selected.id, dto: editableValues },
-            { onSuccess: () => {
-              saveAcademicExperienceEndMode(selected.id, endMode)
-              onClose()
-            } },
+            { onSuccess: onClose },
           )
         },
       },
@@ -73,10 +63,7 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
 
     update.mutate(
       { id: selected.id, dto: pendingValues },
-      { onSuccess: () => {
-        saveAcademicExperienceEndMode(selected.id, pendingEndMode)
-        onClose()
-      } },
+      { onSuccess: onClose },
     )
   }
 
@@ -120,7 +107,6 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
                 description: selected.description,
                 is_visible: selected.is_visible,
               }}
-              initialEndMode={getAcademicExperienceEndMode(selected)}
             />
           ) : (
             null

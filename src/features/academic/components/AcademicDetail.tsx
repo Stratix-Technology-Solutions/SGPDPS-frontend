@@ -1,6 +1,5 @@
 import type { AcademicExperienceResponse } from '../dtos/academic.interface'
 import { getAcademicTypeLabel } from '../utils/academicLabels'
-import { getAcademicExperienceEndMode } from '../utils/academicExperienceEndMode'
 
 interface Props {
   item: AcademicExperienceResponse
@@ -8,13 +7,6 @@ interface Props {
 }
 
 export const AcademicDetail = ({ item, onBack }: Props) => {
-  const endMode = getAcademicExperienceEndMode(item)
-  const endDateLabel = endMode === 'single_day'
-    ? 'Mismo día'
-    : endMode === 'in_progress'
-      ? 'En curso'
-      : item.end_date
-
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -33,7 +25,7 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
           </div>
           <div>
             <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Fin</p>
-            <p className="text-background-dark font-semibold mt-0.5">{endDateLabel ?? 'No aplica'}</p>
+            <p className="text-background-dark font-semibold mt-0.5">{item.end_date ?? 'No aplica'}</p>
           </div>
           <div>
             <p className="text-xs text-neutral-medium/70 font-medium uppercase tracking-wide">Tipo de actividad</p>
