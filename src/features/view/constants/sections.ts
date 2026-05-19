@@ -11,6 +11,7 @@ import { Links } from '../components/display/Links'
 import { Projects } from '../components/display/Projects'
 import { Work } from '../components/display/Work'
 import { Academic } from '../components/display/Academic'
+import { Formation } from '../components/display/Formation'
 import { Skills } from '../components/display/Skills'
 import { SoftSkills } from '../components/display/SoftSkills'
 
@@ -48,7 +49,7 @@ export const sections = [
     title: 'Formación académica',
     description: 'Formación académica, estudios y grados',
     icon: PiStudentFill,
-    content: '',
+    content: Formation,
   },
   {
     id: 'projects',
