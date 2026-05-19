@@ -1,5 +1,8 @@
 import type { AcademicFormationResponse } from '../dtos/academicFormation.interface'
-import { getAcademicFormationLevelLabel } from '../utils/academicFormationLabels'
+import {
+  getAcademicFormationLevelLabel,
+  getAcademicFormationStatusLabel,
+} from '../utils/academicFormationLabels'
 
 interface Props {
   data: AcademicFormationResponse[] | undefined
@@ -24,11 +27,38 @@ export const AcademicFormationList = ({ data, isLoading, onSelect, itemClassName
               onClick={() => onSelect(item)}
               className={`w-full text-left px-4 py-3 rounded-xl border border-neutral-light transition-colors cursor-pointer ${itemClassName ?? 'hover:border-primary hover:bg-neutral-50'}`}
             >
-              <p className="font-semibold text-background-dark">{item.institution}</p>
-              <p className="text-sm text-neutral-medium/70">
-                {getAcademicFormationLevelLabel(item.education_level)}
-                {item.field_of_study ? ` · ${item.field_of_study}` : ''}
-              </p>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="font-semibold text-background-dark">{item.institution}</p>
+                    <p className="text-sm text-neutral-medium/70">
+                      {getAcademicFormationLevelLabel(item.education_level)}
+                      {item.field_of_study ? ` · ${item.field_of_study}` : ''}
+                    </p>
+                  </div>
+
+                  <span className="w-fit rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                    {getAcademicFormationStatusLabel(item.status)}
+                  </span>
+                </div>
+
+                <div className="grid gap-2 text-xs text-neutral-medium/80 sm:grid-cols-2">
+                  <span>
+                    <span className="font-semibold text-background-dark">Emisión: </span>
+                    {item.emission_date ?? 'No aplica'}
+                  </span>
+                  <span>
+                    <span className="font-semibold text-background-dark">Visibilidad: </span>
+                    {item.is_visible ? 'Visible' : 'Oculta'}
+                  </span>
+                </div>
+
+                {item.description && (
+                  <p className="line-clamp-2 text-sm text-neutral-medium">
+                    {item.description}
+                  </p>
+                )}
+              </div>
             </button>
           </li>
         ))}

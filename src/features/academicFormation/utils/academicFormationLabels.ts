@@ -14,3 +14,14 @@ export const getAcademicFormationLevelLabel = (
 
   return labels[level]
 }
+
+export const getAcademicFormationStatusLabel = (
+  status: AcademicFormationResponse['status'],
+) => {
+  const labels: Record<AcademicFormationResponse['status'], string> = {
+    completado: 'Completado',
+    en_curso: 'En curso',
+  }
+
+  return labels[status]
+}
