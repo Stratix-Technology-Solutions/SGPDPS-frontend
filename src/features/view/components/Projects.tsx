@@ -1,5 +1,4 @@
 import type { Project } from '../interfaces/project'
-import { formatYear } from '../utils/formatYear'
 import { SocialIcon } from './SocialIcon'
 
 interface Props {
@@ -67,17 +66,11 @@ export const Projects = ({ projects }: Props) => {
                   {project.title}
                 </h3>
 
-                <p className="mb-3 font-mono text-[11px] text-neutral-medium">
-                  {project.roles.map((role) => role.name).join(', ')}
-                  {' · '}
-
-                  {formatYear(project.start_date)}
-                  {' — '}
-
-                  {project.end_date
-                    ? formatYear(project.end_date)
-                    : 'Actualidad'}
-                </p>
+                {!!project.roles?.length && (
+                  <p className="mb-3 font-mono text-[11px] text-neutral-medium">
+                    {project.roles.map((role) => role.name).join(', ')}
+                  </p>
+                )}
 
                 {project.description && (
                   <p className="mb-4 flex-1 text-sm leading-relaxed text-neutral-medium">

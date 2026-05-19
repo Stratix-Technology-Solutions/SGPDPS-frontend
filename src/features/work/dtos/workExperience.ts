@@ -28,6 +28,7 @@ export interface WorkExperience {
   description: string | null
   start_date: string
   end_date: string | null
+  is_visible: boolean
   created_at: string
   updated_at: string
 }

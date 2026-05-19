@@ -10,4 +10,6 @@ export interface WorkExperience {
   end_date: string | null
 
   description: string | null
+
+  is_visible: boolean
 }

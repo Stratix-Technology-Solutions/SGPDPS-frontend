@@ -1,5 +1,5 @@
 import type { WorkExperience } from '../interfaces/work-experience'
-import { formatYear } from '../utils/formatYear'
+import { formatMonthYear } from '../utils/formatMonthYear'
 
 interface Props {
   work_experiences: WorkExperience[]
@@ -22,7 +22,7 @@ export const WorkExperiences = ({ work_experiences }: Props) => {
                 <p className="font-semibold text-[#0d1b3e]">{exp.position}</p>
               </div>
               <p className="font-mono text-xs text-neutral-medium shrink-0">
-                {formatYear(exp.start_date)} – {formatYear(exp.end_date)}
+                {formatMonthYear(exp.start_date)} – {formatMonthYear(exp.end_date)}
               </p>
             </div>
             <p className="text-sm text-neutral-medium leading-relaxed">{exp.description}</p>

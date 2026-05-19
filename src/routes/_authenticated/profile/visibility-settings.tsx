@@ -19,9 +19,10 @@ function RouteComponent() {
         description="Elige que secciones de tu portafolio seran visibles para los visitantes."
       />
 
-      {!!data && (
+      {!!data?.username && (
         <Link
-          to={`/profile/${(data as any).username}`}
+          to="/profile/$username"
+          params={{ username: data.username }}
           className="w-full bg-primary text-white flex justify-center items-center py-3 rounded-xl hover:cursor-pointer hover:bg-primary-soft transition-all duration-300"
         >
           Ver perfil

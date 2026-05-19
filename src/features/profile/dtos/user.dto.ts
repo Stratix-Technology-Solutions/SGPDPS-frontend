@@ -51,6 +51,7 @@ export const RegisterAccountSchema = z.object({
 })
 
 export interface RegisterAccountDto {
+  username?: string
   first_name: string
   last_name: string
   biography: string

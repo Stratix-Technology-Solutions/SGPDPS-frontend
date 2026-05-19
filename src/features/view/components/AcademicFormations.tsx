@@ -60,7 +60,7 @@ export const AcademicFormations = ({ academic_formations }: Props) => {
                 </div>
 
                 <h3 className="text-base font-semibold text-background-dark">
-                  {formation.institution}
+                  En {formation.institution}
                 </h3>
 
                 <p className={`mt-1 min-h-5 text-sm font-medium ${formation.field_of_study ? 'text-primary' : 'text-transparent'}`}>
