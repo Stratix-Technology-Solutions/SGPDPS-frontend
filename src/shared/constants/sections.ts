@@ -27,16 +27,16 @@ export const sections: Section[] = [
     description: 'Registra y gestiona tu historial de empleos para mostrarlos en tu portafolio.',
   },
   {
-    label: 'Experiencia Academica',
+    label: 'Experiencia Académica',
     to: '/profile/academic-experience',
     Icon: GiGraduateCap,
     description: 'Registra formaciones complementarias como cursos, talleres y certificados.',
   },
   {
-    label: 'Formacion Academica',
+    label: 'Formación Académica',
     to: '/profile/academic-formation',
     Icon: FaUniversity,
-    description: 'Registra tus estudios formales, grados academicos y titulos obtenidos.',
+    description: 'Registra tus estudios formales, grados académicos y títulos obtenidos.',
   },
   {
     label: 'Proyectos Personales',

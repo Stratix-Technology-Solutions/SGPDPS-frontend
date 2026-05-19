@@ -2,6 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { FormField } from '../../../academic/components/field_form/FormField'
 import { FormSelect } from '../../../academic/components/field_form/FormSelect'
 import { FormTextarea } from '../../../academic/components/field_form/FormTextarea'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import {
   AcademicFormationSchema,
   defaultValues as emptyValues,
@@ -14,6 +15,7 @@ interface Props {
   submitLabel?: string
   defaultValues?: Partial<AcademicFormationDto>
   isPending?: boolean
+  serverError?: string
 }
 
 export const FormAcademicFormation = ({
@@ -22,6 +24,7 @@ export const FormAcademicFormation = ({
   submitLabel = 'Guardar',
   defaultValues,
   isPending,
+  serverError,
 }: Props) => {
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
@@ -91,6 +94,8 @@ export const FormAcademicFormation = ({
       <form.Field name="description" children={(field) => (
         <FormTextarea label="Descripción" field={field} placeholder="Ingrese una descripción" />
       )} />
+
+      {serverError && <BannerMessageError message={serverError} />}
 
       <div className="flex justify-end gap-3 pt-1">
         {onCancel && (
