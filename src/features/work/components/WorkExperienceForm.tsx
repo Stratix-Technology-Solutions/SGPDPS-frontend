@@ -43,6 +43,7 @@ export const WorkExperienceForm = ({
             label="Empresa *"
             placeholder="Ingrese el nombre de la empresa"
             field={field}
+            disabled={initialValues !== undefined}
           />
         )}
       />

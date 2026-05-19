@@ -7,6 +7,7 @@ interface Props {
   placeholder?: string
   type?: string
   field: AnyFieldApi
+  disabled?: boolean
 }
 
 export const FormField = ({
@@ -14,6 +15,7 @@ export const FormField = ({
   placeholder,
   type = 'text',
   field,
+  disabled = false,
 }: Props) => (
   <div>
     <label className="block font-semibold text-background-dark mb-1.5">
@@ -28,7 +30,8 @@ export const FormField = ({
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         field.handleChange(e.target.value || null)
       }
-      className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+      disabled={disabled}
+      className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors hover:disabled:cursor-not-allowed disabled:text-gray-500"
     />
     {!field.state.meta.isValid && (
       <InputMessageError

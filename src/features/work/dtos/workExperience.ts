@@ -17,7 +17,9 @@ export const WorkExperienceSchema = z.object({
   end_date: z.string().nullable(),
 })
 
-export const updateSchema = WorkExperienceSchema.partial()
+export const updateSchema = WorkExperienceSchema.omit({
+  company: true,
+}).partial()
 
 export interface WorkExperience {
   id: string

@@ -17,7 +17,8 @@ interface Props {
 export const ModalEdit = ({ onClose }: Props) => {
   const [selected, setSelected] = useState<WorkExperience | null>(null)
   const [showWarning, setShowWarning] = useState(false)
-  const [pendingValues, setPendingValues] = useState<WorkExperienceFormValues | null>(null)
+  const [pendingValues, setPendingValues] =
+    useState<WorkExperienceFormValues | null>(null)
   const [checkResult, setCheckResult] = useState<{
     is_duplicate: boolean
     is_overlapping: boolean
@@ -25,10 +26,7 @@ export const ModalEdit = ({ onClose }: Props) => {
 
   const { data: list, isLoading } = useWorkExperiences()
 
-  const {
-    mutate: update,
-    isPending,
-  } = useUpdateWorkExperience({ onClose })
+  const { mutate: update, isPending } = useUpdateWorkExperience({ onClose })
 
   const {
     mutate: check,
@@ -84,11 +82,7 @@ export const ModalEdit = ({ onClose }: Props) => {
 
   return (
     <>
-      <Modal
-        title={title}
-        description={description}
-        onClose={onClose}
-      >
+      <Modal title={title} description={description} onClose={onClose}>
         {!selected && (
           <WorkExperienceList
             data={list}
@@ -106,7 +100,6 @@ export const ModalEdit = ({ onClose }: Props) => {
               description: selected.description,
               start_date: selected.start_date,
               end_date: selected.end_date,
-              is_visible: selected.is_visible,
             }}
             onSubmit={handleSubmit}
             onCancel={onClose}
@@ -152,4 +145,3 @@ export const ModalEdit = ({ onClose }: Props) => {
     </>
   )
 }
-
