@@ -38,6 +38,17 @@ export const useAcademicFormation = ({ enabled = true }: { enabled?: boolean } =
     },
   })
 
+  const remove = useMutation<void, ApiError, string>({
+    mutationFn: async (id) => {
+      await api.delete(`/academic-formations/${id}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY })
+      const newLastPage = data?.meta.last_page ?? 1
+      if (page > newLastPage) setPage(newLastPage)
+    },
+  })
+
   return {
     data,
     isLoading,
@@ -48,5 +59,6 @@ export const useAcademicFormation = ({ enabled = true }: { enabled?: boolean } =
     setPage,
     create,
     update,
+    remove,
   }
 }
