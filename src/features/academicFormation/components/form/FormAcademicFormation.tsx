@@ -16,6 +16,7 @@ interface Props {
   defaultValues?: Partial<AcademicFormationDto>
   isPending?: boolean
   serverError?: string
+  lockIdentityFields?: boolean
 }
 
 export const FormAcademicFormation = ({
@@ -25,6 +26,7 @@ export const FormAcademicFormation = ({
   defaultValues,
   isPending,
   serverError,
+  lockIdentityFields,
 }: Props) => {
   const form = useForm({
     defaultValues: { ...emptyValues, ...defaultValues },
@@ -52,11 +54,17 @@ export const FormAcademicFormation = ({
             { value: 'maestria', label: 'Maestría' },
             { value: 'doctorado', label: 'Doctorado / PhD' },
           ]}
+          disabled={lockIdentityFields}
         />
       )} />
 
       <form.Field name="institution" children={(field) => (
-        <FormField label="Institución *" field={field} placeholder="Ingrese colegio, instituto o universidad" />
+        <FormField
+          label="Institución *"
+          field={field}
+          placeholder="Ingrese colegio, instituto o universidad"
+          disabled={lockIdentityFields}
+        />
       )} />
 
       <form.Field name="education_level" children={(levelField) => (
@@ -65,7 +73,7 @@ export const FormAcademicFormation = ({
             label={levelField.state.value === 'bachillerato' ? 'Carrera o especialidad' : 'Carrera o especialidad *'}
             field={field}
             placeholder={levelField.state.value === 'bachillerato' ? 'No aplica' : 'Ej. Ingeniería de Sistemas, Medicina, Gestión de Proyectos'}
-            disabled={levelField.state.value === 'bachillerato'}
+            disabled={levelField.state.value === 'bachillerato' || lockIdentityFields}
           />
         )} />
       )} />
