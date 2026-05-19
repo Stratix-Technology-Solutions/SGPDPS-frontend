@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { FormTextarea } from '../field_form/FormTextarea'
@@ -33,11 +34,25 @@ export const FormProjectEdit = ({
   isPending,
   serverError,
 }: Props) => {
+  const [projectStatus, setProjectStatus] = useState<'in_progress' | 'completed'>(
+    defaultValues?.end_date ? 'completed' : 'in_progress',
+  )
+
+  useEffect(() => {
+    setProjectStatus(defaultValues?.end_date ? 'completed' : 'in_progress')
+  }, [defaultValues?.end_date])
+
   const form = useForm({
     defaultValues: { ...projectUpdateDefaultValues, ...defaultValues },
     validators: { onSubmit: ProjectUpdateSchema },
     onSubmit: ({ value }) => {
-      onSubmit(value)
+      const today = new Date().toISOString().slice(0, 10)
+
+      onSubmit({
+        ...value,
+        start_date: projectStatus === 'completed' ? (value.start_date || today) : null,
+        end_date: projectStatus === 'completed' ? (value.end_date || today) : null,
+      })
     },
   })
 
@@ -54,7 +69,7 @@ export const FormProjectEdit = ({
     >
       <div className="grid grid-cols-1 gap-2">
         <div>
-          <label className="block font-semibold text-background-dark mb-1.5">Proyecto</label>
+          <label className="block font-semibold text-background-dark mb-1.5">Nombre del proyecto</label>
           <input
             type="text"
             value={title ?? ''}
@@ -74,8 +89,9 @@ export const FormProjectEdit = ({
               value={field.state.value ?? []}
               options={rolesOptions ?? []}
               isLoading={loadingRole}
-              isEditing={true}
+              isEditing={false}
               placeholder="Buscar rol en el proyecto..."
+              disabled
               onChange={field.handleChange}
             />
           )}
@@ -89,20 +105,26 @@ export const FormProjectEdit = ({
               value={field.state.value ?? []}
               options={skillsOptions ?? []}
               isLoading={loadingSkill}
-              isEditing={true}
+              isEditing={false}
               placeholder="Buscar tecnología utilizada..."
+              disabled
               onChange={field.handleChange}
             />
           )}
         />
       </div>
 
-      <form.Field
-        name="description"
-        children={(field) => (
-          <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
-        )}
-      />
+      <div>
+        <label className="block font-semibold text-background-dark mb-1.5">Estado del proyecto *</label>
+        <select
+          value={projectStatus}
+          onChange={(event) => setProjectStatus(event.target.value as 'in_progress' | 'completed')}
+          className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+        >
+          <option value="in_progress">En curso</option>
+          <option value="completed">Completado</option>
+        </select>
+      </div>
 
       <form.Field
         name="links"
@@ -112,6 +134,13 @@ export const FormProjectEdit = ({
             value={normalizeLinks(field.state.value)}
             onChange={field.handleChange}
           />
+        )}
+      />
+
+      <form.Field
+        name="description"
+        children={(field) => (
+          <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
         )}
       />
 

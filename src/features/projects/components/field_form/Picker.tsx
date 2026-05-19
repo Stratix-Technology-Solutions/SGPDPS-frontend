@@ -14,9 +14,10 @@ interface Props<T extends BaseOption> {
   onChange: (value: number[]) => void
   isEditing: boolean
   placeholder?: string
+  disabled?: boolean
 }
 
-export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange, isEditing, placeholder = 'Buscar opciones...' }: Props<T>) => {
+export const Picker = <T extends BaseOption>({ label, value, options, isLoading, onChange, isEditing, placeholder = 'Buscar opciones...', disabled }: Props<T>) => {
 
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -44,6 +45,7 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
   }, [])
 
   const toggleSelect = (id: number) => {
+    if (disabled) return
     if (value.includes(id)) onChange(value.filter((v) => v !== id))
     else onChange([...value, id])
     setQuery('')
@@ -84,7 +86,8 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
       )}
 
       {!isLoading && options.length > 0 && (
-        <div className="rounded-xl border border-neutral-light bg-neutral-50 p-2">
+        <div className={`rounded-xl border border-neutral-light p-2 ${disabled ? 'bg-neutral-100' : 'bg-neutral-50'}`}>
+          {!disabled && (
           <div className="relative">
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-neutral-light focus-within:border-primary transition-colors">
               <input
@@ -122,6 +125,7 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
               </div>
             )}
           </div>
+          )}
 
           <div className="mt-2 flex flex-wrap gap-2">
             {value.map((id) => {
@@ -130,7 +134,7 @@ export const Picker = <T extends BaseOption>({ label, value, options, isLoading,
               return (
                 <span key={id} className="flex items-center gap-2 px-3 py-1 bg-primary-soft/10 text-primary rounded-full text-sm">
                   <span className="capitalize">{opt.name}</span>
-                  {!isEditing && (
+                  {!isEditing && !disabled && (
                     <button type="button" onClick={() => remove(id)} className="p-0.5 rounded-full hover:bg-primary-soft/20">
                       <MdClose size={14} />
                     </button>
