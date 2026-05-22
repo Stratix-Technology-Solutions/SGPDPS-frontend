@@ -63,7 +63,7 @@ function RouteComponent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-light/40 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-primary-soft/30 border-t-primary-soft rounded-full animate-spin" />
           <span className="text-neutral-medium text-sm">
@@ -76,7 +76,7 @@ function RouteComponent() {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-light/40 flex items-center justify-center">
         <div className="text-center">
           <p className="text-background-dark font-semibold mb-1">
             Algo salió mal
@@ -91,7 +91,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-neutral-light/40">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-5">
