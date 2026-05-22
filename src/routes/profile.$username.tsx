@@ -15,7 +15,7 @@ export const Route = createFileRoute('/profile/$username')({
   component: RouteComponent,
   loader: async ({ params }) => {
     try {
-      const response = await api.get<UserProfileResponse>(`/profile/u/${params.username}`)
+      const response = await api.get<UserProfileResponse>(`/profiles/u/${params.username}`)
       return response.data
     } catch (error) {
       throw notFound()
