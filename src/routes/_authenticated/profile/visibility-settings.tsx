@@ -21,7 +21,7 @@ function RouteComponent() {
 
       {!!data?.username && (
         <Link
-          to="/profile/$username"
+          to="/profiles/$username"
           params={{ username: data.username }}
           className="w-full bg-primary text-white flex justify-center items-center py-3 rounded-xl hover:cursor-pointer hover:bg-primary-soft transition-all duration-300"
         >

@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProfileUsernameRouteImport } from './routes/profile.$username'
+import { Route as ProfilesUsernameRouteImport } from './routes/profiles.$username'
 import { Route as PublicVerifyEmailRouteImport } from './routes/_public/verify-email'
 import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
@@ -42,9 +42,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileUsernameRoute = ProfileUsernameRouteImport.update({
-  id: '/profile/$username',
-  path: '/profile/$username',
+const ProfilesUsernameRoute = ProfilesUsernameRouteImport.update({
+  id: '/profiles/$username',
+  path: '/profiles/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicVerifyEmailRoute = PublicVerifyEmailRouteImport.update({
@@ -140,7 +140,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof PublicRegisterRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
-  '/profile/$username': typeof ProfileUsernameRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/profile/academic-experience': typeof AuthenticatedProfileAcademicExperienceRoute
   '/profile/academic-formation': typeof AuthenticatedProfileAcademicFormationRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
@@ -159,7 +159,7 @@ export interface FileRoutesByTo {
   '/register': typeof PublicRegisterRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/verify-email': typeof PublicVerifyEmailRoute
-  '/profile/$username': typeof ProfileUsernameRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/profile/academic-experience': typeof AuthenticatedProfileAcademicExperienceRoute
   '/profile/academic-formation': typeof AuthenticatedProfileAcademicFormationRoute
   '/profile/edit': typeof AuthenticatedProfileEditRoute
@@ -181,7 +181,7 @@ export interface FileRoutesById {
   '/_public/register': typeof PublicRegisterRoute
   '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_public/verify-email': typeof PublicVerifyEmailRoute
-  '/profile/$username': typeof ProfileUsernameRoute
+  '/profiles/$username': typeof ProfilesUsernameRoute
   '/_authenticated/profile/academic-experience': typeof AuthenticatedProfileAcademicExperienceRoute
   '/_authenticated/profile/academic-formation': typeof AuthenticatedProfileAcademicFormationRoute
   '/_authenticated/profile/edit': typeof AuthenticatedProfileEditRoute
@@ -202,7 +202,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
-    | '/profile/$username'
+    | '/profiles/$username'
     | '/profile/academic-experience'
     | '/profile/academic-formation'
     | '/profile/edit'
@@ -221,7 +221,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
-    | '/profile/$username'
+    | '/profiles/$username'
     | '/profile/academic-experience'
     | '/profile/academic-formation'
     | '/profile/edit'
@@ -242,7 +242,7 @@ export interface FileRouteTypes {
     | '/_public/register'
     | '/_public/reset-password'
     | '/_public/verify-email'
-    | '/profile/$username'
+    | '/profiles/$username'
     | '/_authenticated/profile/academic-experience'
     | '/_authenticated/profile/academic-formation'
     | '/_authenticated/profile/edit'
@@ -258,7 +258,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
-  ProfileUsernameRoute: typeof ProfileUsernameRoute
+  ProfilesUsernameRoute: typeof ProfilesUsernameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -284,11 +284,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile/$username': {
-      id: '/profile/$username'
-      path: '/profile/$username'
-      fullPath: '/profile/$username'
-      preLoaderRoute: typeof ProfileUsernameRouteImport
+    '/profiles/$username': {
+      id: '/profiles/$username'
+      path: '/profiles/$username'
+      fullPath: '/profiles/$username'
+      preLoaderRoute: typeof ProfilesUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/verify-email': {
@@ -457,7 +457,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
-  ProfileUsernameRoute: ProfileUsernameRoute,
+  ProfilesUsernameRoute: ProfilesUsernameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

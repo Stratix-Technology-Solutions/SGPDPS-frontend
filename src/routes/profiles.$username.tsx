@@ -11,7 +11,7 @@ import { UserNotFound } from '../features/view/components/UserNotFound'
 import { SocialLinks } from '../features/view/components/SocialLinks'
 import type { UserProfileResponse } from '../features/view/interfaces/user'
 
-export const Route = createFileRoute('/profile/$username')({
+export const Route = createFileRoute('/profiles/$username')({
   component: RouteComponent,
   loader: async ({ params }) => {
     try {
