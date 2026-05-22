@@ -15,7 +15,8 @@ export const CardProfile = ({
   return (
     <Link
       key={id}
-      to={`/profiles/${username}`}
+      to="/profiles/$username"
+      params={{ username }}
       className="group flex flex-col gap-4 p-5 border border-neutral-200 rounded-2xl bg-white transition-all duration-200 hover:border-primary-soft/50 hover:shadow-md hover:shadow-primary-soft/10 hover:-translate-y-0.5 active:translate-y-0"
     >
       <div className="flex items-center gap-3">
