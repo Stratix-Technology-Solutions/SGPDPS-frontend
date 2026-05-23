@@ -3,11 +3,11 @@ import { useState } from 'react'
 import { FiEdit2, FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { ActionButton } from '../../../shared/components/ActionButton'
-import { FormCreateSoftSkill } from '../../../features/skills/components/FormCreateSoftSkill'
 import { ModalEditTechnicalSkill } from '../../../features/skills/components/ModalEditTechnicalSkill'
 import { ModalDeleteTechnicalSkill } from '../../../features/skills/components/ModalDeleteTechnicalSkill'
 import { ModalDeleteSoftSkill } from '../../../features/skills/components/ModalDeleteSoftSkill'
 import { ModalCreateTechnicalSkill } from '../../../features/skills/components/ModalCreateTechnicalSkill'
+import { ModalCreateSoftSkill } from '../../../features/skills/components/ModalCreateSoftSkill'
 
 export const Route = createFileRoute('/_authenticated/profile/skills')({
   component: RouteComponent,
@@ -24,7 +24,7 @@ const modalRegistry = {
   createTechnical: ModalCreateTechnicalSkill,
   editTechnical: ModalEditTechnicalSkill,
   deleteTechnical: ModalDeleteTechnicalSkill,
-  createSoft: FormCreateSoftSkill,
+  createSoft: ModalCreateSoftSkill,
   deleteSoft: ModalDeleteSoftSkill,
 }
 

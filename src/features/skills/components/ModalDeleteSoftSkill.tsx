@@ -1,76 +1,64 @@
 import { useState } from 'react'
 import { ListSkills } from './ListSkills'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import api from '../../../app/api/axios'
-import type { ApiError } from '../../../shared/interfaces/api.interface'
 import type { SoftSkillResponse } from '../interfaces/soft.interface'
 import { CardSoftSkill } from './CardSoftSkill'
-import { Modal } from '../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { useDeleteSoftSkill } from '../hooks/useDeleteSoftSkill'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalDeleteSoftSkill = ({ onClose }: Props) => {
-  const [id, setId] = useState(null)
-  const queryClient = useQueryClient()
-  const { mutate, isPending } = useMutation<void, ApiError, void>({
-    mutationFn: async () => {
-      await api.delete(`/soft-skills/${id}`)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'skills', 'soft'] })
-    },
-  })
+export const ModalDeleteSoftSkill = ({ isOpen, onClose }: Props) => {
+  const [softId, setSoftId] = useState(null)
+  const { mutate, isPending } = useDeleteSoftSkill()
 
   return (
-    <Modal
-      title="Eliminar Habilidades Blandas"
-      description="Aquí podras seleccionar que habilidad blanda deseas eliminar."
-      onClose={onClose}
-    >
-      <ListSkills<SoftSkillResponse>
-        queryKey={['user', 'skills', 'soft']}
-        route="soft-skills"
-        renderItem={(item) => <CardSoftSkill {...item} />}
-        action={(item: any) => setId(item.id)}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={!softId ? 'Eliminar Habilidades Blandas' : '¿Eliminar habilidad blanda?'}
+        subtitle={!softId
+          ? 'Aquí podras seleccionar que habilidad blanda deseas eliminar.'
+          : ''
+        }
+        variant={!softId ? 'close-only' : 'back-close'}
+        onBack={() => setSoftId(null)}
+        intent={!softId ? 'default' : 'danger'}
       />
 
-      {id && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
-            <h3 className="text-xl font-bold text-background-dark mb-2">
-              ¿Eliminar habilidad?
-            </h3>
-            <p className="text-neutral-medium mb-6">
-              ¿Estás seguro de que deseas eliminar la habilidad registrada? Puedes crear nuevos mas tarde.
-            </p>
-
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setId(null)}
-                className="px-5 py-2.5 rounded-xl font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors cursor-pointer"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                disabled={isPending}
-                onClick={() => {
-                  mutate()
-                  setId(null)
-                  onClose()
-                }}
-                className="px-5 py-2.5 rounded-xl font-medium bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Sí, Eliminar
-              </button>
+      <ModalBody padding="md">
+        <div className="py-2">
+          {!softId ? (
+            <ListSkills<SoftSkillResponse>
+              queryKey={['user', 'skills', 'soft']}
+              route="soft-skills"
+              renderItem={(item) => <CardSoftSkill {...item} />}
+              action={(item: any) => setSoftId(item.id)}
+            />
+          ) : (
+            <div className="flex flex-col gap-2">
+              <p>¿Estás seguro de que deseas eliminar la habilidad blanda registrada?</p>
+              <p>Puedes crear nuevos mas tarde.</p>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </ModalBody>
+
+      <ModalFooter
+        variant={!softId ? 'close-only' : 'delete-cancel'}
+        disabled={isPending}
+        loading={isPending}
+        onConfirm={() => {
+          if (softId) {
+            mutate(softId, {
+              onSuccess: () => {
+                setSoftId(null)
+              }
+            })
+          }
+        }}
+      />
     </Modal>
   )
 }

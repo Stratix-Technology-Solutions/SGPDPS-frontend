@@ -17,7 +17,7 @@ export const ModalDeleteTechnicalSkill = ({ isOpen, onClose }: Props) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
-        title={!technologyId ? 'Eliminar Habilidades Técnicas' : '¿Eliminar habilidad?'}
+        title={!technologyId ? 'Eliminar Habilidades Técnicas' : '¿Eliminar habilidad técnica?'}
         subtitle={!technologyId
           ? 'Aquí podras seleccionar que habilidad técnica deseas eliminar.'
           : ''
@@ -38,7 +38,7 @@ export const ModalDeleteTechnicalSkill = ({ isOpen, onClose }: Props) => {
             />
           ) : (
             <div className="flex flex-col gap-2">
-              <p>¿Estás seguro de que deseas eliminar la habilidad registrada?.</p>
+              <p>¿Estás seguro de que deseas eliminar la habilidad técnica registrada?</p>
               <p>Puedes crear nuevos mas tarde.</p>
             </div>
           )}

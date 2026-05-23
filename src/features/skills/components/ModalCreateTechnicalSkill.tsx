@@ -1,13 +1,11 @@
 import { useForm } from '@tanstack/react-form'
 import { TechnicalSchema, defaultValues } from '../dtos/technical.dto'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { ApiError } from '../../../shared/interfaces/api.interface'
-import api from '../../../app/api/axios'
-import type { TechnicalDto } from '../dtos/technical.dto'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
 import { AutocompleteInput } from './AutoCompleteInput'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
+import { useCreateTechnicalSkill } from '../hooks/useCreateTechnicalSkill'
+import { useGetTechnicalSkillsSystem } from '../hooks/useGetTechnicalSkillsSystem'
 
 interface Props {
   isOpen: boolean
@@ -15,34 +13,21 @@ interface Props {
 }
 
 export const ModalCreateTechnicalSkill = ({ isOpen, onClose }: Props) => {
-  const queryClient = useQueryClient()
-
-  const { mutate: create, error, isPending, isError } = useMutation<TechnicalDto, ApiError, unknown>({
-    mutationFn: async (data) => {
-      const res = await api.post('/skills', data)
-      return res.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['user', 'skills', 'technical'],
-      })
-      onClose()
-    },
-  })
-
-  const { data } = useQuery<{ name: string }[], ApiError>({
-    queryKey: ['skills', 'system'],
-    queryFn: async () => {
-      const res = await api.get('/skills/list-all')
-      return res.data
-    },
-  })
+  const { mutate: create, error, isPending, isError } = useCreateTechnicalSkill()
+  const { data } = useGetTechnicalSkillsSystem()
 
   const form = useForm({
     defaultValues,
     validators: { onSubmit: TechnicalSchema },
     onSubmit: ({ value }) => {
-      create(value)
+      create({
+        ...value,
+        domain_level: value.domain_level as 'Básico' | 'Intermedio' | 'Avanzado'
+      }, {
+        onSuccess: () => {
+          onClose()
+        }
+      })
     },
   })
 
