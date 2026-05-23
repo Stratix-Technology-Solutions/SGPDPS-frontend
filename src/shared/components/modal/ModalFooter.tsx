@@ -25,7 +25,7 @@ interface ModalFooterProps {
 const footerVariants: any = {
   'confirm-cancel': {
     confirmIcon: <IoCheckmark size={22} />,
-    confirmText: 'Confirmar',
+    confirmText: 'Guardar',
   },
 
   'ok-only': {
