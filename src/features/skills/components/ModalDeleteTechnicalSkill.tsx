@@ -2,75 +2,63 @@ import { useState } from 'react'
 import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
 import { CardTechnicalSkill } from './CardTechnicalSkill'
 import { ListSkills } from './ListSkills'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import api from '../../../app/api/axios'
-import type { ApiError } from '../../../shared/interfaces/api.interface'
-import { Modal } from '../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { useDeleteTechnicalSkill } from '../hooks/useDeleteTechnicalSkill'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalDeleteTechnicalSkill = ({ onClose }: Props) => {
-  const [id, setId] = useState(null)
-  const queryClient = useQueryClient()
-  const { mutate, isPending } = useMutation<void, ApiError, void>({
-    mutationFn: async () => {
-      await api.delete(`/skills/${id}`)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', 'skills', 'technical'] })
-    },
-  })
+export const ModalDeleteTechnicalSkill = ({ isOpen, onClose }: Props) => {
+  const [technologyId, setTechnologyId] = useState(null)
+  const { mutate, isPending } = useDeleteTechnicalSkill()
 
   return (
-    <Modal
-      title="Eliminar Habilidades Técnicas"
-      description="Aquí podras seleccionar que habilidad técnica deseas eliminar."
-      onClose={onClose}
-    >
-      <ListSkills<TechnicalSkillResponse>
-        queryKey={['user', 'skills', 'technical']}
-        route="skills"
-        renderItem={(item) => <CardTechnicalSkill {...item} />}
-        action={(item: any) => setId(item.id)}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={!technologyId ? 'Eliminar Habilidades Técnicas' : '¿Eliminar habilidad?'}
+        subtitle={!technologyId
+          ? 'Aquí podras seleccionar que habilidad técnica deseas eliminar.'
+          : ''
+        }
+        variant={!technologyId ? 'close-only' : 'back-close'}
+        onBack={() => setTechnologyId(null)}
+        intent={!technologyId ? 'default' : 'danger'}
       />
 
-      {id && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
-            <h3 className="text-xl font-bold text-background-dark mb-2">
-              ¿Eliminar habilidad?
-            </h3>
-            <p className="text-neutral-medium mb-6">
-              ¿Estás seguro de que deseas eliminar la habilidad registrada? Puedes crear nuevos mas tarde.
-            </p>
-
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setId(null)}
-                className="px-5 py-2.5 rounded-xl font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors cursor-pointer"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                disabled={isPending}
-                onClick={() => {
-                  mutate()
-                  setId(null)
-                  onClose()
-                }}
-                className="px-5 py-2.5 rounded-xl font-medium bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
-              >
-                Sí, Eliminar
-              </button>
+      <ModalBody padding="md">
+        <div className="py-2">
+          {!technologyId ? (
+            <ListSkills<TechnicalSkillResponse>
+              queryKey={['user', 'skills', 'technical']}
+              route="skills"
+              renderItem={(item) => <CardTechnicalSkill {...item} />}
+              action={(item: any) => setTechnologyId(item.id)}
+            />
+          ) : (
+            <div className="flex flex-col gap-2">
+              <p>¿Estás seguro de que deseas eliminar la habilidad registrada?.</p>
+              <p>Puedes crear nuevos mas tarde.</p>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </ModalBody>
+
+      <ModalFooter
+        variant={!technologyId ? 'close-only' : 'delete-cancel'}
+        disabled={isPending}
+        loading={isPending}
+        onConfirm={() => {
+          if (technologyId) {
+            mutate(technologyId, {
+              onSuccess: () => {
+                setTechnologyId(null)
+              }
+            })
+          }
+        }}
+      />
     </Modal>
   )
 }

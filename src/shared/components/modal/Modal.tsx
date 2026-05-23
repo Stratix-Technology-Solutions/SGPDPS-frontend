@@ -17,7 +17,7 @@ interface ModalProps {
 export function Modal({
   isOpen,
   onClose,
-  size = 'lg',
+  size = 'md',
   closeOnOverlay = true,
   closeOnEsc = true,
   scrollable = true,
