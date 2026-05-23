@@ -3,21 +3,34 @@ import { useState } from 'react'
 import { FiEdit2, FiPlusCircle, FiTrash2 } from 'react-icons/fi'
 import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { ActionButton } from '../../../shared/components/ActionButton'
-import { FormCreateTechnicalSkill } from '../../../features/skills/components/FormCreateTechnicalSkill'
 import { FormCreateSoftSkill } from '../../../features/skills/components/FormCreateSoftSkill'
 import { ModalEditTechnicalSkill } from '../../../features/skills/components/ModalEditTechnicalSkill'
 import { ModalDeleteTechnicalSkill } from '../../../features/skills/components/ModalDeleteTechnicalSkill'
 import { ModalDeleteSoftSkill } from '../../../features/skills/components/ModalDeleteSoftSkill'
+import { ModalCreateTechnicalSkill } from '../../../features/skills/components/ModalCreateTechnicalSkill'
 
 export const Route = createFileRoute('/_authenticated/profile/skills')({
   component: RouteComponent,
 })
 
-type Modal = 'createTechnical' | 'editTechnical' | 'deleteTechnical'
- | 'createSoft' | 'editSoft' | 'deleteSoft' | null
+type Modal = 'createTechnical'
+  | 'editTechnical'
+  | 'deleteTechnical'
+  | 'createSoft'
+  | 'deleteSoft'
+  | null
+
+const modalRegistry = {
+  createTechnical: ModalCreateTechnicalSkill,
+  editTechnical: ModalEditTechnicalSkill,
+  deleteTechnical: ModalDeleteTechnicalSkill,
+  createSoft: FormCreateSoftSkill,
+  deleteSoft: ModalDeleteSoftSkill,
+}
 
 function RouteComponent() {
   const [modal, setModal] = useState<Modal>(null)
+  const ActiveModal = modal ? modalRegistry[modal] : null
 
   return (
     <div className="py-10 flex flex-col gap-8">
@@ -46,18 +59,12 @@ function RouteComponent() {
         </div>
       </div>
 
-      {modal === 'createTechnical' ? (
-        <FormCreateTechnicalSkill onClose={() => setModal(null)} />
-      ) : modal === 'editTechnical' ? (
-        <ModalEditTechnicalSkill onClose={() => setModal(null)} />
-      ) : modal === 'deleteTechnical' ? (
-        <ModalDeleteTechnicalSkill onClose={() => setModal(null)} />
-
-      ) : modal === 'createSoft' ? (
-        <FormCreateSoftSkill onClose={() => setModal(null)} />
-      ) : modal === 'deleteSoft' ? (
-        <ModalDeleteSoftSkill onClose={() => setModal(null)} />
-      ) : null }
+      {ActiveModal && (
+        <ActiveModal
+          isOpen={!!modal}
+          onClose={() => setModal(null)}
+        />
+      )}
     </div>
   )
 }

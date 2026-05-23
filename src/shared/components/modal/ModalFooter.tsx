@@ -8,6 +8,7 @@ import { ModalPrimaryButton } from './ModalPrimaryButton'
 
 interface ModalFooterProps {
   variant?: FooterVariant
+  formId?: string
   align?: Align
   confirmText?: string
   cancelText?: string
@@ -53,6 +54,7 @@ export function ModalFooter({
   disabled = false,
   intent = 'primary',
   divider = true,
+  formId,
   leftSlot,
   children,
 }: ModalFooterProps) {
@@ -75,26 +77,21 @@ export function ModalFooter({
           <>
             {variant !== 'ok-only' && (
               <ModalSecondaryButton
-                text={
-                  cancelText ||
-                  config.cancelText ||
-                  'Cancelar'
-                }
+                text={cancelText || config.cancelText || 'Cancelar'}
                 onClick={handleCancel}
               />
             )}
 
             {variant !== 'close-only' && (
               <ModalPrimaryButton
-                text={
-                  confirmText ||
-                  config.confirmText
-                }
+                text={confirmText || config.confirmText}
                 icon={config.confirmIcon}
                 loading={loading}
                 disabled={disabled}
                 intent={config.intent || intent}
                 onClick={onConfirm}
+                type={formId ? 'submit' : 'button'}
+                form={formId}
               />
             )}
           </>
