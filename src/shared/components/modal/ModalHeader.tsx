@@ -33,7 +33,7 @@ export function ModalHeader({
 
   return (
     <div className={`relative shrink-0 ${divider ? 'border-b border-neutral-light' : ''}`}>
-      <div className={`absolute top-0 left-0 w-1 h-full rounded-tl-2xl ${intentAccent[intent]}`} />
+      <div className={`absolute top-0 left-0 w-1.5 h-full rounded-tl-2xl ${intentAccent[intent]}`} />
 
       <div className="flex items-start gap-3 p-4 lg:px-6">
         {showBack && (

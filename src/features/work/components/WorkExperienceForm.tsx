@@ -1,4 +1,3 @@
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 import { InputMessageError } from '../../../shared/components/InputMessageError'
 import { FormField } from '../components/FormField'
 import { WorkExperienceSchema, defaultValues } from '../dtos/workExperience'
@@ -7,29 +6,22 @@ import type { WorkExperienceFormValues } from '../dtos/workExperience'
 
 interface Props {
   initialValues?: WorkExperienceFormValues
-  onSubmit: (values: WorkExperienceFormValues) => void
-  onCancel: () => void
-  isPending: boolean
-  isError: boolean
-  errorMessage?: string
+  submit: (values: WorkExperienceFormValues) => void
 }
 
 export const WorkExperienceForm = ({
   initialValues,
-  onSubmit,
-  onCancel,
-  isPending,
-  isError,
-  errorMessage,
+  submit,
 }: Props) => {
   const form = useForm({
     defaultValues: initialValues ?? defaultValues,
     validators: { onSubmit: WorkExperienceSchema },
-    onSubmit: ({ value }) => onSubmit(value),
+    onSubmit: ({ value }) => submit(value),
   })
 
   return (
     <form
+      id="work-form-create"
       className="flex flex-col gap-4"
       onSubmit={async (e) => {
         e.preventDefault()
@@ -100,31 +92,6 @@ export const WorkExperienceForm = ({
           </div>
         )}
       />
-
-      {isError && (
-        <BannerMessageError
-          message={
-            errorMessage ?? 'Surgió un error al guardar la experiencia laboral.'
-          }
-        />
-      )}
-
-      <div className="flex justify-end gap-4 pt-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white disabled:bg-neutral-medium disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-        >
-          Guardar
-        </button>
-      </div>
     </form>
   )
 }
