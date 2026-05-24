@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { sections } from '../constants/sections'
+import { FiChevronRight } from 'react-icons/fi'
 
 interface Props {
   open: boolean
@@ -8,37 +9,68 @@ interface Props {
 
 export const Aside = ({ open, closeAside }: Props) => {
   return (
-    <aside
-      className={`
-        fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white z-40
-        w-full lg:w-xs
-        transform transition-transform duration-300
-        ${open ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0
-        shadow-lg
-      `}
-    >
-      <div className="flex items-center justify-center py-8">
-        <img
-          src="/logo.svg"
-          className="w-32 aspect-square"
-          alt="logo FolioX"
-        />
+    <aside className={`fixed left-0 top-20 h-[calc(100vh-5rem)] w-full lg:w-xs bg-white/95 backdrop-blur-xl border-r border-neutral-200 z-40 transform transition-all duration-300 ease-out ${open ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+      <div className="px-6 pt-8 pb-4 border-b border-neutral-100">
+        <div className="flex flex-col items-center gap-3">
+          <div className="relative">
+            <div className="absolute inset-0 bg-primary/15 blur-2xl rounded-full" />
+
+            <img
+              src="/logo.svg"
+              className="relative w-24 aspect-square drop-shadow-sm"
+              alt="logo FolioX"
+            />
+          </div>
+
+          <div className="text-center">
+            <h2 className="font-bold text-lg text-background-dark">
+              FolioX
+            </h2>
+
+            <p className="text-sm text-neutral-medium">
+              Panel profesional
+            </p>
+          </div>
+        </div>
       </div>
 
-      <nav className="flex flex-col gap-2 px-4 pb-4">
-        {sections.map(({ label, to, Icon }) => (
-          <Link
-            key={label}
-            to={to}
-            className="p-2 rounded-md hover:bg-gray-100 flex items-center gap-2 font-medium"
-            onClick={closeAside}
-          >
-            <Icon className="w-6 h-6 inline" />
-            {label}
-          </Link>
-        ))}
-      </nav>
+      <div className="flex flex-col h-full overflow-y-auto px-4 py-5">
+        <nav className="flex flex-col gap-1">
+          <p className="px-3 pb-2 text-[11px] font-semibold tracking-wider uppercase text-neutral-medium">
+            Navegación
+          </p>
+
+          {sections.map(({ label, to, Icon }) => (
+            <Link
+              key={label}
+              to={to}
+              onClick={closeAside}
+              activeOptions={{
+                exact: true,
+              }}
+              className="group relative overflow-hidden flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-200"
+              activeProps={{
+                className: `bg-primary text-white shadow-md shadow-primary/15`,
+              }}
+              inactiveProps={{
+                className: `text-background-dark hover:bg-neutral-100`,
+              }}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-primary/5 to-transparent transition-opacity" />
+
+              <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 shrink-0 transition-transform duration-200 group-hover:scale-105">
+                <Icon className="w-4.5 h-4.5" />
+              </div>
+
+              <span className="relative font-medium">
+                {label}
+              </span>
+
+              <FiChevronRight className="ml-auto w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 " />
+            </Link>
+          ))}
+        </nav>
+      </div>
     </aside>
   )
 }
