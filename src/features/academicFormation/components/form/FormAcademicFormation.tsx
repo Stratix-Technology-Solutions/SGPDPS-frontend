@@ -2,7 +2,6 @@ import { useForm } from '@tanstack/react-form'
 import { FormField } from '../../../academic/components/field_form/FormField'
 import { FormSelect } from '../../../academic/components/field_form/FormSelect'
 import { FormTextarea } from '../../../academic/components/field_form/FormTextarea'
-import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import {
   AcademicFormationSchema,
   defaultValues as emptyValues,
@@ -10,23 +9,17 @@ import {
 import type { AcademicFormationDto } from '../../dtos/academicFormation.dto'
 
 interface Props {
-  onCancel?: () => void
-  onSubmit: (values: AcademicFormationDto) => void
-  submitLabel?: string
+  formId: string
+  submit: (values: AcademicFormationDto) => void
   defaultValues?: Partial<AcademicFormationDto>
-  isPending?: boolean
-  serverError?: string
   lockIdentityFields?: boolean
   lockCompletedStatus?: boolean
 }
 
 export const FormAcademicFormation = ({
-  onCancel,
-  onSubmit,
-  submitLabel = 'Guardar',
+  formId,
+  submit,
   defaultValues,
-  isPending,
-  serverError,
   lockIdentityFields,
   lockCompletedStatus,
 }: Props) => {
@@ -34,7 +27,7 @@ export const FormAcademicFormation = ({
     defaultValues: { ...emptyValues, ...defaultValues },
     validators: { onSubmit: AcademicFormationSchema },
     onSubmit: ({ value }) => {
-      onSubmit({
+      submit({
         ...value,
         field_of_study: value.education_level === 'bachillerato' ? null : value.field_of_study,
         emission_date: value.status === 'completado' ? value.emission_date : null,
@@ -43,7 +36,14 @@ export const FormAcademicFormation = ({
   })
 
   return (
-    <form onSubmit={async (e) => { e.preventDefault(); await form.handleSubmit() }} className="flex flex-col gap-4">
+    <form
+      id={formId}
+      className="flex flex-col gap-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}
+    >
       <form.Field name="education_level" children={(field) => (
         <FormSelect
           label="Grado académico *"
@@ -105,27 +105,6 @@ export const FormAcademicFormation = ({
       <form.Field name="description" children={(field) => (
         <FormTextarea label="Descripción" field={field} placeholder="Ingrese una descripción" />
       )} />
-
-      {serverError && <BannerMessageError message={serverError} />}
-
-      <div className="flex justify-end gap-3 pt-1">
-        {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-          >
-            Cancelar
-          </button>
-        )}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white cursor-pointer disabled:bg-neutral-medium disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {submitLabel}
-        </button>
-      </div>
     </form>
   )
 }

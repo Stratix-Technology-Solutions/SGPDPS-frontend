@@ -6,12 +6,9 @@ import {
 
 interface Props {
   item: AcademicFormationResponse
-  isPending: boolean
-  onConfirm: () => void
-  onCancel: () => void
 }
 
-export const ConfirmDeleteAcademicFormation = ({ item, isPending, onConfirm, onCancel }: Props) => {
+export const ConfirmDeleteAcademicFormation = ({ item }: Props) => {
   return (
     <>
       <p className="text-neutral-medium/70">
@@ -73,24 +70,6 @@ export const ConfirmDeleteAcademicFormation = ({ item, isPending, onConfirm, onC
             </div>
           )}
         </div>
-      </div>
-
-      <div className="flex justify-end gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          disabled={isPending}
-          onClick={onConfirm}
-          className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {isPending ? 'Eliminando...' : 'Sí, eliminar'}
-        </button>
       </div>
     </>
   )

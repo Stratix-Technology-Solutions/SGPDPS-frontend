@@ -16,8 +16,16 @@ export const Route = createFileRoute(
 
 type Modal = 'add' | 'edit' | 'delete' | 'view' | null
 
+const modalRegistry = {
+  add: ModalAddAcademicFormation,
+  edit: ModalEditAcademicFormation,
+  delete: ModalDeleteAcademicFormation,
+  view: ModalViewAcademicFormation,
+}
+
 function RouteComponent() {
   const [modal, setModal] = useState<Modal>(null)
+  const ActiveModal = modal ? modalRegistry[modal] : null
 
   return (
     <div className="py-10 flex flex-col gap-6">
@@ -33,10 +41,12 @@ function RouteComponent() {
         <ActionButton icon={FiEye} label="Visualizar formación académica" onClick={() => setModal('view')} />
       </div>
 
-      {modal === 'add' && <ModalAddAcademicFormation onClose={() => setModal(null)} />}
-      {modal === 'edit' && <ModalEditAcademicFormation onClose={() => setModal(null)} />}
-      {modal === 'delete' && <ModalDeleteAcademicFormation onClose={() => setModal(null)} />}
-      {modal === 'view' && <ModalViewAcademicFormation onClose={() => setModal(null)} />}
+      {ActiveModal && (
+        <ActiveModal
+          isOpen={!!modal}
+          onClose={() => setModal(null)}
+        />
+      )}
     </div>
   )
 }

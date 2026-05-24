@@ -15,7 +15,6 @@ export const ModalViewAcademic = ({ isOpen, onClose }: Props) => {
   const [selected, setSelected] = useState<AcademicExperienceResponse | null>(null)
 
   return (
-    <>
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
         title={selected
@@ -53,6 +52,5 @@ export const ModalViewAcademic = ({ isOpen, onClose }: Props) => {
         onCancel={selected ? () => {setSelected(null)} : onClose}
       />
     </Modal>
-    </>
   )
 }

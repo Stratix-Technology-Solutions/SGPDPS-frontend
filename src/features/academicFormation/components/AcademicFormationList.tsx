@@ -13,7 +13,7 @@ interface Props {
 
 export const AcademicFormationList = ({ data, isLoading, onSelect, itemClassName }: Props) => {
   return (
-    <>
+    <div>
       {isLoading && <p className="text-neutral-medium/70 text-sm">Cargando...</p>}
 
       {!isLoading && !data?.length && (
@@ -59,6 +59,6 @@ export const AcademicFormationList = ({ data, isLoading, onSelect, itemClassName
           </li>
         ))}
       </ul>
-    </>
+    </div>
   )
 }
