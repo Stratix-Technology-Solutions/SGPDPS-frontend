@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useNavigate } from '@tanstack/react-router'
 import { ProfileFormField } from './ProfileFormField'
@@ -16,6 +16,7 @@ import { normalizeDialCode, normalizePhoneValue } from '../utils/normalize'
 import type { RegisterAccountDto } from '../dtos/user.dto'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import { AvatarField } from './AvatarField'
+import { Modal, ModalBody, ModalFooter, ModalHeader, useModal } from '../../../shared/components/modal'
 
 interface ProfileFormProps {
   mode: 'register' | 'edit'
@@ -49,7 +50,7 @@ export function ProfileForm({
   const navigate = useNavigate()
   const errorRef = useRef<HTMLDivElement>(null)
   const lastAutoPhoneRef = useRef<string | null>(null)
-  const [showCancelModal, setShowCancelModal] = useState(false)
+  const modal = useModal()
 
   const form = useForm({
     defaultValues: initialData ?? defaultValues,
@@ -112,34 +113,8 @@ export function ProfileForm({
     : '¿Estás seguro de que deseas cancelar la creación de tu perfil? Los datos no guardados se perderán. Sin embargo, puedes completar el perfil más tarde.'
 
   return (
+    <>
     <div className="py-6 sm:py-10">
-      {showCancelModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xl max-w-sm w-full animate-in fade-in zoom-in duration-200">
-            <h3 className="text-lg font-bold text-background-dark mb-2">
-              {mode === 'edit' ? '¿Cancelar edición?' : '¿Cancelar creación?'}
-            </h3>
-            <p className="text-sm text-neutral-medium mb-6">{cancelMessage}</p>
-            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setShowCancelModal(false)}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-neutral-200 text-background-dark hover:bg-neutral-300 transition-colors"
-              >
-                Seguir editando
-              </button>
-              <button
-                type="button"
-                onClick={() => { setShowCancelModal(false); navigate({ to: '/' }) }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
-              >
-                Sí, salir
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-2xl mx-auto px-3 sm:px-0">
         {isSuccess && <SuccessModal message={successMessage} redirect="Redirigiendo al inicio..." />}
 
@@ -235,7 +210,7 @@ export function ProfileForm({
             <button
               type="button"
               disabled={isPending}
-              onClick={() => setShowCancelModal(true)}
+              onClick={modal.open}
               className="w-full sm:w-auto bg-neutral-200 hover:bg-neutral-300 text-background-dark font-medium px-8 py-2.5 rounded-xl transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Cancelar
@@ -251,5 +226,24 @@ export function ProfileForm({
         </form>
       </div>
     </div>
+
+    <Modal isOpen={modal.isOpen} onClose={modal.close} size="sm">
+      <ModalHeader
+        title={mode === 'edit' ? '¿Cancelar edición?' : '¿Cancelar creación?'}
+        intent="danger"
+      />
+
+      <ModalBody padding="lg">
+        <p className="text-neutral-medium">{cancelMessage}</p>
+      </ModalBody>
+
+      <ModalFooter
+        intent="danger"
+        confirmText="Si, salir"
+        cancelText="Seguir editando"
+        onConfirm={() => { navigate({ to: '/dashboard' }) }}
+      />
+    </Modal>
+    </>
   )
 }
