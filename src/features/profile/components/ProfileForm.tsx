@@ -30,7 +30,6 @@ interface ProfileFormProps {
   title: string
   subtitle: string
   avatarUrl?: string | null
-  onAvatarChange: (file: File) => void
 }
 
 export function ProfileForm({
@@ -46,7 +45,6 @@ export function ProfileForm({
   title,
   subtitle,
   avatarUrl,
-  onAvatarChange,
 }: ProfileFormProps) {
   const navigate = useNavigate()
   const errorRef = useRef<HTMLDivElement>(null)

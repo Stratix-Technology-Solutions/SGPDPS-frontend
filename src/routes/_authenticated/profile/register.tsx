@@ -27,6 +27,7 @@ function RouteComponent() {
       subtitle="Esta información será visible en tu portafolio público."
       submitLabel="Guardar perfil"
       pendingLabel="Guardando..."
+      avatarUrl={currentProfile?.picture}
     />
   )
 }
