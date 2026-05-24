@@ -29,8 +29,8 @@ interface ProfileFormProps {
   pendingLabel: string
   title: string
   subtitle: string
-  avatarUrl?: string
-  onAvatarChange?: (file: File | null) => void
+  avatarUrl?: string | null
+  onAvatarChange: (file: File) => void
 }
 
 export function ProfileForm({
@@ -159,7 +159,6 @@ export function ProfileForm({
         <div className="mb-6">
           <AvatarField
             currentUrl={avatarUrl}
-            onChange={onAvatarChange ?? (() => {})}
           />
         </div>
 

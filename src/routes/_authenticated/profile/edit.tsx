@@ -30,6 +30,7 @@ function RouteComponent() {
       subtitle="Esta información será visible en tu portafolio público."
       submitLabel="Actualizar perfil"
       pendingLabel="Guardando..."
+      avatarUrl={data?.picture}
     />
   )
 }

@@ -54,6 +54,7 @@ export interface RegisterAccountDto {
   username?: string
   first_name: string
   last_name: string
+  picture?: string | null
   biography: string
   date_of_birth?: string
   gender?: 'masculino' | 'femenino' | 'otro'
@@ -65,7 +66,7 @@ export interface RegisterAccountDto {
 export const defaultValues = {
   first_name: '',
   last_name: '',
-  date_of_birth:  '',
+  date_of_birth: '',
   gender: '',
   biography: '',
   country: '',
