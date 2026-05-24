@@ -1,20 +1,21 @@
-import { Modal } from '../../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import { FormProjectEdit } from '../form/FormProjectEdit'
-import { useGetProject, useUpdateProject } from '../../hooks/useProjects'
+import { useGetProjects, useUpdateProject } from '../../hooks/useProjects'
 import type { ProjectUpdateDto } from '../../dtos/project.dto'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
+import { useState } from 'react'
+import type { Project } from '../../interfaces/project.interface'
+import { ListProjectsSelection } from '../ListProjectsSelection'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  idProject: string
 }
 
-export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
+export const ModalEditProject = ({ isOpen, onClose }: Props) => {
+  const [selected, setSelected] = useState<Project | null>(null)
+  const { data, isLoading } = useGetProjects()
   const update = useUpdateProject()
-
-  const { data } = useGetProject(idProject)
-
-  const project = data?.data
 
   const handleSubmit = (values: ProjectUpdateDto) => {
     const payload: ProjectUpdateDto = {
@@ -24,43 +25,71 @@ export const ModalEditProject = ({ isOpen, onClose, idProject }: Props) => {
       roles_ids: values.roles_ids,
     }
 
-    update.mutate({ id: idProject, dto: payload }, {
-      onSuccess: () => {
-        onClose()
-      }
-    })
+    if (selected) {
+      update.mutate({ id: selected.id, dto: payload }, {
+        onSuccess: () => {
+          onClose()
+        }
+      })
+    }
   }
 
-  const serverError = update.isError && update.error ? update.error.response?.data.message || 'Error al actualizar el proyecto' : undefined
-
   const initialValues: Partial<ProjectUpdateDto> = {
-    description: project?.description,
-    links: project?.links.map((link) => ({
+    description: selected?.description,
+    links: selected?.links.map((link) => ({
       id: link.id,
       url: link.url,
     })),
-    skill_ids: project?.skills.map((skill) => skill.id),
-    roles_ids: project?.roles.map((role) => role.id),
+    skill_ids: selected?.skills.map((skill) => skill.id),
+    roles_ids: selected?.roles.map((role) => role.id),
   }
 
-  if (!isOpen) return null
-
   return (
-    <Modal onClose={onClose} title="Editar proyecto personal">
-      <div>
-        <p className="text-sm text-neutral-medium mb-6">
-          Actualiza roles, tecnologías, enlaces y descripción del proyecto.
-        </p>
-        <FormProjectEdit
-          onCancel={onClose}
-          onSubmit={handleSubmit}
-          submitLabel="Guardar"
-          defaultValues={initialValues}
-          title={project?.title}
-          isPending={update.isPending}
-          serverError={serverError}
-        />
-      </div>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={!selected ? 'Selecciona un proyecto para editar' : 'Editar proyecto personal'}
+        subtitle={!selected
+          ? undefined
+          : 'Actualiza roles, tecnologías, enlaces y descripción del proyecto.'
+        }
+        variant={!selected ? 'close-only' : 'back-close'}
+        onBack={() => setSelected(null)}
+      />
+
+      <ModalBody>
+        <div className="flex flex-col gap-4 py-2">
+          {!selected ? (
+            <ListProjectsSelection
+              projects={data?.data}
+              isLoading={isLoading}
+              onSelect={setSelected}
+              hoverColor="primary"
+            />
+          ) : (
+            <>
+              {update.isError && (
+                <BannerMessageError
+                  message={update.error?.response?.data?.message ?? 'Error al actualizar el proyecto'}
+                />
+              )}
+
+              <FormProjectEdit
+                formId="project-form-update"
+                submit={handleSubmit}
+                defaultValues={initialValues}
+                title={selected?.title}
+              />
+            </>
+          )}
+        </div>
+      </ModalBody>
+
+      <ModalFooter
+        formId="project-form-update"
+        variant={!selected ? 'close-only' : 'confirm-cancel'}
+        disabled={update.isPending}
+        loading={update.isPending}
+      />
     </Modal>
   )
 }

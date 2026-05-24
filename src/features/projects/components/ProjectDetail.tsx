@@ -1,16 +1,12 @@
-import { useGetProject } from "../hooks/useProjects"
+import type { Project } from '../interfaces/project.interface'
 
 interface Props {
-  idProject: string
+  project: Project
 }
 
-export const ProjectDetail = ({ idProject }: Props) => {
-  const { data } = useGetProject(idProject)
-
-  const project = data?.data
-
+export const ProjectDetail = ({ project }: Props) => {
   return (
-    <div className="rounded-2xl bg-white p-6">
+    <div className="rounded-2xl bg-white">
       <div className="flex flex-col gap-6 text-neutral-medium">
         <div className="flex flex-col gap-3">
           <div className="flex items-start justify-between gap-3">

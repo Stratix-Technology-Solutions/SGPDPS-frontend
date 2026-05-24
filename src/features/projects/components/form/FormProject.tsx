@@ -9,14 +9,14 @@ import { Picker } from '../field_form/Picker'
 import { useGetProjectsRole, useGetProjectSkill } from '../../hooks/useProjects'
 
 interface Props {
-  onCancel: () => void
-  onSubmit: (values: ProjectCreateDto) => void
-  submitLabel: string
-  isPending: boolean
+  formId: string
+  submit: (values: ProjectCreateDto) => void
 }
 
-export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Props) => {
+export const FormProject = ({ formId, submit }: Props) => {
   const [projectStatus, setProjectStatus] = useState<'in_progress' | 'completed'>('in_progress')
+  const { data: roles, isLoading: loadingRole } = useGetProjectsRole()
+  const { data: skills, isLoading: loadingSkill } = useGetProjectSkill()
 
   const form = useForm({
     defaultValues,
@@ -24,7 +24,7 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
     onSubmit: ({ value }) => {
       const today = new Date().toISOString().slice(0, 10)
 
-      onSubmit({
+      submit({
         ...value,
         start_date: projectStatus === 'completed' ? today : null,
         end_date: projectStatus === 'completed' ? today : null,
@@ -32,17 +32,15 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
     },
   })
 
-  const { data: roles, isLoading: loadingRole } = useGetProjectsRole()
-
-  const { data: skills, isLoading: loadingSkill } = useGetProjectSkill()
-
-
   return (
     <form
+      id={formId}
+      className="flex flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit(e)
-      }} className="flex flex-col gap-4" >
+      }}
+    >
       <form.Field
         name="title"
         children={(field) => (
@@ -99,26 +97,6 @@ export const FormProject = ({ onCancel, onSubmit, submitLabel, isPending }: Prop
       <form.Field name="description" children={(field) => (
         <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
       )} />
-
-      <div className="sticky bottom-0 -mx-6 flex justify-end gap-3 border-t border-neutral-light bg-white px-6 py-4">
-        {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-          >
-            Cancelar
-          </button>
-        )}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white disabled:bg-neutral-medium disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-        >
-          {submitLabel}
-        </button>
-      </div>
     </form>
   )
 }

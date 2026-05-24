@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { FormTextarea } from '../field_form/FormTextarea'
 import { ProjectLinksEditor, type ProjectLinkInput } from '../field_form/ProjectLinksEditor'
 import { ProjectUpdateSchema, projectUpdateDefaultValues } from '../../dtos/project.dto'
@@ -9,13 +8,10 @@ import { Picker } from '../field_form/Picker'
 import { useGetProjectSkill, useGetProjectsRole } from '../../hooks/useProjects'
 
 interface Props {
-  onCancel?: () => void
-  onSubmit: (values: ProjectUpdateDto) => void
-  submitLabel?: string
+  formId: string
+  submit: (values: ProjectUpdateDto) => void
   defaultValues?: Partial<ProjectUpdateDto>
   title?: string
-  isPending?: boolean
-  serverError?: string
 }
 
 const normalizeLinks = (links: ProjectUpdateDto['links']): ProjectLinkInput[] => {
@@ -25,18 +21,12 @@ const normalizeLinks = (links: ProjectUpdateDto['links']): ProjectLinkInput[] =>
   }))
 }
 
-export const FormProjectEdit = ({
-  onCancel,
-  onSubmit,
-  submitLabel = 'Guardar cambios',
-  defaultValues,
-  title,
-  isPending,
-  serverError,
-}: Props) => {
+export const FormProjectEdit = ({ formId, submit, defaultValues, title }: Props) => {
   const [projectStatus, setProjectStatus] = useState<'in_progress' | 'completed'>(
     defaultValues?.end_date ? 'completed' : 'in_progress',
   )
+  const { data: rolesOptions, isLoading: loadingRole } = useGetProjectsRole()
+  const { data: skillsOptions, isLoading: loadingSkill } = useGetProjectSkill()
 
   useEffect(() => {
     setProjectStatus(defaultValues?.end_date ? 'completed' : 'in_progress')
@@ -48,7 +38,7 @@ export const FormProjectEdit = ({
     onSubmit: ({ value }) => {
       const today = new Date().toISOString().slice(0, 10)
 
-      onSubmit({
+      submit({
         ...value,
         start_date: projectStatus === 'completed' ? (value.start_date || today) : null,
         end_date: projectStatus === 'completed' ? (value.end_date || today) : null,
@@ -56,16 +46,14 @@ export const FormProjectEdit = ({
     },
   })
 
-  const { data: rolesOptions, isLoading: loadingRole } = useGetProjectsRole()
-  const { data: skillsOptions, isLoading: loadingSkill } = useGetProjectSkill()
-
   return (
     <form
+      id={formId}
+      className="flex flex-col gap-4"
       onSubmit={async (event) => {
         event.preventDefault()
         await form.handleSubmit()
       }}
-      className="flex flex-col gap-4"
     >
       <div className="grid grid-cols-1 gap-2">
         <div>
@@ -143,28 +131,6 @@ export const FormProjectEdit = ({
           <FormTextarea label="Descripción del proyecto" field={field} placeholder="Explica de qué trata el proyecto y qué problema resuelve" />
         )}
       />
-
-      {serverError && <BannerMessageError message={serverError} />}
-
-      <div className="sticky bottom-0 -mx-6 flex justify-end gap-3 border-t border-neutral-light bg-white px-6 py-4">
-        {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-          >
-            Cancelar
-          </button>
-        )}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white disabled:bg-neutral-medium disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-        >
-          {submitLabel}
-        </button>
-      </div>
     </form>
   )
 }

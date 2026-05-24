@@ -1,23 +1,19 @@
-import { Modal } from "../../../shared/components/Modal"
-import type { ProjectIdTitle } from "../interfaces/project.interface"
+import type { Project } from "../interfaces/project.interface"
 
 interface Props {
-  title: string
-  onClose: () => void
-  projects: ProjectIdTitle[] | undefined
+  projects: Project[] | undefined
   isLoading: boolean
-  onSelect: (project: ProjectIdTitle) => void
+  onSelect: (project: Project) => void
   hoverColor?: 'primary' | 'red'
 }
 
-export const ProjectSelectionModal = ({ title, onClose, projects, isLoading, onSelect, hoverColor }: Props) => {
+export const ListProjectsSelection = ({ projects, isLoading, onSelect, hoverColor }: Props) => {
   const hoverClasses = hoverColor === 'red'
     ? 'hover:border-red-500 hover:bg-red-50'
     : 'hover:border-primary hover:bg-primary/5'
 
   return (
-    <Modal title={title} onClose={onClose}>
-
+    <div>
       {isLoading && <p className="text-neutral-medium/70 text-sm">Cargando proyectos...</p>}
 
       {!isLoading && !projects?.length && (
@@ -44,6 +40,6 @@ export const ProjectSelectionModal = ({ title, onClose, projects, isLoading, onS
           </li>
         ))}
       </ul>
-    </Modal>
+    </div>
   )
 }

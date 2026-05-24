@@ -1,27 +1,28 @@
 import { useState } from 'react'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { useAcademicFormation } from '../../hooks/useAcademicFormation'
-import { AcademicFormationList } from '../AcademicFormationList'
-import { ConfirmDeleteAcademicFormation } from '../ConfirmDeleteAcademicFormation'
-import type { AcademicFormationResponse } from '../../dtos/academicFormation.interface'
+import type { Project } from '../../interfaces/project.interface'
+import { useDeleteProject, useGetProjects } from '../../hooks/useProjects'
+import { ListProjectsSelection } from '../ListProjectsSelection'
+import { ProjectDetail } from '../ProjectDetail'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
 }
 
-export const ModalDeleteAcademicFormation = ({ isOpen, onClose }: Props) => {
-  const { data, isLoading, remove } = useAcademicFormation()
-  const [selected, setSelected] = useState<AcademicFormationResponse | null>(null)
+export const ModalDeleteProject = ({ isOpen, onClose }: Props) => {
+  const { data, isLoading } = useGetProjects()
+  const [selected, setSelected] = useState<Project | null>(null)
+  const remove = useDeleteProject()
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
-        title={selected ? '¿Eliminar formación académica?' : 'Selecciona una formación para eliminar'}
+        title={selected ? '¿Eliminar proyecto?' : 'Selecciona un proyecto para eliminar'}
         subtitle={selected
-          ? '¿Estás seguro de que deseas eliminar esta formación académica? Esta acción no se puede deshacer.'
-          : 'Elige la formación académica que deseas eliminar.'}
+          ? '¿Estas seguro que deseas eliminar este proyecto? Esta acción no se puede deshacer.'
+          : 'Elige el proyecto que deseas eliminar.'}
         variant={!selected ? 'close-only' : 'back-close'}
         onBack={() => setSelected(null)}
         intent={!selected ? 'default' : 'danger'}
@@ -30,23 +31,21 @@ export const ModalDeleteAcademicFormation = ({ isOpen, onClose }: Props) => {
       <ModalBody>
         <div className="flex flex-col gap-4 py-2">
           {!selected ? (
-            <AcademicFormationList
-              data={data?.data}
+            <ListProjectsSelection
+              projects={data?.data}
               isLoading={isLoading}
               onSelect={setSelected}
-              itemClassName="hover:border-red-400 hover:bg-red-50"
+              hoverColor="red"
             />
           ) : (
             <>
               {remove.isError && (
                 <BannerMessageError
-                  message={remove.error?.response?.data?.message ?? 'Ocurrió un error al eliminar la formación académica'}
+                  message={remove.error?.response?.data?.message ?? 'Ocurrió un error al eliminar el proyecto'}
                 />
               )}
 
-              <ConfirmDeleteAcademicFormation
-                item={selected}
-              />
+              <ProjectDetail project={selected} />
             </>
           )}
         </div>
