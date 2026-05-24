@@ -5,6 +5,7 @@ import type { Profile } from '../interfaces/profile'
 export const Hero = ({
   first_name,
   last_name,
+  picture,
   date_of_birth,
   gender,
   biography,
@@ -25,7 +26,7 @@ export const Hero = ({
     },
     {
       icon: <FiCalendar className="shrink-0" />,
-      label: !!date_of_birth ? formatDate(date_of_birth) : null,
+      label: date_of_birth ? formatDate(date_of_birth) : null,
     },
     {
       icon: <FiUser className="shrink-0" />,
@@ -83,9 +84,18 @@ export const Hero = ({
       <div className="relative mx-auto shrink-0 md:mx-0">
         <div className="h-36 w-36 rounded-full bg-linear-to-br from-primary to-primary-soft p-[3px] sm:h-44 sm:w-44">
           <div className="flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-[#dbe7f8]">
-            <span className="text-4xl font-serif text-primary sm:text-5xl">
-              {initials}
-            </span>
+            {
+              picture ? (
+                <img
+                  src={picture}
+                  alt={first_name}
+                  className="w-full h-full object-cover rounded-full"
+                />) : (
+                <span className="text-4xl font-serif text-primary sm:text-5xl">
+                  {initials}
+                </span>
+              )
+            }
           </div>
         </div>
       </div>
