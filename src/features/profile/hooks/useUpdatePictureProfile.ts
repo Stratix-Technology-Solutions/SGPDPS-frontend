@@ -12,7 +12,7 @@ export const useUpdatePictureProfile = () => {
 
       formData.append('file', file)
 
-      const res = await api.patch('/profile/picture', formData, {
+      const res = await api.post('/profile/picture', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
