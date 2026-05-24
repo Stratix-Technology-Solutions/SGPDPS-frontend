@@ -65,52 +65,51 @@ export const ModalCreate = ({ isOpen, onClose }: Props) => {
       : 'No se pudo verificar la experiencia laboral.'
 
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalHeader
-          title={showWarning ? 'Advertencia' : 'Agregar Experiencia Laboral'}
-          subtitle={showWarning
-            ? 'Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar.'
-            : 'Ingresa los datos del trabajo que deseas agregar a tu portafolio profesional.'
-          }
-          intent={showWarning ? 'warning' : 'default'}
-        />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={showWarning ? 'Advertencia' : 'Agregar Experiencia Laboral'}
+        subtitle={showWarning
+          ? 'Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar.'
+          : 'Ingresa los datos del trabajo que deseas agregar a tu portafolio profesional.'
+        }
+        intent={showWarning ? 'warning' : 'default'}
+      />
 
-        <ModalBody>
-          <div className="flex flex-col gap-4 py-2">
-            {showWarning ? (
-              <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
-                {warningMessage}
-              </div>
-            ) : (
-              <>
-                {isErrorCheck && (
-                  <BannerMessageError
-                    message={
-                      errorCheck?.response?.data?.message ?? 'Surgió un error al guardar la experiencia laboral.'
-                    }
-                  />
-                )}
-
-                <WorkExperienceForm
-                  submit={handleSubmit}
+      <ModalBody>
+        <div className="flex flex-col gap-4 py-2">
+          {showWarning ? (
+            <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
+              {warningMessage}
+            </div>
+          ) : (
+            <>
+              {isErrorCheck && (
+                <BannerMessageError
+                  message={
+                    errorCheck?.response?.data?.message ?? 'Surgió un error al guardar la experiencia laboral.'
+                  }
                 />
-              </>
-            )}
-          </div>
-        </ModalBody>
+              )}
 
-        <ModalFooter
-          formId={!showWarning ? 'work-form-create' : undefined}
-          onConfirm={showWarning ? handleContinue : undefined}
-          variant="confirm-cancel"
-          confirmText={showWarning ? 'Continuar' : 'Guardar'}
-          intent={showWarning ? 'warning' : 'primary'}
-          loading={isPending || isPendingCheck}
-          disabled={isPending || isPendingCheck}
-          onCancel={showWarning ? handleCloseWarning : onClose}
-        />
-      </Modal>
-    </>
+              <WorkExperienceForm
+                formId="work-form-create"
+                submit={handleSubmit}
+              />
+            </>
+          )}
+        </div>
+      </ModalBody>
+
+      <ModalFooter
+        formId={!showWarning ? 'work-form-create' : undefined}
+        onConfirm={showWarning ? handleContinue : undefined}
+        variant="confirm-cancel"
+        confirmText={showWarning ? 'Continuar' : 'Guardar'}
+        intent={showWarning ? 'warning' : 'primary'}
+        loading={isPending || isPendingCheck}
+        disabled={isPending || isPendingCheck}
+        onCancel={showWarning ? handleCloseWarning : onClose}
+      />
+    </Modal>
   )
 }

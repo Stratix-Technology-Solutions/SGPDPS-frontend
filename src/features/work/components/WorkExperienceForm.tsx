@@ -5,11 +5,13 @@ import { useForm } from '@tanstack/react-form'
 import type { WorkExperienceFormValues } from '../dtos/workExperience'
 
 interface Props {
+  formId: string
   initialValues?: WorkExperienceFormValues
   submit: (values: WorkExperienceFormValues) => void
 }
 
 export const WorkExperienceForm = ({
+  formId,
   initialValues,
   submit,
 }: Props) => {
@@ -21,7 +23,7 @@ export const WorkExperienceForm = ({
 
   return (
     <form
-      id="work-form-create"
+      id={formId}
       className="flex flex-col gap-4"
       onSubmit={async (e) => {
         e.preventDefault()
