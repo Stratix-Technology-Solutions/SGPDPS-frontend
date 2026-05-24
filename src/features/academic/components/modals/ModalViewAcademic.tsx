@@ -3,41 +3,56 @@ import { useAcademic } from '../../hooks/useAcademic'
 import { AcademicDetail } from '../AcademicDetail'
 import { AcademicList } from '../AcademicList'
 import type { AcademicExperienceResponse } from '../../dtos/academic.interface'
-import { Modal } from '../../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalViewAcademic = ({ onClose }: Props) => {
+export const ModalViewAcademic = ({ isOpen, onClose }: Props) => {
   const { data, isLoading } = useAcademic()
   const [selected, setSelected] = useState<AcademicExperienceResponse | null>(null)
 
   return (
     <>
-      {selected ? (
-        <Modal
-          title="Detalle de experiencia académica"
-          onClose={onClose}
-        >
-          <AcademicDetail
-            item={selected}
-            onBack={() => setSelected(null)}
-          />
-        </Modal>
-      ) : (
-        <Modal
-          title="Selecciona una experiencia para ver sus detalles"
-          onClose={onClose}
-        >
-          <AcademicList
-            data={data?.data}
-            isLoading={isLoading}
-            onSelect={setSelected}
-            itemClassName="hover:border-gray-500 hover:bg-gray-50"
-          />
-        </Modal>
-      )}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={selected
+          ? 'Detalle de experiencia académica'
+          : 'Experiencias académicas'
+        }
+        subtitle={selected
+          ? 'Información detallada de la experiencia seleccionada.'
+          : 'Selecciona una experiencia para ver sus detalles.'
+        }
+        variant={!selected ? 'close-only' : 'back-close'}
+        onBack={() => setSelected(null)}
+      />
+
+      <ModalBody>
+        <div className="py-2">
+          {!selected ? (
+            <AcademicList
+              data={data?.data}
+              isLoading={isLoading}
+              onSelect={setSelected}
+              itemClassName="hover:border-gray-500 hover:bg-gray-50"
+            />
+          ) : (
+            <AcademicDetail
+              item={selected}
+            />
+          )}
+        </div>
+      </ModalBody>
+
+      <ModalFooter
+        variant="close-only"
+        cancelText={selected ? 'Volver atrás' : 'Cerrar'}
+        onCancel={selected ? () => {setSelected(null)} : onClose}
+      />
+    </Modal>
     </>
   )
 }

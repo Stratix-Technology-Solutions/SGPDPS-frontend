@@ -3,14 +3,16 @@ import { FormAcademic } from '../form/FormAcademic'
 import { useAcademic } from '../../hooks/useAcademic'
 import { useCheckDuplicateAcademicExperience } from '../../hooks/useCheckAcademicExperience'
 import type { CheckDuplicateResponse } from '../../dtos/academic.interface'
-import { Modal } from '../../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import type { AcademicDto } from '../../dtos/academic.dto'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalAddAcademic = ({ onClose }: Props) => {
+export const ModalAddAcademic = ({ isOpen, onClose }: Props) => {
   const { create } = useAcademic()
   const [showWarning, setShowWarning] = useState(false)
   const [pendingValues, setPendingValues] = useState<AcademicDto | null>(null)
@@ -41,7 +43,6 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
 
   const handleContinue = () => {
     if (!pendingValues) return
-
     create.mutate(pendingValues, { onSuccess: onClose })
   }
 
@@ -57,58 +58,52 @@ export const ModalAddAcademic = ({ onClose }: Props) => {
       : 'No se pudo verificar la experiencia académica.'
 
   return (
-    <>
-      <Modal
-        title="Registrar experiencia académica"
-        description="Agrega formaciones complementarias fuera de tu formación académica formal."
-        onClose={onClose}
-      >
-        <FormAcademic
-          onCancel={onClose}
-          submitLabel="Guardar"
-          onSubmit={handleSubmit}
-          isPending={isChecking || create.isPending}
-          serverError={create.isError
-            ? (create.error?.response?.data?.message ?? 'Ocurrió un error al guardar la experiencia académica')
-            : isCheckError
-              ? (checkError?.response?.data?.message ?? 'No se pudo verificar la experiencia académica')
-              : undefined
-          }
-        />
-      </Modal>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={!showWarning
+          ? 'Registrar experiencia académica'
+          : 'Advertencia'
+        }
+        subtitle={!showWarning
+          ? 'Agrega formaciones complementarias fuera de tu formación académica formal.'
+          : 'Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar.'}
+      />
 
-      {showWarning && (
-        <Modal
-          title="Advertencia"
-          description="Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar."
-          onClose={handleCloseWarning}
-        >
-          <div className="flex flex-col gap-4">
+      <ModalBody>
+        <div className="flex flex-col gap-4 py-2">
+          {!showWarning ? (
+            <>
+              {isCheckError && (
+                <BannerMessageError
+                  message={
+                    checkError?.response?.data?.message ?? 'Surgió un error al guardar la experiencia laboral.'
+                  }
+                />
+              )}
+
+              <FormAcademic
+                formId="academic-form-create"
+                submit={handleSubmit}
+              />
+            </>
+          ) : (
             <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
               {warningMessage}
             </div>
+          )}
+        </div>
+      </ModalBody>
 
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={handleCloseWarning}
-                className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                disabled={create.isPending}
-                onClick={handleContinue}
-                className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white cursor-pointer disabled:bg-neutral-medium disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {create.isPending ? 'Guardando...' : 'Continuar'}
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
-    </>
+      <ModalFooter
+        formId={!showWarning ? 'academic-form-create' : undefined}
+        onConfirm={showWarning ? handleContinue : undefined}
+        variant="confirm-cancel"
+        confirmText={showWarning ? 'Continuar' : 'Guardar'}
+        intent={showWarning ? 'warning' : 'primary'}
+        loading={create.isPending || isChecking}
+        disabled={create.isPending || isChecking}
+        onCancel={showWarning ? handleCloseWarning : onClose}
+      />
+    </Modal>
   )
 }

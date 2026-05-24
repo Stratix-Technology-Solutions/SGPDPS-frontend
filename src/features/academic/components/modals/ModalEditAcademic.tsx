@@ -3,16 +3,17 @@ import { useAcademic } from '../../hooks/useAcademic'
 import { FormAcademic } from '../form/FormAcademic'
 import { AcademicList } from '../AcademicList'
 import type { AcademicExperienceResponse, CheckDuplicateResponse } from '../../dtos/academic.interface'
-import { Modal } from '../../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import { useCheckDuplicateAcademicExperience } from '../../hooks/useCheckAcademicExperience'
-
 import type { AcademicDto } from '../../dtos/academic.dto'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalEditAcademic = ({ onClose }: Props) => {
+export const ModalEditAcademic = ({ isOpen, onClose }: Props) => {
   const { data, isLoading, update } = useAcademic()
   const [selected, setSelected] = useState<AcademicExperienceResponse | null>(null)
   const [showWarning, setShowWarning] = useState(false)
@@ -78,86 +79,80 @@ export const ModalEditAcademic = ({ onClose }: Props) => {
       ? 'Ya existe una experiencia académica que se solapa con este rango de fechas. Si continúas, se actualizará de todos modos.'
       : 'No se pudo verificar la experiencia académica.'
 
-  return (
-    <>
-      {selected ? (
-        <Modal
-          title="Editar experiencia académica"
-          onClose={onClose}
-        >
-          {!showWarning ? (
-            <FormAcademic
-              onCancel={() => setSelected(null)}
-              onSubmit={handleSubmit}
-              isPending={isChecking || update.isPending}
-              submitLabel="Actualizar"
-              lockIdentityFields
-              serverError={update.isError
-                ? (update.error?.response?.data?.message ?? 'Ocurrió un error al actualizar')
-                : isCheckError
-                  ? (checkError?.response?.data?.message ?? 'No se pudo verificar la experiencia académica')
-                  : undefined
-              }
-              defaultValues={{
-                title: selected.title,
-                institution: selected.institution,
-                start_date: selected.start_date,
-                end_date: selected.end_date,
-                type: selected.type,
-                description: selected.description,
-                is_visible: selected.is_visible,
-              }}
-            />
-          ) : (
-            null
-          )}
-        </Modal>
-      ) : (
-        <Modal
-          title="Selecciona una experiencia para editar"
-          onClose={onClose}
-        >
-          <AcademicList
-            data={data?.data}
-            isLoading={isLoading}
-            onSelect={setSelected}
-            itemClassName="hover:border-gray-500 hover:bg-gray-50"
-          />
-        </Modal>
-      )}
+  const title = selected
+    ? 'Editar experiencia académica'
+    : showWarning
+      ? 'Advertencia'
+      : 'Selecciona una experiencia para editar'
 
-      {showWarning && (
-        <Modal
-          title="Advertencia"
-          description="Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar."
-          onClose={handleCloseWarning}
-        >
-          <div className="flex flex-col gap-4">
+  const subtitle = selected
+    ? 'Modifica los datos de la experiencia seleccionada.'
+    : showWarning
+      ? 'Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar.'
+      : 'Selecciona la experiencia académica que deseas editar.'
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={title}
+        subtitle={subtitle}
+        intent={showWarning ? 'warning' : 'default'}
+        variant={!selected ? 'close-only' : 'back-close'}
+        onBack={() => setSelected(null)}
+      />
+
+      <ModalBody>
+        <div className="flex flex-col gap-4 py-2">
+          {!selected ? (
+            <AcademicList
+              data={data?.data}
+              isLoading={isLoading}
+              onSelect={setSelected}
+              itemClassName="hover:border-gray-500 hover:bg-gray-50"
+            />
+          ) : !showWarning ? (
+            <>
+              {isCheckError && (
+                <BannerMessageError
+                  message={
+                    checkError?.response?.data?.message ?? 'Surgió un error al guardar la experiencia laboral.'
+                  }
+                />
+              )}
+
+              <FormAcademic
+                formId="academic-form-update"
+                submit={handleSubmit}
+                lockIdentityFields
+                defaultValues={{
+                  title: selected.title,
+                  institution: selected.institution,
+                  start_date: selected.start_date,
+                  end_date: selected.end_date,
+                  type: selected.type,
+                  description: selected.description,
+                  is_visible: selected.is_visible,
+                }}
+              />
+            </>
+          ) : (
             <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
               {warningMessage}
             </div>
+          )}
+        </div>
+      </ModalBody>
 
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={handleCloseWarning}
-                className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                disabled={update.isPending}
-                onClick={handleContinue}
-                className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white cursor-pointer disabled:bg-neutral-medium disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {update.isPending ? 'Guardando...' : 'Continuar'}
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
-    </>
+      <ModalFooter
+        formId={!showWarning ? 'academic-form-update' : undefined}
+        onConfirm={showWarning ? handleContinue : undefined}
+        variant={selected ? 'confirm-cancel' : 'close-only'}
+        confirmText={showWarning ? 'Continuar' : 'Guardar'}
+        intent={showWarning ? 'warning' : 'primary'}
+        loading={update.isPending || isChecking}
+        disabled={update.isPending || isChecking}
+        onCancel={showWarning ? handleCloseWarning : onClose}
+      />
+    </Modal>
   )
 }

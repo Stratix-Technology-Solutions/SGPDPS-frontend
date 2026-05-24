@@ -3,10 +3,9 @@ import { getAcademicTypeLabel } from '../utils/academicLabels'
 
 interface Props {
   item: AcademicExperienceResponse
-  onBack: () => void
 }
 
-export const AcademicDetail = ({ item, onBack }: Props) => {
+export const AcademicDetail = ({ item }: Props) => {
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -39,12 +38,6 @@ export const AcademicDetail = ({ item, onBack }: Props) => {
             <p className="text-background-dark mt-0.5">{item.description}</p>
           </div>
         )}
-      </div>
-
-      <div className="flex justify-end">
-        <button onClick={onBack} className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light">
-          Volver atrás
-        </button>
       </div>
     </>
   )
