@@ -60,7 +60,7 @@ export function ModalHeader({
           )}
 
           {subtitle && (
-            <p className="text-sm text-neutral-medium mt-0.5 leading-snug">
+            <p className="text-sm text-neutral-medium mt-2 leading-snug">
               {subtitle}
             </p>
           )}

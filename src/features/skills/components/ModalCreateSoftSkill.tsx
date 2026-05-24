@@ -43,7 +43,7 @@ export const ModalCreateSoftSkill = ({ isOpen, onClose }: Props) => {
 
           <form
             id="soft-skill-form"
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-4"
             onSubmit={(e) => {
               e.preventDefault()
               form.handleSubmit(e)

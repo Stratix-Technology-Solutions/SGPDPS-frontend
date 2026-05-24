@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { ApiError } from '../../../shared/interfaces/api.interface'
 import api from '../../../app/api/axios'
+import type { ApiError } from '../../../shared/interfaces/api.interface'
 
-export const useDeleteLink = ({ onClose }: { onClose: () => void }) => {
-    const queryClient = useQueryClient()
+export const useDeleteLink = () => {
+  const queryClient = useQueryClient()
 
-    return useMutation<void, ApiError, string>({
-        mutationFn: async (id) => {
-            await api.delete(`/links/${id}`)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['user', 'links'] })
-            onClose()
-        },
-    })
+  return useMutation<void, ApiError, number>({
+    mutationFn: async (id) => {
+      await api.delete(`/links/${id}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'links'] })
+    },
+  })
 }

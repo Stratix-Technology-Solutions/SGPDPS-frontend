@@ -4,7 +4,7 @@ import type { LinkDto } from '../dtos/links.dto'
 import type { LinkResponse } from '../interfaces/link.interface'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
-export const useCreateLink = ({ onClose }: { onClose: () => void }) => {
+export const useCreateLink = () => {
   const queryClient = useQueryClient()
 
   return useMutation<LinkResponse, ApiError, LinkDto>({
@@ -14,7 +14,6 @@ export const useCreateLink = ({ onClose }: { onClose: () => void }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user', 'links'] })
-      onClose()
     }
   })
 }

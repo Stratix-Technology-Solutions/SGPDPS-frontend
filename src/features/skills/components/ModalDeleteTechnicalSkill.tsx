@@ -27,7 +27,7 @@ export const ModalDeleteTechnicalSkill = ({ isOpen, onClose }: Props) => {
         intent={!technologyId ? 'default' : 'danger'}
       />
 
-      <ModalBody padding="md">
+      <ModalBody>
         <div className="py-2">
           {!technologyId ? (
             <ListSkills<TechnicalSkillResponse>

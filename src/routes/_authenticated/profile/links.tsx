@@ -12,8 +12,14 @@ export const Route = createFileRoute('/_authenticated/profile/links')({
 
 type Modal = 'create' | 'delete' | null
 
+const modalRegistry = {
+  create: ModalCreate,
+  delete: ModalDelete,
+}
+
 function RouteComponent() {
   const [modal, setModal] = useState<Modal>(null)
+  const ActiveModal = modal ? modalRegistry[modal] : null
 
   return (
     <div className="py-10 flex flex-col gap-6">
@@ -27,8 +33,12 @@ function RouteComponent() {
         <ActionButton icon={FiTrash2} label="Eliminar enlace" onClick={() => setModal('delete')} />
       </div>
 
-      {modal === 'create' && <ModalCreate onClose={() => setModal(null)} />}
-      {modal === 'delete' && <ModalDelete onClose={() => setModal(null)} />}
+      {ActiveModal && (
+        <ActiveModal
+          isOpen={!!modal}
+          onClose={() => setModal(null)}
+        />
+      )}
     </div>
   )
 }

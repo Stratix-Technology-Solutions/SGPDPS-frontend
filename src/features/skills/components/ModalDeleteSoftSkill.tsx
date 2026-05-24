@@ -27,7 +27,7 @@ export const ModalDeleteSoftSkill = ({ isOpen, onClose }: Props) => {
         intent={!softId ? 'default' : 'danger'}
       />
 
-      <ModalBody padding="md">
+      <ModalBody>
         <div className="py-2">
           {!softId ? (
             <ListSkills<SoftSkillResponse>

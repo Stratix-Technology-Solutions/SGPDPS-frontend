@@ -50,7 +50,7 @@ export const ModalCreateTechnicalSkill = ({ isOpen, onClose }: Props) => {
 
           <form
             id="technical-skill-form"
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-4"
             onSubmit={(e) => {
               e.preventDefault()
               form.handleSubmit(e)
