@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal } from '../../../shared/components/Modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'
@@ -9,12 +9,14 @@ import type {
   WorkExperience,
   WorkExperienceFormValues,
 } from '../dtos/workExperience'
+import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 
 interface Props {
+  isOpen: boolean
   onClose: () => void
 }
 
-export const ModalEdit = ({ onClose }: Props) => {
+export const ModalEdit = ({ isOpen, onClose }: Props) => {
   const [selected, setSelected] = useState<WorkExperience | null>(null)
   const [showWarning, setShowWarning] = useState(false)
   const [pendingValues, setPendingValues] =
@@ -25,7 +27,6 @@ export const ModalEdit = ({ onClose }: Props) => {
   } | null>(null)
 
   const { data: list, isLoading } = useWorkExperiences()
-
   const { mutate: update, isPending } = useUpdateWorkExperience({ onClose })
 
   const {
@@ -74,74 +75,75 @@ export const ModalEdit = ({ onClose }: Props) => {
 
   const title = selected
     ? 'Editar Experiencia Laboral'
-    : 'Seleccionar Experiencia Laboral'
+    : showWarning
+      ? 'Advertencia'
+      : 'Seleccionar Experiencia Laboral'
 
-  const description = selected
+  const subtitle = selected
     ? 'Modifica los datos de la experiencia seleccionada.'
-    : 'Selecciona la experiencia laboral que deseas editar.'
+    : showWarning
+      ? 'Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar.'
+      : 'Selecciona la experiencia laboral que deseas editar.'
 
   return (
-    <>
-      <Modal title={title} description={description} onClose={onClose}>
-        {!selected && (
-          <WorkExperienceList
-            data={list}
-            isLoading={isLoading}
-            onSelect={setSelected}
-            itemClassName="hover:border-primary hover:bg-neutral-50"
-          />
-        )}
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader
+        title={title}
+        subtitle={subtitle}
+        intent={showWarning ? 'warning' : 'default'}
+        variant={!selected ? 'close-only' : 'back-close'}
+        onBack={() => setSelected(null)}
+      />
 
-        {selected && !showWarning && (
-          <WorkExperienceForm
-            initialValues={{
-              company: selected.company,
-              position: selected.position,
-              description: selected.description,
-              start_date: selected.start_date,
-              end_date: selected.end_date,
-            }}
-            onSubmit={handleSubmit}
-            onCancel={onClose}
-            isPending={isPendingCheck || isPending}
-            isError={isErrorCheck}
-            errorMessage={errorCheck?.response?.data?.message}
-          />
-        )}
-      </Modal>
+      <ModalBody>
+        <div className="flex flex-col gap-4 py-2">
+          {!selected ? (
+            <WorkExperienceList
+              data={list}
+              isLoading={isLoading}
+              onSelect={setSelected}
+              itemClassName="hover:border-primary hover:bg-neutral-50"
+            />
+          ) : !showWarning ? (
+            <>
+              {isErrorCheck && (
+                <BannerMessageError
+                  message={
+                    errorCheck?.response?.data?.message ?? 'Surgió un error al editar la experiencia laboral.'
+                  }
+                />
+              )}
 
-      {showWarning && (
-        <Modal
-          title="Advertencia"
-          description="Se encontraron posibles coincidencias. Revisa el mensaje antes de continuar."
-          onClose={handleCloseWarning}
-        >
-          <div className="flex flex-col gap-4">
+              <WorkExperienceForm
+                formId='work-form-update'
+                submit={handleSubmit}
+                initialValues={{
+                  company: selected.company,
+                  position: selected.position,
+                  description: selected.description,
+                  start_date: selected.start_date,
+                  end_date: selected.end_date,
+                }}
+              />
+            </>
+          ) : (
             <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
               {warningMessage}
             </div>
+          )}
+        </div>
+      </ModalBody>
 
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={handleCloseWarning}
-                className="px-4 py-2 rounded-md border cursor-pointer hover:bg-neutral-light"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                disabled={isPending}
-                onClick={handleContinue}
-                className="px-4 py-2 rounded-md bg-primary hover:bg-primary-soft text-white cursor-pointer disabled:bg-neutral-medium disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {isPending ? 'Guardando...' : 'Continuar'}
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
-    </>
+      <ModalFooter
+        formId={!showWarning ? 'work-form-update' : undefined}
+        onConfirm={showWarning ? handleContinue : undefined}
+        variant={selected ? 'confirm-cancel' : 'close-only'}
+        confirmText={showWarning ? 'Continuar' : 'Guardar'}
+        intent={showWarning ? 'warning' : 'primary'}
+        loading={isPending || isPendingCheck}
+        disabled={isPending || isPendingCheck}
+        onCancel={showWarning ? handleCloseWarning : onClose}
+      />
+    </Modal>
   )
 }

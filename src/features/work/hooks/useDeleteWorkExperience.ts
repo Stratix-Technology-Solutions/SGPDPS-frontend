@@ -2,11 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
-export const useDeleteWorkExperience = ({
-  onClose,
-}: {
-  onClose: () => void
-}) => {
+export const useDeleteWorkExperience = () => {
   const queryClient = useQueryClient()
   const token = localStorage.getItem('access_token')
 
@@ -16,7 +12,6 @@ export const useDeleteWorkExperience = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['work-experiences', token] })
-      onClose()
     },
   })
 }
