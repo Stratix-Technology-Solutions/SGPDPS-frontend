@@ -15,6 +15,7 @@ interface Props<T extends string> {
   otherLabel?: string
   hasPlaceholder?: boolean
   otherPlaceholder?: string
+  otherSelectedLabel?: string
   maxDropdownHeight?: string
   required?: boolean
 }
@@ -32,6 +33,7 @@ export const FormSelect = <T extends string,>({
   otherLabel = 'Otro',
   hasPlaceholder = true,
   otherPlaceholder = 'Ingrese un valor',
+  otherSelectedLabel = 'Ingrese un valor personalizado',
   maxDropdownHeight = '240px',
   required = false,
 }: Props<T>) => {
@@ -68,24 +70,15 @@ export const FormSelect = <T extends string,>({
       }
     }
 
-    document.addEventListener(
-      'mousedown',
-      handleClickOutside,
-    )
+    document.addEventListener('mousedown', handleClickOutside)
 
     return () => {
-      document.removeEventListener(
-        'mousedown',
-        handleClickOutside,
-      )
+      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [field])
 
   return (
-    <div
-      ref={containerRef}
-      className="space-y-2"
-    >
+    <div ref={containerRef} className="space-y-2">
       <label className="block font-semibold text-background-dark">
         {label} {required && '*'}
       </label>
@@ -96,10 +89,12 @@ export const FormSelect = <T extends string,>({
         onClick={() => setOpen((prev) => !prev)}
         className="flex w-full items-center justify-between rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 text-left text-background-dark outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:opacity-50 cursor-pointer">
         <span>
-          {selectedOption?.label ??
-            (hasPlaceholder
-              ? placeholder
-              : options[0]?.label)}
+          {isOtherSelected
+            ? otherSelectedLabel
+            : selectedOption?.label ??
+              (hasPlaceholder
+                ? placeholder
+                : options[0]?.label)}
         </span>
 
         <span

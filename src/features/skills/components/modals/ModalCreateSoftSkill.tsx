@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form'
-import { SoftSchema, defaultValues } from '../../dtos/soft.dto'
+import { SoftFormSchema, defaultValues } from '../../dtos/soft.dto'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import { useCreateSoftSKill } from '../../hooks/useCreateSoftSkill'
@@ -18,9 +18,13 @@ export const ModalCreateSoftSkill = ({ isOpen, onClose }: Props) => {
 
   const form = useForm({
     defaultValues,
-    validators: { onSubmit: SoftSchema },
+    validators: { onSubmit: SoftFormSchema },
     onSubmit: ({ value }) => {
-      create(value, { onSuccess: onClose })
+      const finalName = value.name === '__other__'
+        ? value.custom_name
+        : value.name
+
+      create({ name: finalName }, { onSuccess: onClose })
     },
   })
 
@@ -52,11 +56,18 @@ export const ModalCreateSoftSkill = ({ isOpen, onClose }: Props) => {
             <form.Field
               name="name"
               children={(field) => (
-                <FormSelect
-                  label="Habilidad blanda"
-                  field={field}
-                  options={data ? objectToOptions(data, 'name', 'name') : []}
-                  required
+                <form.Field
+                  name="custom_name"
+                  children={(customField) => (
+                    <FormSelect
+                      label="Habilidad blanda"
+                      field={field}
+                      customField={customField}
+                      options={data ? objectToOptions(data, 'name', 'name') : []}
+                      allowOther
+                      required
+                    />
+                  )}
                 />
               )}
             />
