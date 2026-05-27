@@ -1,9 +1,9 @@
 import { useForm } from '@tanstack/react-form'
-import { InputMessageError } from '../../../shared/components/InputMessageError'
-import { SoftSchema, defaultValues } from '../dtos/soft.dto'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
-import { useCreateSoftSKill } from '../hooks/useCreateSoftSkill'
+import { InputMessageError } from '../../../../shared/components/InputMessageError'
+import { SoftSchema, defaultValues } from '../../dtos/soft.dto'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { useCreateSoftSKill } from '../../hooks/useCreateSoftSkill'
 
 interface Props {
   isOpen: boolean

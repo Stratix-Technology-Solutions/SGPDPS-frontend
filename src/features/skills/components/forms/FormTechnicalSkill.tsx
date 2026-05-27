@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form'
-import { DOMAIN_LEVELS, TechnicalFormSchema, defaultValues, type TechnicalDto } from '../../dtos/technical.dto'
+import { DOMAIN_LEVELS, TechnicalFormSchema, defaultValues, type TechnicalDto, type TechnicalFormValues } from '../../dtos/technical.dto'
 import { useGetTechnicalSkillsSystem } from '../../hooks/useGetTechnicalSkillsSystem'
 import { FormSelect } from '../../../../shared/components/form'
 import { objectToOptions, toOptions } from '../../../../shared/components/form/form.utils'
@@ -7,14 +7,21 @@ import { objectToOptions, toOptions } from '../../../../shared/components/form/f
 interface Props {
   formId: string
   success: (value: TechnicalDto) => void
+  initialValues?: Partial<TechnicalFormValues>
+  disabledFields?: boolean
 }
 
-export const FormCreateTechnicalSkill = ({ formId, success }: Props) => {
+export const FormTechnicalSkill = ({
+  formId,
+  success,
+  initialValues,
+  disabledFields,
+}: Props) => {
   const { data } = useGetTechnicalSkillsSystem()
 
   const form = useForm({
-    defaultValues,
-    validators: { onSubmit: TechnicalFormSchema},
+    defaultValues: { ...defaultValues, ...initialValues },
+    validators: { onSubmit: TechnicalFormSchema },
     onSubmit: ({ value }) => {
       const finalName = value.name === '__other__'
         ? value.custom_name
@@ -48,6 +55,7 @@ export const FormCreateTechnicalSkill = ({ formId, success }: Props) => {
                 customField={customField}
                 allowOther
                 options={data ? objectToOptions(data, 'name', 'name') : []}
+                disabled={disabledFields}
               />
             )}
           />

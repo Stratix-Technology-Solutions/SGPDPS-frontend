@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
-import { CardTechnicalSkill } from './CardTechnicalSkill'
-import { ListSkills } from './ListSkills'
-import { FormUpdateTechnicalSkill } from './FormUpdateTechnicalSkill'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
-import { useUpdateTechnicalSkill } from '../hooks/useUpdateTechnicalSkill'
+import type { TechnicalSkillResponse } from '../../interfaces/technical.interface'
+import { CardTechnicalSkill } from '..//CardTechnicalSkill'
+import { ListSkills } from '..//ListSkills'
+import { FormTechnicalSkill } from '..//forms/FormTechnicalSkill'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
+import { useUpdateTechnicalSkill } from '../../hooks/useUpdateTechnicalSkill'
 
 interface Props {
   isOpen: boolean
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const ModalEditTechnicalSkill = ({ isOpen, onClose }: Props) => {
-  const [technology, setTechnology] = useState(null)
+  const [technology, setTechnology] = useState<TechnicalSkillResponse | null>(null)
   const { mutate, error, isError, isPending } = useUpdateTechnicalSkill()
 
   return (
@@ -47,15 +47,19 @@ export const ModalEditTechnicalSkill = ({ isOpen, onClose }: Props) => {
                 />
               )}
 
-              <FormUpdateTechnicalSkill
-                technology={technology}
-                update={(values) =>
-                  mutate(values, {
+              <FormTechnicalSkill
+                formId="technical-skill-form-update"
+                initialValues={technology}
+                disabledFields
+                success={(value) => {
+                  if (!technology) return
+
+                  mutate({ id: technology.id, data: value }, {
                     onSuccess: () => {
                       setTechnology(null)
                     },
                   })
-                }
+                }}
               />
             </>
           )}

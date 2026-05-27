@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { ListSkills } from './ListSkills'
-import type { SoftSkillResponse } from '../interfaces/soft.interface'
-import { CardSoftSkill } from './CardSoftSkill'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
-import { useDeleteSoftSkill } from '../hooks/useDeleteSoftSkill'
+import { ListSkills } from '../ListSkills'
+import type { SoftSkillResponse } from '../../interfaces/soft.interface'
+import { CardSoftSkill } from '../CardSoftSkill'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { useDeleteSoftSkill } from '../../hooks/useDeleteSoftSkill'
 
 interface Props {
   isOpen: boolean

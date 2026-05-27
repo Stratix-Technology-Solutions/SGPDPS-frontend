@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import type { TechnicalSkillResponse } from '../interfaces/technical.interface'
-import { CardTechnicalSkill } from './CardTechnicalSkill'
-import { ListSkills } from './ListSkills'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
-import { useDeleteTechnicalSkill } from '../hooks/useDeleteTechnicalSkill'
+import type { TechnicalSkillResponse } from '../../interfaces/technical.interface'
+import { CardTechnicalSkill } from '../CardTechnicalSkill'
+import { ListSkills } from '../ListSkills'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { useDeleteTechnicalSkill } from '../../hooks/useDeleteTechnicalSkill'
 
 interface Props {
   isOpen: boolean
@@ -50,13 +50,13 @@ export const ModalDeleteTechnicalSkill = ({ isOpen, onClose }: Props) => {
         disabled={isPending}
         loading={isPending}
         onConfirm={() => {
-          if (technologyId) {
-            mutate(technologyId, {
-              onSuccess: () => {
-                setTechnologyId(null)
-              }
-            })
-          }
+          if (!technologyId) return
+
+          mutate(technologyId, {
+            onSuccess: () => {
+              setTechnologyId(null)
+            }
+          })
         }}
       />
     </Modal>

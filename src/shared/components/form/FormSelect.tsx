@@ -92,7 +92,7 @@ export const FormSelect = <T extends string,>({
         type="button"
         disabled={disabled}
         onClick={() => setOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 text-left text-background-dark outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-neutral-100 cursor-pointer">
+        className="flex w-full items-center justify-between rounded-xl border border-neutral-light bg-neutral-50 px-4 py-3 text-left text-background-dark outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:opacity-50 cursor-pointer">
         <span>
           {selectedOption?.label ??
             (hasPlaceholder

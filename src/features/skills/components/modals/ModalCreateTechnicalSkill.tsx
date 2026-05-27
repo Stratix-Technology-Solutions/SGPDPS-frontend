@@ -1,7 +1,7 @@
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
-import { BannerMessageError } from '../../../shared/components/BannerMessageError'
-import { useCreateTechnicalSkill } from '../hooks/useCreateTechnicalSkill'
-import { FormCreateTechnicalSkill } from './form/FormCreateTechnicalSkill'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
+import { useCreateTechnicalSkill } from '../../hooks/useCreateTechnicalSkill'
+import { FormTechnicalSkill } from '../forms/FormTechnicalSkill'
 
 interface Props {
   isOpen: boolean
@@ -28,7 +28,7 @@ export const ModalCreateTechnicalSkill = ({ isOpen, onClose }: Props) => {
             />
           )}
 
-          <FormCreateTechnicalSkill
+          <FormTechnicalSkill
             formId="technical-skill-form"
             success={(value) => {
               create(value, { onSuccess: onClose })

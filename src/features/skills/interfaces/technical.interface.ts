@@ -1,7 +1,7 @@
 export interface TechnicalSkillResponse {
   id: number
   name: string
-  domain_level: string
+  domain_level: 'Básico' | 'Intermedio' | 'Avanzado'
   is_visible: boolean
 }
 
