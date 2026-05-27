@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import api from '../../../app/api/axios'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 
-export const useGetTechnicalSkillsSystem = () => {
+export const useGetSoftSkillsSystem = () => {
   return useQuery<{ name: string }[], ApiError>({
-    queryKey: ['technical', 'skills', 'system'],
+    queryKey: ['soft', 'skills', 'system'],
     queryFn: async () => {
-      const res = await api.get('/skills/list-all')
+      const res = await api.get('/soft-skills/list-all')
       return res.data
     },
   })

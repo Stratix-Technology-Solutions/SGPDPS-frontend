@@ -16,6 +16,7 @@ interface Props<T extends string> {
   hasPlaceholder?: boolean
   otherPlaceholder?: string
   maxDropdownHeight?: string
+  required?: boolean
 }
 
 const OTHER_VALUE = '__other__'
@@ -32,6 +33,7 @@ export const FormSelect = <T extends string,>({
   hasPlaceholder = true,
   otherPlaceholder = 'Ingrese un valor',
   maxDropdownHeight = '240px',
+  required = false,
 }: Props<T>) => {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,7 +87,7 @@ export const FormSelect = <T extends string,>({
       className="space-y-2"
     >
       <label className="block font-semibold text-background-dark">
-        {label}
+        {label} {required && '*'}
       </label>
 
       <button

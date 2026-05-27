@@ -56,6 +56,7 @@ export const FormTechnicalSkill = ({
                 allowOther
                 options={data ? objectToOptions(data, 'name', 'name') : []}
                 disabled={disabledFields}
+                required
               />
             )}
           />
@@ -70,6 +71,7 @@ export const FormTechnicalSkill = ({
             field={field}
             options={toOptions(DOMAIN_LEVELS)}
             hasPlaceholder={false}
+            required
           />
         )}
       />

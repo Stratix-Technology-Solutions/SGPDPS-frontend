@@ -1,9 +1,11 @@
 import { useForm } from '@tanstack/react-form'
-import { InputMessageError } from '../../../../shared/components/InputMessageError'
 import { SoftSchema, defaultValues } from '../../dtos/soft.dto'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
 import { useCreateSoftSKill } from '../../hooks/useCreateSoftSkill'
+import { FormSelect } from '../../../../shared/components/form'
+import { useGetSoftSkillsSystem } from '../../hooks/useGetSoftSkillsSystem'
+import { objectToOptions } from '../../../../shared/components/form/form.utils'
 
 interface Props {
   isOpen: boolean
@@ -11,16 +13,14 @@ interface Props {
 }
 
 export const ModalCreateSoftSkill = ({ isOpen, onClose }: Props) => {
+  const { data } = useGetSoftSkillsSystem()
   const { mutate: create, error, isPending, isError } = useCreateSoftSKill()
+
   const form = useForm({
     defaultValues,
     validators: { onSubmit: SoftSchema },
     onSubmit: ({ value }) => {
-      create(value, {
-        onSuccess: () => {
-          onClose()
-        }
-      })
+      create(value, { onSuccess: onClose })
     },
   })
 
@@ -52,22 +52,12 @@ export const ModalCreateSoftSkill = ({ isOpen, onClose }: Props) => {
             <form.Field
               name="name"
               children={(field) => (
-                <div>
-                  <label className="block font-semibold text-background-dark mb-1.5">Habilidad blanda</label>
-                  <input
-                    id={field.name}
-                    name={field.name}
-                    type="text"
-                    placeholder="Ingrese su habilidad blanda"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-                    required
-                  />
-                  {!field.state.meta.isValid && (
-                    <InputMessageError message={field.state.meta.errors.map(e => e?.message).join(', ')} />
-                  )}
-                </div>
+                <FormSelect
+                  label="Habilidad blanda"
+                  field={field}
+                  options={data ? objectToOptions(data, 'name', 'name') : []}
+                  required
+                />
               )}
             />
           </form>
