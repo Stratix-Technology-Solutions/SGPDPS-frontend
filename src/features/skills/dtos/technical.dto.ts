@@ -18,9 +18,17 @@ export const TechnicalSchema = z.object({
   })
 })
 
+
+export const TechnicalFormSchema = TechnicalSchema.extend({
+  custom_name: z.string(),
+})
+
 export type TechnicalDto = z.infer<typeof TechnicalSchema>
 
-export const defaultValues: TechnicalDto = {
+export type TechnicalFormValues = z.infer<typeof TechnicalFormSchema>
+
+export const defaultValues: TechnicalFormValues = {
   name: '',
+  custom_name: '',
   domain_level: 'Básico',
 }

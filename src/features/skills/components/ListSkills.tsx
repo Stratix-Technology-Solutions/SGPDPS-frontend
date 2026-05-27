@@ -46,7 +46,7 @@ export const ListSkills = <T,>({ queryKey, route, renderItem, action }: Props<T>
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       {isSuccess && !data.data.length && (
         <p>No hay elementos para mostrar</p>
       )}
@@ -65,7 +65,7 @@ export const ListSkills = <T,>({ queryKey, route, renderItem, action }: Props<T>
       )}
 
       {isSuccess && data.meta.last_page > 1 && (
-        <div className="flex justify-end items-center flex-wrap gap-2">
+        <div className="flex justify-end items-center flex-wrap gap-2 mt-2">
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
@@ -93,6 +93,6 @@ export const ListSkills = <T,>({ queryKey, route, renderItem, action }: Props<T>
           </button>
         </div>
       )}
-    </>
+    </div>
   )
 }

@@ -1,8 +1,8 @@
 import { useForm } from '@tanstack/react-form'
-import { DOMAIN_LEVELS, TechnicalSchema, defaultValues, type DomainLevel, type TechnicalDto } from '../../dtos/technical.dto'
+import { DOMAIN_LEVELS, TechnicalFormSchema, defaultValues, type TechnicalDto } from '../../dtos/technical.dto'
 import { useGetTechnicalSkillsSystem } from '../../hooks/useGetTechnicalSkillsSystem'
-import { InputMessageError } from '../../../../shared/components/InputMessageError'
-import { AutocompleteInput } from '../AutoCompleteInput'
+import { FormSelect } from '../../../../shared/components/form'
+import { objectToOptions, toOptions } from '../../../../shared/components/form/form.utils'
 
 interface Props {
   formId: string
@@ -14,8 +14,17 @@ export const FormCreateTechnicalSkill = ({ formId, success }: Props) => {
 
   const form = useForm({
     defaultValues,
-    validators: { onSubmit: TechnicalSchema },
-    onSubmit: ({ value }) => { success(value) },
+    validators: { onSubmit: TechnicalFormSchema},
+    onSubmit: ({ value }) => {
+      const finalName = value.name === '__other__'
+        ? value.custom_name
+        : value.name
+
+      success({
+        name: finalName,
+        domain_level: value.domain_level,
+      })
+    },
   })
 
   return (
@@ -30,65 +39,30 @@ export const FormCreateTechnicalSkill = ({ formId, success }: Props) => {
       <form.Field
         name="name"
         children={(field) => (
-          <div>
-            <label className="block font-semibold text-background-dark mb-1.5">
-              Habilidad técnica
-            </label>
-
-            <AutocompleteInput
-              value={field.state.value}
-              onChange={field.handleChange}
-              options={data?.map(item => item.name) ?? []}
-              placeholder="Ingrese su habilidad técnica"
-            />
-
-            {!field.state.meta.isValid && (
-              <InputMessageError
-                message={field.state.meta.errors
-                  .map(e => e?.message)
-                  .join(', ')}
+          <form.Field
+            name="custom_name"
+            children={(customField) => (
+              <FormSelect
+                label="Habilidad técnica"
+                field={field}
+                customField={customField}
+                allowOther
+                options={data ? objectToOptions(data, 'name', 'name') : []}
               />
             )}
-          </div>
+          />
         )}
       />
 
       <form.Field
         name="domain_level"
         children={(field) => (
-          <div>
-            <label className="block font-semibold text-background-dark mb-1.5">
-              Nivel de dominio
-            </label>
-
-            <select
-              id={field.name}
-              value={field.state.value}
-              className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-              onChange={(e) =>
-                field.handleChange(
-                  e.target.value as DomainLevel,
-                )
-              }
-            >
-              {DOMAIN_LEVELS.map((level) => (
-                <option
-                  key={level}
-                  value={level}
-                >
-                  {level}
-                </option>
-              ))}
-            </select>
-
-            {!field.state.meta.isValid && (
-              <InputMessageError
-                message={field.state.meta.errors
-                  .map(e => e?.message)
-                  .join(', ')}
-              />
-            )}
-          </div>
+          <FormSelect
+            label="Nivel de dominio"
+            field={field}
+            options={toOptions(DOMAIN_LEVELS)}
+            hasPlaceholder={false}
+          />
         )}
       />
     </form>
