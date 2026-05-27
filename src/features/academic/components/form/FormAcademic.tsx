@@ -27,9 +27,9 @@ export const FormAcademic = ({ formId, submit, defaultValues, lockIdentityFields
   return (
     <form
       id={formId}
-      onSubmit={async (e) => {
+      onSubmit={(e) => {
         e.preventDefault()
-        await form.handleSubmit()
+        form.handleSubmit()
       }}
       className="flex flex-col gap-4"
     >
