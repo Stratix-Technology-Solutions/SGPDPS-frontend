@@ -9,7 +9,7 @@ import {
 } from '@react-pdf/renderer'
 import { formatDate } from '../../../view/utils/formatDate'
 import type { PortfolioExport } from '../../interface'
-import { toVisibleItems, formatMaybeDate, formatRange, getInitials, FileName } from '../../utils/helper'
+import { FileName, formatMaybeDate, formatRange, getInitials, toVisibleItems } from '../../utils/pdfHelper'
 
 interface Props {
   data: PortfolioExport

@@ -1,22 +1,22 @@
-import { useState } from 'react'
+import { createElement, useState } from 'react'
 import { pdf } from '@react-pdf/renderer'
 import api from '../../../app/api/axios'
-import { toPdfFileName, isVisible, toBase64 } from '../utils/helper'
 import { PortfolioPdfDocument } from '../components/pdf/PortfolioPdfDocument'
+import { isVisible, toBase64, toPdfFileName } from '../utils/helper'
 import type {
   AcademicExperience,
   AcademicFormation,
   CollectionResponse,
   MaybeCollectionResponse,
-  Portfolio, PortfolioExport,
+  Portfolio,
+  PortfolioExport,
   ProfileResponse,
   Project,
   ProjectAsset,
   Skill,
   SocialLink,
-  WorkExperience
+  WorkExperience,
 } from '../interface'
-
 
 const fetchCollection = async <T,>(url: string) => {
   const response = await api.get<CollectionResponse<T> | MaybeCollectionResponse<T> | T[]>(url)
@@ -27,8 +27,6 @@ const fetchCollection = async <T,>(url: string) => {
 
   return response.data.data ?? []
 }
-
-
 
 const fetchPortfolioBundle = async (): Promise<Portfolio> => {
   const profileResponse = await api.get<ProfileResponse>('/profile')
@@ -75,6 +73,8 @@ const fetchPortfolioBundle = async (): Promise<Portfolio> => {
   }
 }
 
+type PdfDocumentInput = Parameters<typeof pdf>[0]
+
 export const useExportPortfolioPdf = () => {
   const [isExporting, setIsExporting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -86,14 +86,13 @@ export const useExportPortfolioPdf = () => {
     try {
       const bundle = await fetchPortfolioBundle()
       const fileName = toPdfFileName(bundle.profile.username)
-      const blob = await pdf(
-        <PortfolioPdfDocument
-          data={{
-            ...bundle,
-            generatedAt: new Date().toISOString(),
-          } satisfies PortfolioExport}
-        />,
-      ).toBlob()
+      const documentNode = createElement(PortfolioPdfDocument, {
+        data: {
+          ...bundle,
+          generatedAt: new Date().toISOString(),
+        } satisfies PortfolioExport,
+      }) as PdfDocumentInput
+      const blob = await pdf(documentNode).toBlob()
 
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
