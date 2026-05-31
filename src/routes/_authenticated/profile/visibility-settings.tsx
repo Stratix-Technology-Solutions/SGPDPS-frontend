@@ -4,6 +4,7 @@ import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { PortfolioSections } from '../../../features/view/components/PortfolioSections'
 import { useGetProfile } from '../../../features/profile/hooks/useGetProfile'
 import { LuCopy, LuExternalLink, LuCheck } from 'react-icons/lu'
+import { useChangeVisibilityProfile } from '../../../features/profile/hooks/useUpdateProfile'
 
 export const Route = createFileRoute(
   '/_authenticated/profile/visibility-settings',
@@ -13,6 +14,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { data } = useGetProfile()
+  const { mutate: visibility } = useChangeVisibilityProfile()
   const [copied, setCopied] = useState(false)
 
   const handleCopyLink = async () => {
@@ -27,6 +29,29 @@ function RouteComponent() {
 
   return (
     <div className="py-10 flex flex-col gap-6">
+      <SectionTitle
+        title="Configurar la visibilidad de tu portafolio"
+        description="Controla si tu portafolio es publico o privado."
+      />
+      <div className="space-y-3">
+        <div
+          className="flex items-center justify-between gap-4 rounded-2xl border border-primary/10 bg-white px-4 py-3 transition-colors hover:border-primary-soft"
+        >
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => visibility()}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 disabled:opacity-50 ${data?.is_visible ? 'bg-primary' : 'bg-neutral-light'}`}
+            >
+              <span className={`absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow-sm transition-all duration-200 ${data?.is_visible ? 'right-1' : 'left-1'}`} />
+            </button>
+
+            <span className={` hidden text-sm md:block ${data?.is_visible ? 'text-primary' : 'text-neutral-medium'}`} >
+              {data?.is_visible ? 'Pública' : 'Privada'}
+            </span>
+          </div>
+        </div>
+      </div>
       <SectionTitle
         title="Configuración de visibilidad"
         description="Elige qué secciones de tu portafolio serán visibles para los visitantes."

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import api from '../../../app/api/axios'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
@@ -35,6 +35,24 @@ export const useUpdateProfile = () => {
       setTimeout(() => {
         navigate({ to: '/dashboard' })
       }, 2000)
+    },
+  })
+}
+
+export const useChangeVisibilityProfile = () => {
+  const queryClient = useQueryClient()
+  const token = localStorage.getItem('access_token')
+
+  return useMutation<RegisterAccountDto, ApiError>({
+    mutationFn: async () => {
+      const res = await api.patch('/profile/visibility')
+
+      return res.data.data
+    },
+    onSuccess: (profile) => {
+      if (!token) return
+
+      queryClient.setQueryData(['user', 'profile', token], profile)
     },
   })
 }

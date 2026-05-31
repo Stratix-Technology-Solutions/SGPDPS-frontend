@@ -61,6 +61,7 @@ export interface RegisterAccountDto {
   country?: string
   phone?: string
   professions: string[]
+  is_visible?: boolean
 }
 
 export const defaultValues = {
