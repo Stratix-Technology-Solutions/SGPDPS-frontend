@@ -1,36 +1,30 @@
 import { useRef, useState } from 'react'
-import { useUpdatePictureProfile } from '../hooks/useUpdatePictureProfile'
-import { useDeletePictureProfile } from '../hooks/useDeletePictureProfile'
 
 interface AvatarFieldProps {
   currentUrl?: string | null
+  onFileSelect: (file: File) => void
+  onRemove: () => void
 }
 
-export function AvatarField({ currentUrl }: AvatarFieldProps) {
-  const { mutate: changePicture } = useUpdatePictureProfile()
-  const { mutate: deletePicture } = useDeletePictureProfile()
+export function AvatarField({ currentUrl, onFileSelect, onRemove }: AvatarFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [preview, setPreview] = useState<string | null>(currentUrl ?? null)
+  const [localPreview, setLocalPreview] = useState<string | null>(null)
+
+  const preview = localPreview ?? currentUrl ?? null
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null
     if (!file) return
 
     const objectUrl = URL.createObjectURL(file)
-    setPreview(objectUrl)
-    changePicture(file, {
-      onError: () => {
-        setPreview(currentUrl ?? null)
-      },
-      onSettled: () => {
-        e.target.value = ''
-      },
-    })
+    setLocalPreview(objectUrl)
+    onFileSelect(file)
+    e.target.value = ''
   }
 
   const handleRemove = () => {
-    setPreview(null)
-    deletePicture()
+    setLocalPreview(null)
+    onRemove()
     if (inputRef.current) inputRef.current.value = ''
   }
 
