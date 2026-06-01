@@ -1,7 +1,7 @@
 import {
   FiEye,
   FiEyeOff,
-  FiCalendar,
+  // FiCalendar,
   FiLink,
   FiFolder,
 } from 'react-icons/fi'
@@ -60,19 +60,22 @@ export const ReportProjects = () => {
     (project) => project.categories.length === 0,
   ).length
 
+  /*
   const formatDate = (date: string | null) => {
     if (!date) return 'Actualidad'
 
     return new Date(date).toLocaleDateString('es-ES', {
+      day: '2-digit',
       month: 'short',
       year: 'numeric',
     })
   }
+  */
 
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <p className="text-sm text-neutral-medium">
             Total proyectos
           </p>
@@ -81,7 +84,7 @@ export const ReportProjects = () => {
           </p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <p className="text-sm text-neutral-medium">
             Visibles
           </p>
@@ -90,7 +93,7 @@ export const ReportProjects = () => {
           </p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <p className="text-sm text-neutral-medium">
             Ocultos
           </p>
@@ -99,7 +102,7 @@ export const ReportProjects = () => {
           </p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <p className="text-sm text-neutral-medium">
             Con recursos
           </p>
@@ -110,7 +113,7 @@ export const ReportProjects = () => {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <h3 className="font-semibold text-background-dark mb-4">
             Skills más utilizadas
           </h3>
@@ -127,7 +130,7 @@ export const ReportProjects = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <h3 className="font-semibold text-background-dark mb-4">
             Roles frecuentes
           </h3>
@@ -144,7 +147,7 @@ export const ReportProjects = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+        <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <h3 className="font-semibold text-background-dark mb-4">
             Observaciones
           </h3>
@@ -166,11 +169,11 @@ export const ReportProjects = () => {
           Proyectos registrados
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {data.projects.map((project) => (
             <div
               key={project.id}
-              className="bg-white border border-neutral-200 rounded-2xl p-6 flex flex-col gap-5 hover:shadow-md transition-all"
+              className="bg-white border border-neutral-200 rounded-2xl p-4 flex flex-col gap-5 hover:shadow-md transition-all"
             >
               <div className="flex justify-between items-start gap-4">
                 <div>
@@ -178,6 +181,7 @@ export const ReportProjects = () => {
                     {project.title}
                   </h3>
 
+                  {/*
                   <div className="flex items-center gap-2 mt-2 text-sm text-neutral-medium">
                     <FiCalendar size={14} />
 
@@ -187,6 +191,7 @@ export const ReportProjects = () => {
                       {formatDate(project.end_date)}
                     </span>
                   </div>
+                  */}
                 </div>
 
                 <span

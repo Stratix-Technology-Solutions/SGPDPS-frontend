@@ -22,14 +22,14 @@ const tabs = [
 
 export const ReportsNavigation = ({ currentView }: Props) => {
   return (
-    <div className="bg-white border border-neutral-200 rounded-2xl p-3">
+    <div className="bg-white border border-neutral-200 rounded-2xl p-4">
       <div className="flex gap-2">
         {tabs.map(({ id, label, Icon }) => (
           <Link
             to="/profile/reports"
             search={{ view: id }}
             key={id}
-            className={`group flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer
+            className={`group flex items-center gap-2 p-3 rounded-xl transition-all duration-200 cursor-pointer
             ${currentView === id
               ? 'bg-primary text-white shadow-sm'
               : 'text-neutral-medium hover:bg-neutral-50 hover:text-background-dark'
