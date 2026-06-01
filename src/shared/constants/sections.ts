@@ -5,6 +5,7 @@ import { MdOutlineWork, MdOutlineComputer } from 'react-icons/md'
 import { MdLink } from 'react-icons/md'
 import { GiGraduateCap } from 'react-icons/gi'
 import { IoSettings } from 'react-icons/io5'
+import { BiSolidReport } from 'react-icons/bi'
 
 interface Section {
   label: string
@@ -55,5 +56,11 @@ export const sections: Section[] = [
     to: '/profile/visibility-settings',
     Icon: IoSettings,
     description: 'Elige que secciones de tu portafolio seran visibles para los visitantes.',
+  },
+  {
+    label: 'Reportes',
+    to: '/profile/reports',
+    Icon: BiSolidReport,
+    description: 'Genera reportes de la información registrada en tu portafolio.',
   },
 ]

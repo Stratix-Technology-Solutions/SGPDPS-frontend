@@ -23,6 +23,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileVisibilitySettingsRouteImport } from './routes/_authenticated/profile/visibility-settings'
 import { Route as AuthenticatedProfileSoftwareProjectsRouteImport } from './routes/_authenticated/profile/software-projects'
 import { Route as AuthenticatedProfileSkillsRouteImport } from './routes/_authenticated/profile/skills'
+import { Route as AuthenticatedProfileReportsRouteImport } from './routes/_authenticated/profile/reports'
 import { Route as AuthenticatedProfileRegisterRouteImport } from './routes/_authenticated/profile/register'
 import { Route as AuthenticatedProfileLinksRouteImport } from './routes/_authenticated/profile/links'
 import { Route as AuthenticatedProfileLaboralExperienceRouteImport } from './routes/_authenticated/profile/laboral-experience'
@@ -101,6 +102,12 @@ const AuthenticatedProfileSkillsRoute =
     path: '/profile/skills',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedProfileReportsRoute =
+  AuthenticatedProfileReportsRouteImport.update({
+    id: '/profile/reports',
+    path: '/profile/reports',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedProfileRegisterRoute =
   AuthenticatedProfileRegisterRouteImport.update({
     id: '/profile/register',
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/profile/laboral-experience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/profile/reports': typeof AuthenticatedProfileReportsRoute
   '/profile/skills': typeof AuthenticatedProfileSkillsRoute
   '/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
   '/profile/visibility-settings': typeof AuthenticatedProfileVisibilitySettingsRoute
@@ -174,6 +182,7 @@ export interface FileRoutesByTo {
   '/profile/laboral-experience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/profile/links': typeof AuthenticatedProfileLinksRoute
   '/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/profile/reports': typeof AuthenticatedProfileReportsRoute
   '/profile/skills': typeof AuthenticatedProfileSkillsRoute
   '/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
   '/profile/visibility-settings': typeof AuthenticatedProfileVisibilitySettingsRoute
@@ -197,6 +206,7 @@ export interface FileRoutesById {
   '/_authenticated/profile/laboral-experience': typeof AuthenticatedProfileLaboralExperienceRoute
   '/_authenticated/profile/links': typeof AuthenticatedProfileLinksRoute
   '/_authenticated/profile/register': typeof AuthenticatedProfileRegisterRoute
+  '/_authenticated/profile/reports': typeof AuthenticatedProfileReportsRoute
   '/_authenticated/profile/skills': typeof AuthenticatedProfileSkillsRoute
   '/_authenticated/profile/software-projects': typeof AuthenticatedProfileSoftwareProjectsRoute
   '/_authenticated/profile/visibility-settings': typeof AuthenticatedProfileVisibilitySettingsRoute
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/profile/laboral-experience'
     | '/profile/links'
     | '/profile/register'
+    | '/profile/reports'
     | '/profile/skills'
     | '/profile/software-projects'
     | '/profile/visibility-settings'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/profile/laboral-experience'
     | '/profile/links'
     | '/profile/register'
+    | '/profile/reports'
     | '/profile/skills'
     | '/profile/software-projects'
     | '/profile/visibility-settings'
@@ -261,6 +273,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile/laboral-experience'
     | '/_authenticated/profile/links'
     | '/_authenticated/profile/register'
+    | '/_authenticated/profile/reports'
     | '/_authenticated/profile/skills'
     | '/_authenticated/profile/software-projects'
     | '/_authenticated/profile/visibility-settings'
@@ -374,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileSkillsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/reports': {
+      id: '/_authenticated/profile/reports'
+      path: '/profile/reports'
+      fullPath: '/profile/reports'
+      preLoaderRoute: typeof AuthenticatedProfileReportsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/profile/register': {
       id: '/_authenticated/profile/register'
       path: '/profile/register'
@@ -427,6 +447,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedProfileLaboralExperienceRoute: typeof AuthenticatedProfileLaboralExperienceRoute
   AuthenticatedProfileLinksRoute: typeof AuthenticatedProfileLinksRoute
   AuthenticatedProfileRegisterRoute: typeof AuthenticatedProfileRegisterRoute
+  AuthenticatedProfileReportsRoute: typeof AuthenticatedProfileReportsRoute
   AuthenticatedProfileSkillsRoute: typeof AuthenticatedProfileSkillsRoute
   AuthenticatedProfileSoftwareProjectsRoute: typeof AuthenticatedProfileSoftwareProjectsRoute
   AuthenticatedProfileVisibilitySettingsRoute: typeof AuthenticatedProfileVisibilitySettingsRoute
@@ -443,6 +464,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedProfileLaboralExperienceRoute,
   AuthenticatedProfileLinksRoute: AuthenticatedProfileLinksRoute,
   AuthenticatedProfileRegisterRoute: AuthenticatedProfileRegisterRoute,
+  AuthenticatedProfileReportsRoute: AuthenticatedProfileReportsRoute,
   AuthenticatedProfileSkillsRoute: AuthenticatedProfileSkillsRoute,
   AuthenticatedProfileSoftwareProjectsRoute:
     AuthenticatedProfileSoftwareProjectsRoute,
