@@ -20,6 +20,7 @@ export const ModalEditProject = ({ isOpen, onClose }: Props) => {
   const handleSubmit = (values: ProjectUpdateDto) => {
     const payload: ProjectUpdateDto = {
       description: values.description,
+      status: values.status,
       links: values.links,
       skill_ids: values.skill_ids,
       roles_ids: values.roles_ids,
@@ -34,14 +35,15 @@ export const ModalEditProject = ({ isOpen, onClose }: Props) => {
     }
   }
 
-  const initialValues: Partial<ProjectUpdateDto> = {
-    description: selected?.description,
+  const initialValues: ProjectUpdateDto = {
+    description: selected?.description ?? '',
+    status: selected?.status ?? 'En curso',
     links: selected?.links.map((link) => ({
       id: link.id,
       url: link.url,
-    })),
-    skill_ids: selected?.skills.map((skill) => skill.id),
-    roles_ids: selected?.roles.map((role) => role.id),
+    })) ?? [],
+    skill_ids: selected?.skills.map((skill) => skill.id) ?? [],
+    roles_ids: selected?.roles.map((role) => role.id) ?? [],
   }
 
   return (

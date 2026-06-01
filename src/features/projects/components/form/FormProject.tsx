@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { FormField } from '../field_form/FormField'
 import { FormTextarea } from '../field_form/FormTextarea'
@@ -14,7 +13,6 @@ interface Props {
 }
 
 export const FormProject = ({ formId, submit }: Props) => {
-  const [projectStatus, setProjectStatus] = useState<'in_progress' | 'completed'>('in_progress')
   const { data: roles, isLoading: loadingRole } = useGetProjectsRole()
   const { data: skills, isLoading: loadingSkill } = useGetProjectSkill()
 
@@ -22,12 +20,8 @@ export const FormProject = ({ formId, submit }: Props) => {
     defaultValues,
     validators: { onSubmit: ProjectCreateSchema },
     onSubmit: ({ value }) => {
-      const today = new Date().toISOString().slice(0, 10)
-
       submit({
         ...value,
-        start_date: projectStatus === 'completed' ? today : null,
-        end_date: projectStatus === 'completed' ? today : null,
       })
     },
   })
@@ -78,17 +72,25 @@ export const FormProject = ({ formId, submit }: Props) => {
         />
       )} />
 
-      <div>
-        <label className="block font-semibold text-background-dark mb-1.5">Estado del proyecto *</label>
-        <select
-          value={projectStatus}
-          onChange={(event) => setProjectStatus(event.target.value as 'in_progress' | 'completed')}
-          className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-        >
-          <option value="in_progress">En curso</option>
-          <option value="completed">Completado</option>
-        </select>
-      </div>
+      <form.Field
+        name="status"
+        children={(field) => (
+          <div>
+            <label className="block font-semibold text-background-dark mb-1.5">
+              Estado del proyecto *
+            </label>
+            <select
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value as 'En curso' | 'Completado')}
+              onBlur={field.handleBlur}
+              className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+            >
+              <option value="En curso">En curso</option>
+              <option value="Completado">Completado</option>
+            </select>
+          </div>
+        )}
+      />
 
       <form.Field name="links" children={(field) => (
         <FormTags label="Enlaces del proyecto" field={field} placeholder="https://github.com/..." />

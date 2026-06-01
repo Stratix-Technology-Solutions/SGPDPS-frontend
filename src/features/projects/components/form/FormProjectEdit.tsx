@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { FormTextarea } from '../field_form/FormTextarea'
 import { ProjectLinksEditor, type ProjectLinkInput } from '../field_form/ProjectLinksEditor'
-import { ProjectUpdateSchema, projectUpdateDefaultValues } from '../../dtos/project.dto'
+import { ProjectUpdateSchema } from '../../dtos/project.dto'
 import type { ProjectUpdateDto } from '../../dtos/project.dto'
 import { Picker } from '../field_form/Picker'
 import { useGetProjectSkill, useGetProjectsRole } from '../../hooks/useProjects'
@@ -10,7 +9,7 @@ import { useGetProjectSkill, useGetProjectsRole } from '../../hooks/useProjects'
 interface Props {
   formId: string
   submit: (values: ProjectUpdateDto) => void
-  defaultValues?: Partial<ProjectUpdateDto>
+  defaultValues?: ProjectUpdateDto
   title?: string
 }
 
@@ -22,27 +21,15 @@ const normalizeLinks = (links: ProjectUpdateDto['links']): ProjectLinkInput[] =>
 }
 
 export const FormProjectEdit = ({ formId, submit, defaultValues, title }: Props) => {
-  const [projectStatus, setProjectStatus] = useState<'in_progress' | 'completed'>(
-    defaultValues?.end_date ? 'completed' : 'in_progress',
-  )
   const { data: rolesOptions, isLoading: loadingRole } = useGetProjectsRole()
   const { data: skillsOptions, isLoading: loadingSkill } = useGetProjectSkill()
 
-  useEffect(() => {
-    setProjectStatus(defaultValues?.end_date ? 'completed' : 'in_progress')
-  }, [defaultValues?.end_date])
 
   const form = useForm({
-    defaultValues: { ...projectUpdateDefaultValues, ...defaultValues },
+    defaultValues: defaultValues as ProjectUpdateDto,
     validators: { onSubmit: ProjectUpdateSchema },
     onSubmit: ({ value }) => {
-      const today = new Date().toISOString().slice(0, 10)
-
-      submit({
-        ...value,
-        start_date: projectStatus === 'completed' ? (value.start_date || today) : null,
-        end_date: projectStatus === 'completed' ? (value.end_date || today) : null,
-      })
+      submit(value)
     },
   })
 
@@ -102,17 +89,25 @@ export const FormProjectEdit = ({ formId, submit, defaultValues, title }: Props)
         />
       </div>
 
-      <div>
-        <label className="block font-semibold text-background-dark mb-1.5">Estado del proyecto *</label>
-        <select
-          value={projectStatus}
-          onChange={(event) => setProjectStatus(event.target.value as 'in_progress' | 'completed')}
-          className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
-        >
-          <option value="in_progress">En curso</option>
-          <option value="completed">Completado</option>
-        </select>
-      </div>
+      <form.Field
+        name="status"
+        children={(field) => (
+          <div>
+            <label className="block font-semibold text-background-dark mb-1.5">
+              Estado del proyecto *
+            </label>
+            <select
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value as 'En curso' | 'Completado')}
+              onBlur={field.handleBlur}
+              className="w-full px-4 py-2.5 rounded-xl border border-neutral-light bg-neutral-50 text-background-dark outline-none focus:border-primary transition-colors"
+            >
+              <option value="En curso">En curso</option>
+              <option value="Completado">Completado</option>
+            </select>
+          </div>
+        )}
+      />
 
       <form.Field
         name="links"

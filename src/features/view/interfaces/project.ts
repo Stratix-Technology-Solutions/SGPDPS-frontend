@@ -5,9 +5,7 @@ export interface Project {
 
   description: string | null
 
-  start_date: string
-
-  end_date: string | null
+  status: string
 
   roles: ProjectRole[]
 

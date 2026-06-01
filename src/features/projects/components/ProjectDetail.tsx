@@ -81,7 +81,7 @@ export const ProjectDetail = ({ project }: Props) => {
 
           <ProjectDetailItem
             label="Estado"
-            value={project?.end_date ? 'Completado' : 'En curso'}
+            value={project.status}
           />
         </section>
 

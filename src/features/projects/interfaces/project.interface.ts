@@ -27,8 +27,7 @@ export interface Project {
   role: string
   description: string
   contributions: string | null
-  start_date: string | null
-  end_date?: string | null
+  status: 'En curso' | 'Completado'
   skills: ProjectSkillResponse[]
   links: LinkResponse[]
   roles: ProjectRole[]

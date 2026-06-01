@@ -530,11 +530,9 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
                 >
                   <View style={styles.headerRow}>
                     <Text style={styles.itemTitle}>{project.title}</Text>
-                    {(project.start_date || project.end_date) && (
-                      <Text style={styles.itemDate}>
-                        {formatRange(project.start_date, project.end_date)}
-                      </Text>
-                    )}
+                    <Text style={styles.itemDate}>
+                      {project.status}
+                    </Text>
                   </View>
                   {!!project.roles.length && (
                     <Text style={styles.rolesText}>

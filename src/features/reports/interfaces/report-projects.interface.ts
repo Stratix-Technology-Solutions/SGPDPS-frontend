@@ -27,8 +27,7 @@ export interface ProjectReport {
   description: string | null
   contributions: string | null
   is_visible: boolean
-  start_date: string | null
-  end_date: string | null
+  status: string
   roles: ProjectRole[]
   categories: ProjectCategory[]
   skills: ProjectSkill[]

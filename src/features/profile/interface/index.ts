@@ -68,8 +68,7 @@ export interface Project {
   id: string
   title: string
   description: string | null
-  start_date: string | null
-  end_date: string | null
+  status: string
   roles: Array<{ id: number; name: string }>
   skills: Array<{ id: number; name: string }>
   links: Array<{ id: number; url: string }>
