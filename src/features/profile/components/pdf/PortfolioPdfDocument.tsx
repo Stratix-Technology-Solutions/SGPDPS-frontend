@@ -7,225 +7,394 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer'
+
 import { formatDate } from '../../../view/utils/formatDate'
 import type { PortfolioExport } from '../../interface'
-import { FileName, formatMaybeDate, formatRange, getInitials, toVisibleItems } from '../../utils/pdfHelper'
+import {
+  FileName,
+  formatMaybeDate,
+  formatRange,
+  getInitials,
+  toVisibleItems,
+} from '../../utils/pdfHelper'
 
 interface Props {
   data: PortfolioExport
 }
 
+const C = {
+  navySoft: '#1e293b',
+
+  bg: '#f8fafc',
+  white: '#ffffff',
+
+  border: '#e2e8f0',
+
+  text: '#0f172a',
+  textMid: '#334155',
+  textMuted: '#64748b',
+  textFaint: '#94a3b8',
+
+  leftBg: '#0f172a',
+  leftBorder: '#1e293b',
+  leftText: '#e2e8f0',
+  leftMuted: '#94a3b8',
+}
+
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 28,
-    paddingBottom: 34,
-    paddingHorizontal: 34,
     fontFamily: 'Helvetica',
-    color: '#102033',
-    backgroundColor: '#f6f8fc',
+    color: C.text,
+    backgroundColor: C.bg,
+    flexDirection: 'column',
   },
+
   header: {
-    borderRadius: 18,
-    backgroundColor: '#102033',
-    padding: 24,
-    marginBottom: 18,
-    position: 'relative',
-    overflow: 'hidden',
-    minHeight: 160,
+    backgroundColor: C.leftBg,
+    paddingTop: 28,
+    paddingBottom: 20,
+    paddingHorizontal: 28,
+  },
+
+  headerTop: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     gap: 18,
   },
-  headerGlow: {
-    position: 'absolute',
-    right: -30,
-    top: -24,
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: '#4870ff',
-    opacity: 0.22,
+
+  avatarWrap: {
+    alignItems: 'center',
+    marginTop: 2,
   },
-  headerContent: {
+
+  avatar: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    objectFit: 'cover',
+    borderWidth: 4,
+    borderColor: C.leftBg,
+  },
+
+  avatarFallback: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: C.navySoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: C.leftBg,
+  },
+
+  avatarFallbackText: {
+    fontSize: 28,
+    fontWeight: 700,
+    color: C.white,
+  },
+
+  nameBlock: {
     flex: 1,
     paddingRight: 12,
   },
-  eyebrow: {
-    fontSize: 9,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    color: '#7cc4ff',
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 24,
-    lineHeight: 1.1,
+
+  nameText: {
+    fontSize: 28,
     fontWeight: 700,
-    color: '#ffffff',
+    color: C.white,
+    lineHeight: 1.12,
   },
-  username: {
-    marginTop: 4,
-    fontSize: 11,
-    color: '#cbd5e1',
-  },
-  professionRow: {
+
+  profRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: 14,
+    marginTop: 12,
   },
-  professionTag: {
-    borderWidth: 1,
-    borderColor: '#4b86ff55',
-    backgroundColor: '#ffffff12',
+
+  headerLinksRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 8,
+  },
+
+  headerLinkBadge: {
+    backgroundColor: C.white,
+    color: C.leftBg,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderRadius: 999,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    color: '#dbeafe',
-    fontSize: 9,
+    fontSize: 7.4,
   },
-  avatar: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    backgroundColor: '#dbeafe',
-    objectFit: 'cover',
-    borderWidth: 3,
-    borderColor: '#ffffff',
-    alignSelf: 'center',
-  },
-  avatarFallback: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    backgroundColor: '#dbeafe',
-    borderWidth: 3,
-    borderColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
-  avatarFallbackText: {
-    fontSize: 24,
-    fontWeight: 700,
-    color: '#2453a5',
-  },
-  section: {
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: '#ffffff',
+
+  profTag: {
     borderWidth: 1,
-    borderColor: '#dce4f2',
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: 700,
-    color: '#102033',
-    marginBottom: 10,
+    borderColor: C.leftBorder,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    color: C.leftText,
+    borderRadius: 999,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    fontSize: 7.4,
     textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 1.2,
   },
-  infoGrid: {
+
+  headerDivider: {
+    height: 1,
+    backgroundColor: C.leftBorder,
+    marginVertical: 14,
+  },
+
+  headerInfoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 16,
+    marginBottom: 12,
   },
-  infoChip: {
-    minWidth: '48%',
-    borderRadius: 10,
-    backgroundColor: '#f6f8fc',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+
+  infoCol: {
+    minWidth: 125,
+    flexGrow: 1,
   },
+
   infoLabel: {
-    fontSize: 8,
-    letterSpacing: 1,
+    fontSize: 7,
     textTransform: 'uppercase',
-    color: '#66758d',
-    marginBottom: 4,
+    letterSpacing: 1.1,
+    color: C.leftMuted,
+    marginBottom: 3,
   },
+
   infoValue: {
-    fontSize: 10,
-    color: '#102033',
-    lineHeight: 1.35,
-  },
-  paragraph: {
-    fontSize: 10,
-    color: '#334155',
+    fontSize: 9.8,
+    fontWeight: 600,
+    letterSpacing: 0.2,
+    color: C.leftText,
     lineHeight: 1.5,
-    marginBottom: 8,
   },
-  list: {
-    gap: 6,
-  },
-  bulletRow: {
-    flexDirection: 'row',
-    gap: 7,
-    alignItems: 'flex-start',
-  },
-  bulletDot: {
-    fontSize: 12,
-    lineHeight: 1.35,
-    color: '#2453a5',
-    width: 10,
-  },
-  bulletText: {
-    flex: 1,
+
+  bioText: {
     fontSize: 10,
-    lineHeight: 1.45,
-    color: '#334155',
+    color: C.leftText,
+    lineHeight: 1.6,
+    marginBottom: 14,
+    opacity: 0.9,
+    maxWidth: '70%',
   },
-  link: {
-    fontSize: 10,
-    color: '#2453a5',
-    textDecoration: 'none',
-    lineHeight: 1.45,
+
+  skillsContainer: {
+    marginBottom: 0,
   },
-  card: {
-    borderRadius: 12,
-    backgroundColor: '#f8fbff',
-    borderWidth: 1,
-    borderColor: '#e4ebf6',
-    padding: 12,
+
+  skillGroup: {
     marginBottom: 10,
   },
-  cardHeader: {
-    fontSize: 11,
-    fontWeight: 700,
-    color: '#102033',
-    marginBottom: 4,
-  },
-  cardSubheader: {
-    fontSize: 9,
-    color: '#66758d',
+
+  skillGroupTitle: {
+    fontSize: 8.5,
+    fontWeight: 800,
+    textTransform: 'uppercase',
+    letterSpacing: 1.3,
+    color: C.leftBg,
     marginBottom: 8,
   },
-  tagRow: {
+
+  sideTagGroup: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: 4,
   },
-  tag: {
-    backgroundColor: '#eef4ff',
-    color: '#2453a5',
+
+  sideTag: {
+    backgroundColor: '#eef3fb',
+    color: C.leftBg,
     borderRadius: 999,
     paddingVertical: 4,
     paddingHorizontal: 8,
-    fontSize: 8,
+    fontSize: 7.3,
   },
+
+  sideSoftTag: {
+    borderWidth: 1,
+    borderColor: '#cfd9e6',
+    backgroundColor: '#ffffff',
+    color: C.leftBg,
+    borderRadius: 999,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    fontSize: 7.3,
+  },
+
+  main: {
+    paddingTop: 20,
+    paddingBottom: 32,
+    paddingHorizontal: 28,
+    backgroundColor: C.white,
+  },
+
+  section: {
+    marginBottom: 24,
+  },
+
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: C.border,
+    paddingBottom: 4,
+  },
+
+  sectionPillText: {
+    fontSize: 10,
+    fontWeight: 800,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    color: C.leftBg,
+  },
+
+  itemBlock: {
+    marginBottom: 14,
+    paddingBottom: 14,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#eef2f6',
+  },
+
+  lastItemBlock: {
+    marginBottom: 0,
+    paddingBottom: 0,
+    borderBottomWidth: 0,
+  },
+
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    flexWrap: 'wrap',
+    marginBottom: 4,
+  },
+
+  itemTitle: {
+    fontSize: 11.5,
+    fontWeight: 700,
+    color: C.text,
+    flexShrink: 1,
+    wordBreak: 'break-word',
+  },
+
+  itemDate: {
+    fontSize: 7.5,
+    color: C.textMuted,
+    backgroundColor: '#f1f5f9',
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 20,
+    marginLeft: 8,
+  },
+
+  itemSubtitle: {
+    fontSize: 8.5,
+    fontWeight: 600,
+    color: C.leftBg,
+    marginBottom: 6,
+  },
+
+  itemDescription: {
+    fontSize: 9,
+    color: C.textMid,
+    lineHeight: 1.55,
+    marginBottom: 8,
+  },
+
+  rolesText: {
+    fontSize: 7.5,
+    fontWeight: 600,
+    color: C.leftBg,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 6,
+  },
+
+  tagRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 5,
+    marginTop: 4,
+    marginBottom: 6,
+  },
+
+  tag: {
+    backgroundColor: '#eef2f6',
+    color: C.leftBg,
+    borderRadius: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    fontSize: 6.8,
+  },
+
+  linksRowMain: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 6,
+  },
+
+  link: {
+    fontSize: 7.2,
+    color: C.leftBg,
+    textDecoration: 'none',
+    backgroundColor: '#eef2f6',
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    borderRadius: 12,
+  },
+
+  assetLink: {
+    fontSize: 7.2,
+    color: C.textMuted,
+    textDecoration: 'none',
+    marginTop: 4,
+  },
+
   footer: {
-    marginTop: 8,
-    fontSize: 8,
-    color: '#7a8799',
-    textAlign: 'right',
+    position: 'absolute',
+    bottom: 12,
+    right: 24,
+    fontSize: 7.2,
+    color: C.textFaint,
+  },
+
+  footerLeft: {
+    position: 'absolute',
+    bottom: 12,
+    left: 24,
+    fontSize: 7.2,
+    color: C.textFaint,
   },
 })
 
+const SectionTitle = ({ title }: { title: string }) => (
+  <View style={styles.sectionHeader}>
+    <Text style={styles.sectionPillText}>{title}</Text>
+  </View>
+)
+
+const getHostname = (url: string) => {
+  try {
+    return new URL(url).hostname.replace('www.', '')
+  } catch {
+    return url
+  }
+}
+
 export const PortfolioPdfDocument = ({ data }: Props) => {
   const { profile } = data
+
   const fullName = `${profile.first_name} ${profile.last_name}`.trim()
+
   const visibleSkills = toVisibleItems(data.skills ?? [])
   const visibleSoftSkills = toVisibleItems(data.softSkills ?? [])
   const visibleLinks = toVisibleItems(data.links ?? [])
@@ -245,278 +414,262 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
     >
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <View style={styles.headerGlow} />
-
-          <View style={styles.headerContent}>
-            <Text style={styles.eyebrow}>Portafolio profesional</Text>
-            <Text style={styles.title}>{fullName || profile.username}</Text>
-            <Text style={styles.username}>@{profile.username}</Text>
-
-            {!!(profile.professions ?? []).length && (
-              <View style={styles.professionRow}>
-                {profile.professions.map((profession) => (
-                  <Text
-                    key={profession}
-                    style={styles.professionTag}
-                  >
-                    {profession}
-                  </Text>
-                ))}
-              </View>
-            )}
-          </View>
-
-          {hasPicture ? (
-            <Image src={profile.picture!} style={styles.avatar} />
-          ) : (
-            <View style={styles.avatarFallback}>
-              <Text style={styles.avatarFallbackText}>
-                {getInitials(profile.first_name, profile.last_name)}
+          <View style={styles.headerTop}>
+            <View style={styles.nameBlock}>
+              <Text style={styles.nameText}>
+                {`${profile.first_name} ${profile.last_name}`}
               </Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Resumen</Text>
-
-          <View style={styles.infoGrid}>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>Nombre</Text>
-              <Text style={styles.infoValue}>{fullName || ''}</Text>
-            </View>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>País</Text>
-              <Text style={styles.infoValue}>{profile.country || ''}</Text>
-            </View>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>Teléfono</Text>
-              <Text style={styles.infoValue}>{profile.phone || ''}</Text>
-            </View>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>Fecha de nacimiento</Text>
-              <Text style={styles.infoValue}>{formatMaybeDate(profile.date_of_birth)}</Text>
-            </View>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>Género</Text>
-              <Text style={styles.infoValue}>{profile.gender || ''}</Text>
-            </View>
-            <View style={styles.infoChip}>
-              <Text style={styles.infoLabel}>Última exportación</Text>
-              <Text style={styles.infoValue}>{formatDate(data.generatedAt)}</Text>
-            </View>
-          </View>
-
-          {!!profile.biography && (
-            <View style={{ marginTop: 12 }}>
-              <Text style={styles.infoLabel}>Biografía</Text>
-              <Text style={styles.paragraph}>{profile.biography}</Text>
-            </View>
-          )}
-        </View>
-
-        {!!visibleLinks.length && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Enlaces</Text>
-            <View style={styles.list}>
-              {visibleLinks.map((link) => (
-                <View
-                  key={link.id}
-                  style={styles.bulletRow}
-                >
-                  <Text style={styles.bulletDot}>•</Text>
-                  <PdfLink
-                    src={link.url}
-                    style={styles.link}
-                  >
-                    {link.url}
-                  </PdfLink>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {(visibleSkills.length || visibleSoftSkills.length) && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Habilidades</Text>
-
-            {!!visibleSkills.length && (
-              <View style={{ marginBottom: 10 }}>
-                <Text style={styles.infoLabel}>Técnicas</Text>
-                <View style={styles.tagRow}>
-                  {visibleSkills.map((skill) => (
-                    <Text
-                      key={skill.id}
-                      style={styles.tag}
-                    >
-                      {skill.name}
-                      {skill.domain_level ? ` · ${skill.domain_level}` : ''}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            )}
-
-            {!!visibleSoftSkills.length && (
-              <View>
-                <Text style={styles.infoLabel}>Blandas</Text>
-                <View style={styles.tagRow}>
-                  {visibleSoftSkills.map((skill) => (
-                    <Text
-                      key={skill.id}
-                      style={styles.tag}
-                    >
-                      {skill.name}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-            )}
-          </View>
-        )}
-
-        {!!visibleWorkExperiences.length && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Experiencia laboral</Text>
-            {visibleWorkExperiences.map((experience) => (
-              <View
-                key={experience.id}
-                style={styles.card}
-              >
-                <Text style={styles.cardHeader}>{experience.position}</Text>
-                <Text style={styles.cardSubheader}>{experience.company} · {formatRange(experience.start_date, experience.end_date)}</Text>
-                {!!experience.description && <Text style={styles.paragraph}>{experience.description}</Text>}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {!!visibleAcademicExperiences.length && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Experiencia académica</Text>
-            {visibleAcademicExperiences.map((experience) => (
-              <View
-                key={experience.id}
-                style={styles.card}
-              >
-                <Text style={styles.cardHeader}>{experience.title}</Text>
-                <Text style={styles.cardSubheader}>{experience.institution} · {formatRange(experience.start_date, experience.end_date)}</Text>
-                {!!experience.description && <Text style={styles.paragraph}>{experience.description}</Text>}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {!!visibleAcademicFormations.length && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Formación académica</Text>
-            {visibleAcademicFormations.map((formation) => (
-              <View
-                key={formation.id}
-                style={styles.card}
-              >
-                <Text style={styles.cardHeader}>{formation.institution}</Text>
-                <Text style={styles.cardSubheader}>{formation.education_level} · {formation.status}</Text>
-                <Text style={styles.paragraph}>{formatMaybeDate(formation.emission_date)}</Text>
-                {!!formation.field_of_study && <Text style={styles.paragraph}>{formation.field_of_study}</Text>}
-                {!!formation.description && <Text style={styles.paragraph}>{formation.description}</Text>}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {!!visibleProjects.length && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Proyectos</Text>
-            {visibleProjects.map((project) => (
-              <View
-                key={project.id}
-                style={styles.card}
-              >
-                <Text style={styles.cardHeader}>{project.title}</Text>
-                <Text style={styles.cardSubheader}>{formatRange(project.start_date, project.end_date)}</Text>
-
-                {!!project.roles.length && (
-                  <View style={styles.tagRow}>
-                    {project.roles.map((role) => (
-                      <Text
-                        key={role.id}
-                        style={styles.tag}
-                      >
-                        {role.name}
+              {!!(profile.professions ?? []).length && (
+                <View>
+                  <View style={styles.profRow}>
+                    {profile.professions.map((p) => (
+                      <Text key={p} style={styles.profTag}>
+                        {p}
                       </Text>
                     ))}
                   </View>
+
+                  {!!visibleLinks.length && (
+                    <View style={styles.headerLinksRow}>
+                      {visibleLinks.map((link) => (
+                        <PdfLink key={link.id} src={link.url} style={styles.headerLinkBadge}>
+                          {getHostname(link.url)}
+                        </PdfLink>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
+
+            <View style={styles.avatarWrap}>
+              {hasPicture ? (
+                <Image src={profile.picture!} style={styles.avatar} />
+              ) : (
+                <View style={styles.avatarFallback}>
+                  <Text style={styles.avatarFallbackText}>
+                    {getInitials(profile.first_name, profile.last_name)}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.headerDivider} />
+
+          <View style={styles.headerInfoGrid}>
+            {!!profile.country && (
+              <Text style={styles.infoValue}>{profile.country}</Text>
+            )}
+            {!!profile.phone && (
+              <Text style={styles.infoValue}>{profile.phone}</Text>
+            )}
+            {!!profile.date_of_birth && (
+              <Text style={styles.infoValue}>
+                {formatMaybeDate(profile.date_of_birth)}
+              </Text>
+            )}
+            {!!profile.gender && (
+              <Text style={styles.infoValue}>{profile.gender}</Text>
+            )}
+          </View>
+
+          {!!profile.biography && (
+            <View style={styles.infoCol}>
+              <Text style={styles.infoLabel}>Acerca de mí</Text>
+              <Text style={styles.bioText}>{profile.biography}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.main}>
+          {(visibleSkills.length > 0 || visibleSoftSkills.length > 0) && (
+            <View style={styles.section}>
+              <SectionTitle title="Habilidades" />
+              <View style={styles.skillsContainer}>
+                {!!visibleSkills.length && (
+                  <View style={styles.skillGroup}>
+                    <Text style={styles.skillGroupTitle}>técnicas</Text>
+                    <View style={styles.sideTagGroup}>
+                      {visibleSkills.map((skill) => (
+                        <Text key={skill.id} style={styles.sideTag}>
+                          {skill.name}
+                          {skill.domain_level ? ` · ${skill.domain_level}` : ''}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
                 )}
-
-                {!!project.description && <Text style={styles.paragraph}>{project.description}</Text>}
-
-                {!!project.skills.length && (
-                  <View style={{ marginTop: 4 }}>
-                    <Text style={styles.infoLabel}>Tecnologías</Text>
-                    <View style={styles.tagRow}>
-                      {project.skills.map((skill) => (
-                        <Text
-                          key={skill.id}
-                          style={styles.tag}
-                        >
+                {!!visibleSoftSkills.length && (
+                  <View style={styles.skillGroup}>
+                    <Text style={styles.skillGroupTitle}>blandas</Text>
+                    <View style={styles.sideTagGroup}>
+                      {visibleSoftSkills.map((skill) => (
+                        <Text key={skill.id} style={styles.sideSoftTag}>
                           {skill.name}
                         </Text>
                       ))}
                     </View>
                   </View>
                 )}
-
-                {!!project.links.length && (
-                  <View style={{ marginTop: 8 }}>
-                    <Text style={styles.infoLabel}>Enlaces del proyecto</Text>
-                    <View style={styles.list}>
-                      {project.links.map((link) => (
-                        <View
-                          key={link.id}
-                          style={styles.bulletRow}
-                        >
-                          <Text style={styles.bulletDot}>•</Text>
-                          <PdfLink
-                            src={link.url}
-                            style={styles.link}
-                          >
-                            {link.url}
-                          </PdfLink>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                )}
-
-                {!!project.assets.length && (
-                  <View style={{ marginTop: 8 }}>
-                    <Text style={styles.infoLabel}>Evidencia</Text>
-                    <View style={styles.list}>
-                      {project.assets.map((asset, index) => (
-                        <View
-                          key={asset.id}
-                          style={styles.bulletRow}
-                        >
-                          <Text style={styles.bulletDot}>•</Text>
-                          <PdfLink
-                            src={asset.url}
-                            style={styles.link}
-                          >
-                            <FileName path={asset.path} index={index} />
-                          </PdfLink>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                )}
               </View>
-            ))}
-          </View>
-        )}
+            </View>
+          )}
 
-        <Text style={styles.footer} render={({ pageNumber }) => pageNumber} fixed />
+          {!!visibleProjects.length && (
+            <View style={styles.section}>
+              <SectionTitle title="Proyectos" />
+              {visibleProjects.map((project, idx) => (
+                <View
+                  key={project.id}
+                  style={
+                    idx === visibleProjects.length - 1
+                      ? [styles.itemBlock, styles.lastItemBlock]
+                      : [styles.itemBlock]
+                  }
+                >
+                  <View style={styles.headerRow}>
+                    <Text style={styles.itemTitle}>{project.title}</Text>
+                    {(project.start_date || project.end_date) && (
+                      <Text style={styles.itemDate}>
+                        {formatRange(project.start_date, project.end_date)}
+                      </Text>
+                    )}
+                  </View>
+                  {!!project.roles.length && (
+                    <Text style={styles.rolesText}>
+                      {project.roles.map((r) => r.name).join(' · ')}
+                    </Text>
+                  )}
+                  {!!project.description && (
+                    <Text style={styles.itemDescription}>{project.description}</Text>
+                  )}
+                  {!!project.skills.length && (
+                    <View style={styles.tagRow}>
+                      {project.skills.map((skill) => (
+                        <Text key={skill.id} style={styles.tag}>
+                          {skill.name}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                  {!!project.links.length && (
+                    <View style={styles.linksRowMain}>
+                      {project.links.map((link) => (
+                        <PdfLink key={link.id} src={link.url} style={styles.link}>
+                          {getHostname(link.url)}
+                        </PdfLink>
+                      ))}
+                    </View>
+                  )}
+                  {!!project.assets.length && (
+                    <View>
+                      {project.assets.map((asset, index) => (
+                        <PdfLink key={asset.id} src={asset.url} style={styles.assetLink}>
+                          ↗ <FileName path={asset.path} index={index} />
+                        </PdfLink>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
+
+          {!!visibleWorkExperiences.length && (
+            <View style={styles.section}>
+              <SectionTitle title="Experiencia laboral" />
+              {visibleWorkExperiences.map((exp, idx) => (
+                <View
+                  key={exp.id}
+                  style={
+                    idx === visibleWorkExperiences.length - 1
+                      ? [styles.itemBlock, styles.lastItemBlock]
+                      : [styles.itemBlock]
+                  }
+                >
+                  <View style={styles.headerRow}>
+                    <Text style={styles.itemTitle}>{exp.position}</Text>
+                    <Text style={styles.itemDate}>
+                      {formatRange(exp.start_date, exp.end_date)}
+                    </Text>
+                  </View>
+                  <Text style={styles.itemSubtitle}>{exp.company}</Text>
+                  {!!exp.description && (
+                    <Text style={styles.itemDescription}>{exp.description}</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
+
+          {!!visibleAcademicFormations.length && (
+            <View style={styles.section}>
+              <SectionTitle title="Formación académica" />
+              {visibleAcademicFormations.map((f, idx) => (
+                <View
+                  key={f.id}
+                  style={
+                    idx === visibleAcademicFormations.length - 1
+                      ? [styles.itemBlock, styles.lastItemBlock]
+                      : [styles.itemBlock]
+                  }
+                >
+                  <View style={styles.headerRow}>
+                    <Text style={styles.itemTitle}>{f.institution}</Text>
+                    {!!f.emission_date && (
+                      <Text style={styles.itemDate}>{formatMaybeDate(f.emission_date)}</Text>
+                    )}
+                  </View>
+                  <Text style={styles.itemSubtitle}>
+                    {f.education_level}
+                    {f.field_of_study ? ` · ${f.field_of_study}` : ''}
+                    {` · ${f.status}`}
+                  </Text>
+                  {!!f.description && (
+                    <Text style={styles.itemDescription}>{f.description}</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
+
+          {!!visibleAcademicExperiences.length && (
+            <View style={styles.section}>
+              <SectionTitle title="Experiencia académica" />
+              {visibleAcademicExperiences.map((exp, idx) => (
+                <View
+                  key={exp.id}
+                  style={
+                    idx === visibleAcademicExperiences.length - 1
+                      ? [styles.itemBlock, styles.lastItemBlock]
+                      : [styles.itemBlock]
+                  }
+                >
+                  <View style={styles.headerRow}>
+                    <Text style={styles.itemTitle}>{exp.title}</Text>
+                    <Text style={styles.itemDate}>
+                      {formatRange(exp.start_date, exp.end_date)}
+                    </Text>
+                  </View>
+                  <Text style={styles.itemSubtitle}>{exp.institution}</Text>
+                  {!!exp.description && (
+                    <Text style={styles.itemDescription}>{exp.description}</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+
+        <Text
+          style={styles.footer}
+          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+          fixed
+        />
+        <Text style={styles.footerLeft} fixed>
+          {formatDate(data.generatedAt)}
+        </Text>
       </Page>
     </Document>
   )
