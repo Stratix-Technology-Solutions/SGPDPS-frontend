@@ -284,7 +284,23 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     wordBreak: 'break-word',
   },
-
+  statusBadgeBase: {
+    fontSize: 7,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    marginLeft: 8,
+    fontWeight: 700,
+    letterSpacing: 0.6,
+  },
+  statusEnCurso: {
+    backgroundColor: '#e2e8f0',
+    color: '#0f172a',
+  },
+  statusCompletado: {
+    backgroundColor: '#0f172a',
+    color: '#e2e8f0',
+  },
   itemDate: {
     fontSize: 7.5,
     color: C.textMuted,
@@ -530,8 +546,15 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
                 >
                   <View style={styles.headerRow}>
                     <Text style={styles.itemTitle}>{project.title}</Text>
-                    <Text style={styles.itemDate}>
-                      {project.status}
+                    <Text
+                      style={[
+                        styles.statusBadgeBase,
+                        project.status === 'En curso'
+                          ? styles.statusEnCurso
+                          : styles.statusCompletado,
+                      ]}
+                    >
+                      {project.status === 'En curso' ? 'En curso' : 'Completado'}
                     </Text>
                   </View>
                   {!!project.roles.length && (
