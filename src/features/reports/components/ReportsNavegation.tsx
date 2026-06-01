@@ -1,10 +1,10 @@
+import { Link } from '@tanstack/react-router'
 import { FiBarChart2, FiFolder } from 'react-icons/fi'
 
 export type ReportView = 'skills' | 'projects'
 
 interface Props {
   currentView: ReportView
-  onChange: (view: ReportView) => void
 }
 
 const tabs = [
@@ -20,14 +20,15 @@ const tabs = [
   },
 ]
 
-export const ReportsNavigation = ({ currentView, onChange }: Props) => {
+export const ReportsNavigation = ({ currentView }: Props) => {
   return (
     <div className="bg-white border border-neutral-200 rounded-2xl p-3">
       <div className="flex gap-2">
         {tabs.map(({ id, label, Icon }) => (
-          <button
+          <Link
+            to="/profile/reports"
+            search={{ view: id }}
             key={id}
-            onClick={() => onChange(id)}
             className={`group flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer
             ${currentView === id
               ? 'bg-primary text-white shadow-sm'
@@ -44,7 +45,7 @@ export const ReportsNavigation = ({ currentView, onChange }: Props) => {
             <span className="font-medium">
               {label}
             </span>
-          </button>
+          </Link>
         ))}
       </div>
     </div>
