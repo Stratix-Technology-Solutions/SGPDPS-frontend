@@ -45,7 +45,6 @@ export const Projects = ({ projects }: Props) => {
                 <span className="absolute select-none font-serif text-6xl text-white/20">
                   {project.title[0]}
                 </span>
-
               </div>
 
               <div className="flex flex-1 flex-col p-5">
@@ -62,10 +61,19 @@ export const Projects = ({ projects }: Props) => {
                   </div>
                 )}
 
-                <h3 className="mb-1 text-base font-semibold text-background-dark">
-                  {project.title}
-                </h3>
-
+                <div className="mb-1 flex items-center gap-2">
+                  <h3 className="text-base font-semibold text-background-dark">
+                    {project.title}
+                  </h3>
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${project.status === 'Completado'
+                      ? 'bg-primary text-neutral-light'
+                      : 'bg-primary/5 text-primary'
+                      }`}
+                  >
+                    {project.status === 'En curso' ? 'En curso' : 'Completado'}
+                  </span>
+                </div>
                 {!!project.roles?.length && (
                   <p className="mb-3 font-mono text-[11px] text-neutral-medium">
                     {project.roles.map((role) => role.name).join(', ')}
