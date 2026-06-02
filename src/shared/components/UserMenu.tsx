@@ -6,6 +6,7 @@ import { useLogout } from '../../features/auth/hooks/useLogout'
 import { useProfileStatus } from '../../features/profile/hooks/useProfileStatus'
 import { SuccessModal } from './SuccessModal'
 import { ErrorModal } from './ErrorModal'
+import { useExportPortfolioPdf } from '../../features/profile/hooks/useExportPortfolioPdf'
 
 interface IUserMenu {
   open: boolean
@@ -16,6 +17,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
   const navigate = useNavigate()
   const { hasProfile, isLoadingProfile, isProfileMissing } = useProfileStatus()
+  const { exportPortfolio, isExporting, error } = useExportPortfolioPdf()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -23,10 +25,10 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
     { label: 'Inicio', to: '/dashboard' },
     ...(!isLoadingProfile
       ? [
-          isProfileMissing || !hasProfile
-            ? { label: 'Registrar perfil', to: '/profile/register', disabled: false }
-            : { label: 'Editar perfil', to: '/profile/edit', disabled: false },
-        ]
+        isProfileMissing || !hasProfile
+          ? { label: 'Registrar perfil', to: '/profile/register', disabled: false }
+          : { label: 'Editar perfil', to: '/profile/edit', disabled: false },
+      ]
       : []),
   ]
 
@@ -85,7 +87,25 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
             </Link>
           ))}
         </nav>
-
+        <button
+          type="button"
+          onClick={() => exportPortfolio()}
+          disabled={isExporting}
+          className="
+            flex items-center gap-3 rounded-xl
+            px-4 py-3
+            disabled:text-gray-500
+            transition-all duration-200
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+          "
+        >
+          <span>
+            {isExporting
+              ? 'Generando PDF...'
+              : 'Exportar portafolio'}
+          </span>
+        </button>
         <button
           type="button"
           onClick={handleLogout}
@@ -96,7 +116,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
       </div>
 
       <div className="hidden md:block absolute right-6 top-16 z-50 w-56 bg-white border rounded-xl shadow-lg p-2">
-        <nav className="flex flex-col border-b mb-2 pb-2">
+        <nav className="flex flex-col border-b mb-1 pb-2">
           {links.map(({ label, to, disabled }) => (
             <Link
               key={`${label}-${to}`}
@@ -114,7 +134,30 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
             </Link>
           ))}
         </nav>
+        <button
+          type="button"
+          onClick={() => exportPortfolio()}
+          disabled={isExporting}
+          className="
+              flex w-full items-center gap-3
+              px-4 py-3
+              cursor-pointer
+              hover:bg-gray-100
+              transition-all duration-200
+              disabled:text-gray-500
+              disabled:cursor-not-allowed
+              disabled:opacity-60
+          border-b
 
+            "
+        >
+
+          <span>
+            {isExporting
+              ? 'Generando PDF...'
+              : 'Exportar PDF'}
+          </span>
+        </button>
         <button
           type="button"
           onClick={handleLogout}

@@ -119,10 +119,10 @@ export const ReportSkills = () => {
           <div className="flex flex-wrap gap-2">
             {advancedSkills.length > 0
               ? advancedSkills.map((skill) => (
-                  <span key={skill.id} className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
-                    {skill.name}
-                  </span>
-                ))
+                <span key={skill.id} className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
+                  {skill.name}
+                </span>
+              ))
               : <span className="text-sm text-neutral-medium">Aún no registraste habilidades avanzadas.</span>}
           </div>
         </div>
@@ -145,11 +145,10 @@ export const ReportSkills = () => {
           <div key={skill.id} className="bg-white border border-neutral-200 rounded-2xl p-4 flex justify-between items-center gap-4">
             <span className="font-semibold text-background-dark">{skill.name}</span>
             <div className="flex items-center gap-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                skill.domain_level
-                  ? levelStyles[skill.domain_level]
-                  : 'bg-neutral-100 text-neutral-medium'
-              }`}
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${skill.domain_level
+                ? levelStyles[skill.domain_level]
+                : 'bg-neutral-100 text-neutral-medium'
+                }`}
               >
                 {skill.domain_level ?? 'Nivel no especificado'}
               </span>
@@ -179,9 +178,8 @@ const SummaryCard = ({ label, value, color }: { label: string, value: number, co
 )
 
 const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => (
-  <span className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-    isVisible ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
-  }`}
+  <span className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${isVisible ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
+    }`}
   >
     {isVisible ? <FiEye size={12} /> : <FiEyeOff size={12} />}
     {isVisible ? 'Visible' : 'Oculta'}
