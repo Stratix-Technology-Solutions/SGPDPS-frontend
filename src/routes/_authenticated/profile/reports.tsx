@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { SectionTitle } from '../../../shared/components/SectionTitle'
 import { ReportsNavigation, type ReportView } from '../../../features/reports/components/ReportsNavegation'
 import { ReportProjects } from '../../../features/reports/components/ReportProjects'
+import { ReportSkills } from '../../../features/reports/components/ReportSkills'
 
 export const Route = createFileRoute('/_authenticated/profile/reports')({
   component: RouteComponent,
@@ -27,9 +28,7 @@ function RouteComponent() {
       />
 
       {view === 'skills' && (
-        <div>
-          Reporte de habilidades
-        </div>
+        <ReportSkills />
       )}
 
       {view === 'projects' && (
