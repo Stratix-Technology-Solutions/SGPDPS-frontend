@@ -17,7 +17,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
   const navigate = useNavigate()
   const { hasProfile, isLoadingProfile, isProfileMissing } = useProfileStatus()
-  const { exportPortfolio, isExporting } = useExportPortfolioPdf()
+  const { exportPortfolio, isExporting, error } = useExportPortfolioPdf()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
