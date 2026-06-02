@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
 })
 
 const SectionTitle = ({ title }: { title: string }) => (
-  <View style={styles.sectionHeader}>
+  <View style={styles.sectionHeader} minPresenceAhead={56}>
     <Text style={styles.sectionPillText}>{title}</Text>
   </View>
 )
@@ -538,6 +538,7 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
               {visibleProjects.map((project, idx) => (
                 <View
                   key={project.id}
+                  wrap={false}
                   style={
                     idx === visibleProjects.length - 1
                       ? [styles.itemBlock, styles.lastItemBlock]
@@ -603,6 +604,7 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
               {visibleWorkExperiences.map((exp, idx) => (
                 <View
                   key={exp.id}
+                  wrap={false}
                   style={
                     idx === visibleWorkExperiences.length - 1
                       ? [styles.itemBlock, styles.lastItemBlock]
@@ -630,6 +632,7 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
               {visibleAcademicFormations.map((f, idx) => (
                 <View
                   key={f.id}
+                  wrap={false}
                   style={
                     idx === visibleAcademicFormations.length - 1
                       ? [styles.itemBlock, styles.lastItemBlock]
@@ -661,6 +664,7 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
               {visibleAcademicExperiences.map((exp, idx) => (
                 <View
                   key={exp.id}
+                  wrap={false}
                   style={
                     idx === visibleAcademicExperiences.length - 1
                       ? [styles.itemBlock, styles.lastItemBlock]
