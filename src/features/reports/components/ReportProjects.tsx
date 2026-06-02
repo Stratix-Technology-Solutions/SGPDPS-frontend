@@ -11,9 +11,9 @@ import { useExportProjectsReport } from '../hooks/useExportProjectsReport'
 import type { ProjectReportVisibility } from '../interfaces/report-projects.interface'
 
 export const ReportProjects = () => {
-  const { data, isLoading, isError, error } = useGetReportProjects()
-  const { exportProjectsReport, isExporting, exportError } = useExportProjectsReport()
   const [visibility, setVisibility] = useState<ProjectReportVisibility>('all')
+  const { data, isLoading, isError, error } = useGetReportProjects(visibility)
+  const { exportProjectsReport, isExporting, exportError } = useExportProjectsReport()
 
   if (isLoading) {
     return (
