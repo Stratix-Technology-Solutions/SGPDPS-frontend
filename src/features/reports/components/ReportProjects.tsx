@@ -3,7 +3,6 @@ import {
   FiDownload,
   FiEye,
   FiEyeOff,
-  // FiCalendar,
   FiLink,
   FiFolder,
 } from 'react-icons/fi'
@@ -65,18 +64,6 @@ export const ReportProjects = () => {
   const projectsWithoutCategories = data.projects.filter(
     (project) => project.categories.length === 0,
   ).length
-
-  /*
-  const formatDate = (date: string | null) => {
-    if (!date) return 'Actualidad'
-
-    return new Date(date).toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })
-  }
-  */
 
   return (
     <div className="flex flex-col gap-4">
@@ -227,26 +214,15 @@ export const ReportProjects = () => {
                   <h3 className="text-lg font-semibold text-background-dark">
                     {project.title}
                   </h3>
-
-                  {/*
-                  <div className="flex items-center gap-2 mt-2 text-sm text-neutral-medium">
-                    <FiCalendar size={14} />
-
-                    <span>
-                      {formatDate(project.start_date)}
-                      {' - '}
-                      {formatDate(project.end_date)}
-                    </span>
-                  </div>
-                  */}
                 </div>
-
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === 'Completado' ? 'bg-green-50 text-green-800' : 'bg-blue-50 bg-ble-800'}`}>
+                  {project.status}
+                </span>
                 <span
-                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-                    project.is_visible
-                      ? 'bg-green-50 text-green-700'
-                      : 'bg-red-50 text-red-600'
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${project.is_visible
+                    ? 'bg-green-50 text-green-700'
+                    : 'bg-red-50 text-red-600'
+                    }`}
                 >
                   {project.is_visible
                     ? <FiEye size={12} />
