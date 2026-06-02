@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { FiDownload, FiEye, FiEyeOff } from 'react-icons/fi'
 import { useGetReportSkills } from '../hooks/useGetReportSkills'
 import { useExportSkillsReport } from '../hooks/useExportSkillsReport'
@@ -16,7 +15,7 @@ const levelStyles: Record<keyof DomainLevels, string> = {
 export const ReportSkills = () => {
   const { data, isLoading, isError, error } = useGetReportSkills()
   const { exportSkillsReport, isExporting, exportError } = useExportSkillsReport()
-  const [filter, setFilter] = useState<SkillsReportFilter>('all')
+  const filter: SkillsReportFilter = 'all'
 
   if (isLoading) {
     return (
