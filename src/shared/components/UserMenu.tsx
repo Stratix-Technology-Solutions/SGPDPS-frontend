@@ -168,7 +168,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
       </div>
 
       {successMessage && <SuccessModal message={successMessage} redirect="Redirigiendo al login..." />}
-      {errorMessage && <ErrorModal message={errorMessage} />}
+      {(errorMessage || error) && <ErrorModal message="ah ocurrido un error" />}
     </>
   )
 }
