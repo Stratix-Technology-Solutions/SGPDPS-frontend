@@ -145,8 +145,13 @@ export const ReportSkills = () => {
           <div key={skill.id} className="bg-white border border-neutral-200 rounded-2xl p-4 flex justify-between items-center gap-4">
             <span className="font-semibold text-background-dark">{skill.name}</span>
             <div className="flex items-center gap-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${levelStyles[skill.domain_level]}`}>
-                {skill.domain_level}
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                skill.domain_level
+                  ? levelStyles[skill.domain_level]
+                  : 'bg-neutral-100 text-neutral-medium'
+              }`}
+              >
+                {skill.domain_level ?? 'Nivel no especificado'}
               </span>
               <VisibilityBadge isVisible={skill.is_visible} />
             </div>

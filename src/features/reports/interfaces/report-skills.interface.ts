@@ -37,7 +37,7 @@ export interface DomainLevels {
 export interface TechnicalSkillReport {
   id: number
   name: string
-  domain_level: keyof DomainLevels
+  domain_level: keyof DomainLevels | null
   is_visible: boolean
 }
 

@@ -75,6 +75,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 700,
   },
+  insightGrid: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  insightCard: {
+    flex: 1,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: C.border,
+    borderRadius: 6,
+    backgroundColor: C.white,
+  },
+  insightTitle: {
+    color: C.navy,
+    fontSize: 9,
+    fontWeight: 700,
+  },
   table: {
     overflow: 'hidden',
     borderWidth: 1,
@@ -94,13 +111,10 @@ const styles = StyleSheet.create({
     fontWeight: 700,
   },
   nameCell: {
-    width: '40%',
+    width: '50%',
   },
   levelCell: {
-    width: '35%',
-  },
-  visibilityCell: {
-    width: '25%',
+    width: '50%',
   },
   empty: {
     padding: 10,
@@ -125,11 +139,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 700,
   },
-  softSkillVisibility: {
-    marginTop: 4,
-    color: C.muted,
-    fontSize: 8,
-  },
   footer: {
     position: 'absolute',
     bottom: 18,
@@ -146,6 +155,7 @@ export const SkillsReportPdfDocument = ({ data }: Props) => {
   const rows = getSkillRows(data.report, data.filter)
   const technicalRows = rows.filter((row) => row.type === 'Técnica')
   const softRows = rows.filter((row) => row.type === 'Blanda')
+  const advancedRows = technicalRows.filter((row) => row.level === 'Avanzado')
 
   return (
     <Document>
@@ -162,10 +172,15 @@ export const SkillsReportPdfDocument = ({ data }: Props) => {
           <SummaryCard value={rows.length} label="Habilidades incluidas" />
           <SummaryCard value={technicalRows.length} label="Técnicas" />
           <SummaryCard value={softRows.length} label="Blandas" />
+          <SummaryCard value={advancedRows.length} label="Fortalezas avanzadas" />
         </View>
 
         {data.filter !== 'soft' && (
-          <SkillsTable title="HABILIDADES TÉCNICAS" rows={technicalRows} />
+          <TechnicalProfile domainLevels={data.report.domain_levels} />
+        )}
+
+        {data.filter !== 'soft' && (
+          <SkillsTable title="DETALLE DE HABILIDADES TÉCNICAS" rows={technicalRows} />
         )}
 
         {data.filter !== 'technical' && (
@@ -188,6 +203,24 @@ const SummaryCard = ({ value, label }: { value: number, label: string }) => (
   </View>
 )
 
+const TechnicalProfile = ({
+  domainLevels,
+}: {
+  domainLevels: SkillsReportExport['report']['domain_levels']
+}) => (
+  <View style={styles.section}>
+    <Text style={styles.sectionTitle}>DISTRIBUCIÓN DEL DOMINIO TÉCNICO</Text>
+    <View style={styles.insightGrid}>
+      {Object.entries(domainLevels).map(([level, count]) => (
+        <View key={level} style={styles.insightCard}>
+          <Text style={styles.summaryValue}>{count}</Text>
+          <Text style={styles.summaryLabel}>{level}</Text>
+        </View>
+      ))}
+    </View>
+  </View>
+)
+
 const SkillsTable = ({
   title,
   rows,
@@ -201,14 +234,12 @@ const SkillsTable = ({
       <View style={[styles.row, styles.headerRow]}>
         <Text style={styles.nameCell}>Habilidad</Text>
         <Text style={styles.levelCell}>Nivel de dominio</Text>
-        <Text style={styles.visibilityCell}>Visibilidad</Text>
       </View>
       {rows.length > 0
         ? rows.map((row) => (
             <View key={`${row.type}-${row.id}`} style={styles.row}>
               <Text style={styles.nameCell}>{row.name}</Text>
               <Text style={styles.levelCell}>{row.level}</Text>
-              <Text style={styles.visibilityCell}>{row.visibility}</Text>
             </View>
           ))
         : <Text style={styles.empty}>No hay habilidades registradas.</Text>}
@@ -218,14 +249,13 @@ const SkillsTable = ({
 
 const SoftSkillsCards = ({ rows }: { rows: ReturnType<typeof getSkillRows> }) => (
   <View style={styles.section}>
-    <Text style={styles.sectionTitle}>HABILIDADES BLANDAS</Text>
+    <Text style={styles.sectionTitle}>HABILIDADES BLANDAS REGISTRADAS</Text>
     {rows.length > 0
       ? (
           <View style={styles.softGrid}>
             {rows.map((row) => (
               <View key={`${row.type}-${row.id}`} style={styles.softCard}>
                 <Text style={styles.softSkillName}>{row.name}</Text>
-                <Text style={styles.softSkillVisibility}>Visibilidad: {row.visibility}</Text>
               </View>
             ))}
           </View>
