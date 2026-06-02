@@ -8,9 +8,10 @@ import {
 import { useGetReportProjects } from '../hooks/useGetReportProjects'
 import { useExportProjectsReport } from '../hooks/useExportProjectsReport'
 import type { ProjectReportVisibility } from '../interfaces/report-projects.interface'
+import { useState } from 'react'
 
 export const ReportProjects = () => {
-  const visibility: ProjectReportVisibility = 'all'
+  const [visibility, setVisibility] = useState<ProjectReportVisibility>('all')
   const { data, isLoading, isError, error } = useGetReportProjects(visibility)
   const { exportProjectsReport, isExporting, exportError } = useExportProjectsReport()
 
@@ -76,19 +77,19 @@ export const ReportProjects = () => {
           </p>
         </div>
 
-        {/* <label htmlFor="projects-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium"> */}
-        {/*   Proyectos incluidos */}
-        {/*   <select */}
-        {/*     id="projects-report-filter" */}
-        {/*     value={visibility} */}
-        {/*     onChange={(event) => setVisibility(event.target.value as ProjectReportVisibility)} */}
-        {/*     className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark" */}
-        {/*   > */}
-        {/*     <option value="all">Todos</option> */}
-        {/*     <option value="visible">Visibles</option> */}
-        {/*     <option value="hidden">Ocultos</option> */}
-        {/*   </select> */}
-        {/* </label> */}
+        <label htmlFor="projects-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium">
+          Proyectos incluidos
+          <select
+            id="projects-report-filter"
+            value={visibility}
+            onChange={(event) => setVisibility(event.target.value as ProjectReportVisibility)}
+            className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark"
+          >
+            <option value="all">Todos</option>
+            <option value="visible">Visibles</option>
+            <option value="hidden">Ocultos</option>
+          </select>
+        </label>
 
         <button
           type="button"
