@@ -57,19 +57,19 @@ export const ReportSkills = () => {
           </p>
         </div>
 
-        <label htmlFor="skills-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium">
-          Tipo de habilidad
-          <select
-            id="skills-report-filter"
-            value={filter}
-            onChange={(event) => setFilter(event.target.value as SkillsReportFilter)}
-            className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark"
-          >
-            <option value="all">Todas</option>
-            <option value="technical">Técnicas</option>
-            <option value="soft">Blandas</option>
-          </select>
-        </label>
+        {/* <label htmlFor="skills-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium"> */}
+        {/*   Tipo de habilidad */}
+        {/*   <select */}
+        {/*     id="skills-report-filter" */}
+        {/*     value={filter} */}
+        {/*     onChange={(event) => setFilter(event.target.value as SkillsReportFilter)} */}
+        {/*     className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark" */}
+        {/*   > */}
+        {/*     <option value="all">Todas</option> */}
+        {/*     <option value="technical">Técnicas</option> */}
+        {/*     <option value="soft">Blandas</option> */}
+        {/*   </select> */}
+        {/* </label> */}
 
         <button
           type="button"
