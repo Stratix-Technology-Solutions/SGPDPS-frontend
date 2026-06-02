@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modalBase'
 import { LinkList } from './LinkList'
 import { useGetLinks } from '../hooks/useGetLink'
 import { useDeleteLink } from '../hooks/useDeleteLink'

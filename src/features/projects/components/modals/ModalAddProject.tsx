@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { FormProject } from '../form/FormProject'
 import { useCreateProject } from '../../hooks/useProjects'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'

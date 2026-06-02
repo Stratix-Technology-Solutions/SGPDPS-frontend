@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { SoftFormSchema, defaultValues } from '../../dtos/soft.dto'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { useCreateSoftSKill } from '../../hooks/useCreateSoftSkill'
 import { FormSelect } from '../../../../shared/components/form'
 import { useGetSoftSkillsSystem } from '../../hooks/useGetSoftSkillsSystem'

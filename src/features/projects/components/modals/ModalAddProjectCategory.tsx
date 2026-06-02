@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import type { Project } from '../../interfaces/project.interface'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { useProjectCategories } from '../../hooks/useProjectCategories'

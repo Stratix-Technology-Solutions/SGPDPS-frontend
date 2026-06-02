@@ -3,7 +3,7 @@ import { FormAcademic } from '../form/FormAcademic'
 import { useAcademic } from '../../hooks/useAcademic'
 import { useCheckDuplicateAcademicExperience } from '../../hooks/useCheckAcademicExperience'
 import type { CheckDuplicateResponse } from '../../dtos/academic.interface'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import type { AcademicDto } from '../../dtos/academic.dto'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 

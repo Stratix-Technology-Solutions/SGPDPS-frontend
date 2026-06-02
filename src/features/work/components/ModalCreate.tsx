@@ -3,7 +3,7 @@ import { useCreateWorkExperience } from '../hooks/useCreateWorkExperience'
 import { useCheckDuplicateWorkExperience } from '../hooks/useCheckWorkExperience'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 import type { WorkExperienceFormValues } from '../dtos/workExperience'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modalBase'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'
 
 interface Props {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { useAcademicFormation } from '../../hooks/useAcademicFormation'
 import { AcademicFormationList } from '../AcademicFormationList'
 import { FormAcademicFormation } from '../form/FormAcademicFormation'

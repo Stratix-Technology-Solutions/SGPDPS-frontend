@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modalBase'
 import { defaultValues, LinkSchema } from '../dtos/links.dto'
 import { useCreateLink } from '../hooks/useCreateLink'
 import { BannerMessageError } from '../../../shared/components/BannerMessageError'

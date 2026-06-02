@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { FormAcademicFormation } from '../form/FormAcademicFormation'
 import { useAcademicFormation } from '../../hooks/useAcademicFormation'
 import type { AcademicFormationDto } from '../../dtos/academicFormation.dto'

@@ -16,7 +16,7 @@ import { normalizeDialCode, normalizePhoneValue } from '../utils/normalize'
 import type { RegisterAccountDto } from '../dtos/user.dto'
 import type { ApiError } from '../../../shared/interfaces/api.interface'
 import { AvatarField } from './AvatarField'
-import { Modal, ModalBody, ModalFooter, ModalHeader, useModal } from '../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader, useModal } from '../../../shared/components/modalBase'
 
 interface ProfileFormProps {
   mode: 'register' | 'edit'

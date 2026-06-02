@@ -3,7 +3,7 @@ import type { TechnicalSkillResponse } from '../../interfaces/technical.interfac
 import { CardTechnicalSkill } from '..//CardTechnicalSkill'
 import { ListSkills } from '..//ListSkills'
 import { FormTechnicalSkill } from '..//forms/FormTechnicalSkill'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import { useUpdateTechnicalSkill } from '../../hooks/useUpdateTechnicalSkill'
 

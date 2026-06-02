@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../shared/components/modalBase'
 import { WorkExperienceList } from '../components/WorkExperienceList'
 import { WorkExperienceForm } from '../components/WorkExperienceForm'
 import { useWorkExperiences } from '../hooks/useWorkExperiences'

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { TechnicalSkillResponse } from '../../interfaces/technical.interface'
 import { CardTechnicalSkill } from '../CardTechnicalSkill'
 import { ListSkills } from '../ListSkills'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { useDeleteTechnicalSkill } from '../../hooks/useDeleteTechnicalSkill'
 
 interface Props {

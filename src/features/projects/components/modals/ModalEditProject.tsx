@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { FormProjectEdit } from '../form/FormProjectEdit'
 import { useGetProjects, useUpdateProject } from '../../hooks/useProjects'
 import type { ProjectUpdateDto } from '../../dtos/project.dto'

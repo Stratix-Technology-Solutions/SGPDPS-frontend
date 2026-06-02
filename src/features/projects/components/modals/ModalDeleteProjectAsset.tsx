@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 import { useGetProjectAssets, useDeleteProjectAsset } from '../../hooks/useProjectAssets'
 import { FiFile, FiImage } from 'react-icons/fi'
 import type { Project } from '../../interfaces/project.interface'

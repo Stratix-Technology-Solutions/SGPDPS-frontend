@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAcademic } from '../../hooks/useAcademic'
 import { AcademicList } from '../AcademicList'
 import type { AcademicExperienceResponse } from '../../dtos/academic.interface'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modal'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../../shared/components/modalBase'
 
 interface Props {
   isOpen: boolean
