@@ -12,6 +12,7 @@ interface Props {
   submit: (values: ProjectCreateDto) => void
 }
 
+
 export const FormProject = ({ formId, submit }: Props) => {
   const { data: roles, isLoading: loadingRole } = useGetProjectsRole()
   const { data: skills, isLoading: loadingSkill } = useGetProjectSkill()
@@ -92,7 +93,9 @@ export const FormProject = ({ formId, submit }: Props) => {
         )}
       />
 
-      <form.Field name="links" children={(field) => (
+      <form.Field validators={{
+        onChange: ProjectCreateSchema.shape.links,
+      }} name="links" children={(field) => (
         <FormTags label="Enlaces del proyecto" field={field} placeholder="https://github.com/..." />
       )} />
 
