@@ -6,6 +6,14 @@ export interface ReportSkillsResponse {
   soft_skills: SoftSkillReport[]
 }
 
+export type SkillsReportFilter = 'all' | 'technical' | 'soft'
+
+export interface SkillsReportExport {
+  report: ReportSkillsResponse
+  filter: SkillsReportFilter
+  generatedAt: string
+}
+
 export interface UserReport {
   id: string
   username: string

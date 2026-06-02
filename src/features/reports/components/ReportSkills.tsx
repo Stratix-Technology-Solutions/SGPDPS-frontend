@@ -1,6 +1,11 @@
-import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { useState } from 'react'
+import { FiDownload, FiEye, FiEyeOff } from 'react-icons/fi'
 import { useGetReportSkills } from '../hooks/useGetReportSkills'
-import type { DomainLevels } from '../interfaces/report-skills.interface'
+import { useExportSkillsReport } from '../hooks/useExportSkillsReport'
+import type {
+  DomainLevels,
+  SkillsReportFilter,
+} from '../interfaces/report-skills.interface'
 
 const levelStyles: Record<keyof DomainLevels, string> = {
   'Básico': 'bg-amber-50 text-amber-700',
@@ -10,6 +15,8 @@ const levelStyles: Record<keyof DomainLevels, string> = {
 
 export const ReportSkills = () => {
   const { data, isLoading, isError, error } = useGetReportSkills()
+  const { exportSkillsReport, isExporting, exportError } = useExportSkillsReport()
+  const [filter, setFilter] = useState<SkillsReportFilter>('all')
 
   if (isLoading) {
     return (
@@ -40,6 +47,47 @@ export const ReportSkills = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="bg-white border border-neutral-200 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-end gap-4">
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-background-dark">
+            Generar reporte de habilidades
+          </h2>
+          <p className="text-sm text-neutral-medium mt-1">
+            Descarga una versión compartible para procesos de selección.
+          </p>
+        </div>
+
+        <label htmlFor="skills-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium">
+          Tipo de habilidad
+          <select
+            id="skills-report-filter"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value as SkillsReportFilter)}
+            className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark"
+          >
+            <option value="all">Todas</option>
+            <option value="technical">Técnicas</option>
+            <option value="soft">Blandas</option>
+          </select>
+        </label>
+
+        <button
+          type="button"
+          disabled={isExporting}
+          onClick={() => exportSkillsReport(data, filter)}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-white transition-colors hover:bg-primary-soft disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <FiDownload />
+          {isExporting ? 'Generando...' : 'Descargar reporte'}
+        </button>
+      </div>
+
+      {exportError && (
+        <div className="bg-white border border-red-200 rounded-2xl p-4">
+          <p className="text-sm text-red-500">{exportError}</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <SummaryCard label="Habilidades técnicas" value={data.summary.total_technical_skills} color="text-primary" />
         <SummaryCard label="Habilidades blandas" value={data.summary.total_soft_skills} color="text-purple-700" />
