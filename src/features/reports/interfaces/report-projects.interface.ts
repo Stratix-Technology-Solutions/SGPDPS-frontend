@@ -5,6 +5,14 @@ export interface ReportProjectsResponse {
   projects: ProjectReport[]
 }
 
+export type ProjectReportVisibility = 'all' | 'visible' | 'hidden'
+
+export interface ProjectsReportExport {
+  report: ReportProjectsResponse
+  visibility: ProjectReportVisibility
+  generatedAt: string
+}
+
 export interface UserReport {
   id: string
   username: string
@@ -18,7 +26,7 @@ export interface ProjectsSummary {
 }
 
 export interface ProjectsFilters {
-  visibility: 'all' | 'visible' | 'hidden'
+  visibility: ProjectReportVisibility
 }
 
 export interface ProjectReport {

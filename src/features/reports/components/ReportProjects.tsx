@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import {
+  FiDownload,
   FiEye,
   FiEyeOff,
   // FiCalendar,
@@ -6,9 +8,13 @@ import {
   FiFolder,
 } from 'react-icons/fi'
 import { useGetReportProjects } from '../hooks/useGetReportProjects'
+import { useExportProjectsReport } from '../hooks/useExportProjectsReport'
+import type { ProjectReportVisibility } from '../interfaces/report-projects.interface'
 
 export const ReportProjects = () => {
   const { data, isLoading, isError, error } = useGetReportProjects()
+  const { exportProjectsReport, isExporting, exportError } = useExportProjectsReport()
+  const [visibility, setVisibility] = useState<ProjectReportVisibility>('all')
 
   if (isLoading) {
     return (
@@ -74,6 +80,47 @@ export const ReportProjects = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="bg-white border border-neutral-200 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-end gap-4">
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-background-dark">
+            Generar reporte de proyectos
+          </h2>
+          <p className="text-sm text-neutral-medium mt-1">
+            Descarga un complemento profesional con aportes, roles y evidencia.
+          </p>
+        </div>
+
+        <label htmlFor="projects-report-filter" className="flex flex-col gap-1 text-sm text-neutral-medium">
+          Proyectos incluidos
+          <select
+            id="projects-report-filter"
+            value={visibility}
+            onChange={(event) => setVisibility(event.target.value as ProjectReportVisibility)}
+            className="min-w-44 px-3 py-2 rounded-xl border border-neutral-200 bg-white text-background-dark"
+          >
+            <option value="all">Todos</option>
+            <option value="visible">Visibles</option>
+            <option value="hidden">Ocultos</option>
+          </select>
+        </label>
+
+        <button
+          type="button"
+          disabled={isExporting}
+          onClick={() => exportProjectsReport(data, visibility)}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-white transition-colors hover:bg-primary-soft disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <FiDownload />
+          {isExporting ? 'Generando...' : 'Descargar reporte'}
+        </button>
+      </div>
+
+      {exportError && (
+        <div className="bg-white border border-red-200 rounded-2xl p-4">
+          <p className="text-sm text-red-500">{exportError}</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-neutral-200 rounded-2xl p-4">
           <p className="text-sm text-neutral-medium">
