@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { BannerMessageError } from '../../../../shared/components/BannerMessageError'
 import type { ApiError } from '../../../../shared/interfaces/api.interface'
-import { useToggleShow } from '../../hooks/useToggleShow'
+import { useBulkVisibility } from '../../hooks/useBulkVisibility'
+import { VisibilityColumn } from './VisibilityColumn'
 
 interface Item {
   id: string | number
@@ -32,7 +34,60 @@ export const VisibilityList = <T extends Item>({
   url,
   getLabel,
 }: Props<T>) => {
-  const { mutate } = useToggleShow({ url, queryKey })
+  const { mutate } = useBulkVisibility({ url, queryKey })
+
+  const [selectedPublic, setSelectedPublic] = useState<(string | number)[]>([])
+  const [selectedPrivate, setSelectedPrivate] = useState<(string | number)[]>([])
+
+  const publicItems = data?.filter((item) => item.is_visible) ?? []
+  const privateItems = data?.filter((item) => !item.is_visible) ?? []
+
+  const togglePublic = (id: string | number) => {
+    setSelectedPublic((prev) =>
+      prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id]
+    )
+  }
+  const togglePrivate = (id: string | number) => {
+    setSelectedPrivate((prev) =>
+      prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id]
+    )
+  }
+
+  const selectAllPublic = () => {
+    setSelectedPublic(publicItems.map((item) => item.id))
+  }
+  const selectAllPrivate = () => {
+    setSelectedPrivate(privateItems.map((item) => item.id))
+  }
+
+  const clearPublic = () => {
+    setSelectedPublic([])
+  }
+  const clearPrivate = () => {
+    setSelectedPrivate([])
+  }
+
+  const hideSelected = () => {
+    mutate({
+      ids: selectedPublic,
+      is_visible: false,
+    })
+
+    setSelectedPublic([])
+  }
+
+  const showSelected = () => {
+    mutate({
+      ids: selectedPrivate,
+      is_visible: true,
+    })
+
+    setSelectedPrivate([])
+  }
 
   if (isLoading) {
     return (
@@ -70,36 +125,30 @@ export const VisibilityList = <T extends Item>({
   }
 
   return (
-    <div className="space-y-3">
-      {data.map((item) => (
-        <div
-          key={item.id}
-          className="flex items-center justify-between gap-4 rounded-2xl border border-primary/10 bg-white px-4 py-3 transition-colors hover:border-primary-soft"
-        >
-          <p className="truncate text-sm text-background-dark">
-            {getLabel(item)}
-          </p>
+    <div className="grid gap-4 lg:grid-cols-2">
+      <VisibilityColumn
+        title="Públicas"
+        items={publicItems}
+        selected={selectedPublic}
+        getLabel={getLabel}
+        onToggle={togglePublic}
+        onSelectAll={selectAllPublic}
+        onClear={clearPublic}
+        onSubmit={hideSelected}
+        buttonLabel="Hacer privadas"
+      />
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                mutate({
-                  id: item.id,
-                  is_visible: !item.is_visible,
-                })
-              }
-              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 disabled:opacity-50 ${item.is_visible ? 'bg-primary' : 'bg-neutral-light'}`}
-            >
-              <span className={`absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow-sm transition-all duration-200 ${item.is_visible ? 'right-1' : 'left-1' }`} />
-            </button>
-
-            <span className={` hidden text-sm md:block ${item.is_visible ? 'text-primary' : 'text-neutral-medium'}`} >
-              {item.is_visible ? 'Pública' : 'Privada'}
-            </span>
-          </div>
-        </div>
-      ))}
+      <VisibilityColumn
+        title="Privadas"
+        items={privateItems}
+        selected={selectedPrivate}
+        getLabel={getLabel}
+        onToggle={togglePrivate}
+        onSelectAll={selectAllPrivate}
+        onClear={clearPrivate}
+        onSubmit={showSelected}
+        buttonLabel="Hacer públicas"
+      />
     </div>
   )
 }

@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import {
-  FiChevronDown,
-} from 'react-icons/fi'
+import { FiChevronDown } from 'react-icons/fi'
 import { PiWarningCircleLight } from 'react-icons/pi'
 import { sections } from '../constants/sections'
 
@@ -28,7 +26,7 @@ export const PortfolioSections = () => {
               <button
                 type="button"
                 onClick={() => toggleSection(section.id)}
-                className="flex w-full items-center gap-4 px-4 py-4 text-left transition-colors hover:bg-primary/5 cursor-pointer"
+                className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-primary/5 cursor-pointer"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/10 bg-primary/5 text-primary">
                   <Icon className="text-xl" />
@@ -49,18 +47,15 @@ export const PortfolioSections = () => {
                 </div>
               </button>
 
-              <div
-                className={`grid transition-all duration-300 ease-in-out
-                  ${
-                    isOpen
-                      ? 'grid-rows-[1fr] border-t border-primary/10'
-                      : 'grid-rows-[0fr]'
-                  }
-                `}
+              <div className={`grid transition-all duration-300 ease-in-out
+                ${isOpen
+                  ? 'grid-rows-[1fr] border-t border-primary/10'
+                  : 'grid-rows-[0fr]'
+                }
+              `}
               >
-
                 <div className="overflow-hidden">
-                  <div className="bg-primary/5 px-5 py-4">
+                  <div className="bg-primary/5 p-4">
                     {Content && <Content enabled={section.id === active} />}
                   </div>
                 </div>
