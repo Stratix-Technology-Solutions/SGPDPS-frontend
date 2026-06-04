@@ -34,9 +34,12 @@ export const Aside = ({ open, closeAside, exportPdf, loading }: Props) => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+          >
             <button
               className={`flex items-center gap-2 bg-primary text-white py-2 px-4 rounded-xl hover:bg-primary-soft transition-all duration-200 shadow-sm hover:shadow-md ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
+              title="Exporta portafolio a PDF"
               onClick={() => exportPdf()}
             >
               {loading ? (
