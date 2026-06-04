@@ -1,13 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import { sections } from '../constants/sections'
-import { FiChevronRight } from 'react-icons/fi'
+import { FiChevronRight, FiLoader, FiDownload } from 'react-icons/fi'
 
 interface Props {
   open: boolean
   closeAside: () => void
+  exportPdf: () => void
+  loading: boolean
 }
 
-export const Aside = ({ open, closeAside }: Props) => {
+export const Aside = ({ open, closeAside, exportPdf, loading }: Props) => {
   return (
     <aside className={`fixed left-0 top-20 h-[calc(100vh-5rem)] w-full lg:w-xs bg-white/95 backdrop-blur-xl border-r border-neutral-200 z-40 transform transition-all duration-300 ease-out ${open ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
       <div className="px-6 pt-8 pb-4 border-b border-neutral-100">
@@ -30,6 +32,25 @@ export const Aside = ({ open, closeAside }: Props) => {
             <p className="text-sm text-neutral-medium">
               Panel profesional
             </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              className={`flex items-center gap-2 bg-primary text-white py-2 px-4 rounded-xl hover:bg-primary-soft transition-all duration-200 shadow-sm hover:shadow-md ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
+              onClick={() => exportPdf()}
+            >
+              {loading ? (
+                <>
+                  <FiLoader className="w-4 h-4 animate-spin" />
+                  <span>Exportando...</span>
+                </>
+              ) : (
+                <>
+                  <FiDownload className="w-4 h-4" />
+                  <span>Exportar PDF</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>

@@ -6,7 +6,6 @@ import { useLogout } from '../../features/auth/hooks/useLogout'
 import { useProfileStatus } from '../../features/profile/hooks/useProfileStatus'
 import { SuccessModal } from './SuccessModal'
 import { ErrorModal } from './ErrorModal'
-import { useExportPortfolioPdf } from '../../features/profile/hooks/useExportPortfolioPdf'
 
 interface IUserMenu {
   open: boolean
@@ -17,7 +16,6 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
   const logout = useLogout()
   const navigate = useNavigate()
   const { hasProfile, isLoadingProfile, isProfileMissing } = useProfileStatus()
-  const { exportPortfolio, isExporting, error } = useExportPortfolioPdf()
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -89,25 +87,6 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
         </nav>
         <button
           type="button"
-          onClick={() => exportPortfolio()}
-          disabled={isExporting}
-          className="
-            flex items-center gap-3 rounded-xl
-            px-4 py-3
-            disabled:text-gray-500
-            transition-all duration-200
-            disabled:cursor-not-allowed
-            disabled:opacity-60
-          "
-        >
-          <span>
-            {isExporting
-              ? 'Generando PDF...'
-              : 'Exportar portafolio'}
-          </span>
-        </button>
-        <button
-          type="button"
           onClick={handleLogout}
           className="text-red-500 text-left"
         >
@@ -136,30 +115,6 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
         </nav>
         <button
           type="button"
-          onClick={() => exportPortfolio()}
-          disabled={isExporting}
-          className="
-              flex w-full items-center gap-3
-              px-4 py-3
-              cursor-pointer
-              hover:bg-gray-100
-              transition-all duration-200
-              disabled:text-gray-500
-              disabled:cursor-not-allowed
-              disabled:opacity-60
-          border-b
-
-            "
-        >
-
-          <span>
-            {isExporting
-              ? 'Generando PDF...'
-              : 'Exportar PDF'}
-          </span>
-        </button>
-        <button
-          type="button"
           onClick={handleLogout}
           className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-red-500 cursor-pointer"
         >
@@ -168,7 +123,7 @@ export const UserMenu = ({ open, onClose }: IUserMenu) => {
       </div>
 
       {successMessage && <SuccessModal message={successMessage} redirect="Redirigiendo al login..." />}
-      {(errorMessage || error) && <ErrorModal message="ah ocurrido un error" />}
+      {(errorMessage) && <ErrorModal message={errorMessage} />}
     </>
   )
 }
