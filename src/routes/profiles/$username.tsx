@@ -1,4 +1,5 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute, useRouter, notFound } from '@tanstack/react-router'
+import { FaArrowLeft } from 'react-icons/fa6'
 import api from '../../app/api/axios'
 import { Hero } from '../../features/view/components/Hero'
 import { Skills } from '../../features/view/components/Skills'
@@ -38,6 +39,8 @@ function RouteComponent() {
     work_experiences,
     projects,
   } = Route.useLoaderData()
+
+  const router = useRouter()
 
   const skills_parsed = Object.values(skills)
   const soft_skills_parsed = Object.values(soft_skills)
@@ -101,6 +104,16 @@ function RouteComponent() {
             </div>
           </section>
         )}
+      </div>
+
+      <div
+        className="fixed bottom-4 right-4">
+        <button
+          className="flex items-center gap-2 bg-primary text-white py-3 px-5 rounded-xl hover:bg-primary-soft transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+          onClick={() => router.history.back()}>
+          <FaArrowLeft size={18} />
+          Volver
+        </button>
       </div>
 
       <Footer
