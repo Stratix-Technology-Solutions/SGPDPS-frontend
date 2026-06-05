@@ -7,8 +7,6 @@ import {
   Text,
   View,
 } from '@react-pdf/renderer'
-
-import { formatDate } from '../../../view/utils/formatDate'
 import type { PortfolioExport } from '../../interface'
 import {
   FileName,
@@ -45,7 +43,7 @@ const styles = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
     color: C.text,
-    backgroundColor: C.bg,
+    backgroundColor: C.white,
     flexDirection: 'column',
   },
 
@@ -229,8 +227,8 @@ const styles = StyleSheet.create({
   },
 
   main: {
-    paddingTop: 20,
-    paddingBottom: 32,
+    paddingTop: 28,
+    paddingBottom: 40,
     paddingHorizontal: 28,
     backgroundColor: C.white,
   },
@@ -428,8 +426,11 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
       subject={profile.username}
       creator="FolioX"
     >
-      <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
+      <Page
+        size="A4"
+        style={[styles.page, { marginTop: 40, marginBottom: 40 }]}
+      >
+        <View style={[styles.header, { marginTop: -40 }]}>
           <View style={styles.headerTop}>
             <View style={styles.nameBlock}>
               <Text style={styles.nameText}>
@@ -686,15 +687,6 @@ export const PortfolioPdfDocument = ({ data }: Props) => {
             </View>
           )}
         </View>
-
-        <Text
-          style={styles.footer}
-          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-          fixed
-        />
-        <Text style={styles.footerLeft} fixed>
-          {formatDate(data.generatedAt)}
-        </Text>
       </Page>
     </Document>
   )
