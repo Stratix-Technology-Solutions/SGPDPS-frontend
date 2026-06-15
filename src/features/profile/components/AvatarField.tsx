@@ -8,9 +8,9 @@ interface AvatarFieldProps {
 
 export function AvatarField({ currentUrl, onFileSelect, onRemove }: AvatarFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [localPreview, setLocalPreview] = useState<string | null>(null)
+  const [localPreview, setLocalPreview] = useState<string | null | "removed">("idle")
 
-  const preview = localPreview ?? currentUrl ?? null
+  const preview = localPreview === "idle" ? (currentUrl ?? null) : localPreview === "removed" ? null : localPreview
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null
@@ -23,7 +23,7 @@ export function AvatarField({ currentUrl, onFileSelect, onRemove }: AvatarFieldP
   }
 
   const handleRemove = () => {
-    setLocalPreview(null)
+    setLocalPreview("removed")
     onRemove()
     if (inputRef.current) inputRef.current.value = ''
   }
