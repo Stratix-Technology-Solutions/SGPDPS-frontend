@@ -1,12 +1,11 @@
 import { createElement, useState } from 'react'
-import { pdf } from '@react-pdf/renderer'
-import { ProjectsReportPdfDocument } from '../components/pdf/ProjectsReportPdfDocument'
+import { pdf as PdfFn } from '@react-pdf/renderer'
 import type {
   ProjectReportVisibility,
   ReportProjectsResponse,
 } from '../interfaces/report-projects.interface'
 
-type PdfDocumentInput = Parameters<typeof pdf>[0]
+type PdfDocumentInput = Parameters<typeof PdfFn>[0]
 
 export const useExportProjectsReport = () => {
   const [isExporting, setIsExporting] = useState(false)
@@ -20,6 +19,10 @@ export const useExportProjectsReport = () => {
     setExportError(null)
 
     try {
+      const [{ pdf }, { ProjectsReportPdfDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('../components/pdf/ProjectsReportPdfDocument'),
+      ])
       const documentNode = createElement(ProjectsReportPdfDocument, {
         data: {
           report,

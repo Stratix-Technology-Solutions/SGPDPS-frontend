@@ -1,12 +1,11 @@
 import { createElement, useState } from 'react'
-import { pdf } from '@react-pdf/renderer'
-import { SkillsReportPdfDocument } from '../components/pdf/SkillsReportPdfDocument'
+import { pdf as PdfFn } from '@react-pdf/renderer'
 import type {
   ReportSkillsResponse,
   SkillsReportFilter,
 } from '../interfaces/report-skills.interface'
 
-type PdfDocumentInput = Parameters<typeof pdf>[0]
+type PdfDocumentInput = Parameters<typeof PdfFn>[0]
 
 export const useExportSkillsReport = () => {
   const [isExporting, setIsExporting] = useState(false)
@@ -20,6 +19,10 @@ export const useExportSkillsReport = () => {
     setExportError(null)
 
     try {
+      const [{ pdf }, { SkillsReportPdfDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('../components/pdf/SkillsReportPdfDocument'),
+      ])
       const fileName = `reporte-habilidades-${report.user.username.toLowerCase()}`
 
       const documentNode = createElement(SkillsReportPdfDocument, {

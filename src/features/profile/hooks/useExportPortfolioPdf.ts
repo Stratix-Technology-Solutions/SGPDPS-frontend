@@ -1,7 +1,6 @@
 import { createElement, useState } from 'react'
 import { pdf } from '@react-pdf/renderer'
 import api from '../../../app/api/axios'
-import { PortfolioPdfDocument } from '../components/pdf/PortfolioPdfDocument'
 import { isVisible, toBase64, toPdfFileName } from '../utils/helper'
 import type {
   AcademicExperience,
@@ -84,7 +83,11 @@ export const useExportPortfolioPdf = () => {
     setError(null)
 
     try {
-      const bundle = await fetchPortfolioBundle()
+      const [bundle, { pdf }, { PortfolioPdfDocument }] = await Promise.all([
+        fetchPortfolioBundle(),
+        import('@react-pdf/renderer'),
+        import('../components/pdf/PortfolioPdfDocument'),
+      ])
       const fileName = toPdfFileName(bundle.profile.username)
       const documentNode = createElement(PortfolioPdfDocument, {
         data: {
